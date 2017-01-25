@@ -1,4 +1,4 @@
-from IPython.display import clear_output
+#from IPython.display import clear_output
 import random
 import GridWorld as GW
 import NeuralNet as NN
@@ -43,7 +43,7 @@ def trainNet(init=0):
                 state = new_state
                 if reward != -1:
                     status = 0
-                clear_output(wait=True)
+                #clear_output(wait=True)
             if epsilon > 0.1:
                 epsilon -= (1 / epochs)
 
@@ -125,7 +125,7 @@ def trainNet(init=0):
                     state = new_state
                 if reward != -1:  # if reached terminal state, update game status
                     status = 0
-                clear_output(wait=True)
+                #clear_output(wait=True)
             if epsilon > 0.1:  # decrement epsilon over time
                 epsilon -= (1 / epochs)
 
