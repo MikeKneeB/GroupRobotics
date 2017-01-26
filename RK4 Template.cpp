@@ -75,7 +75,7 @@ int main()
     ofstream outFile(fileName);
 
     //File headings
-    outFile << "Time \tTheta \tx \ty \tomega \ta" << endl;
+    outFile << "Time \tTheta \tError \tx \ty \tomega \tError \ta" << endl;
 
     //step size
     h = tMax/N;
@@ -89,7 +89,7 @@ int main()
         a = omegaDot(l, theta, omega, c, m);
 
         //outputs t, theta, x, y and omega to file
-        outFile << t << "\t" << theta << "\t" << x << "\t" << y << "\t" << omega << "\t" << a << endl; // N*h instead of t
+        outFile << t << "\t" << theta <<"t" << oError << "\t" << x << "\t" << y << "\t" << omega << "\t"<< wError << "\t" << a << endl; 
 
         //calculates t, theta and omega after half a step
 
