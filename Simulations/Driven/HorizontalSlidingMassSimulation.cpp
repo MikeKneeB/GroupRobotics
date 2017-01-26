@@ -1,9 +1,9 @@
 // Name: Max Hadfield
 // Date: 26.01.16
-// Damped Horizontal Sliding Mass simulation using 2nd order Runge Kutta method
+// Damped Horizontal Sliding Mass simulation using 4th order Runge Kutta method
 
-//The swing and robot are modelled as a simple pendulum with one fixed mass (m2) at the end and one sliding mass (m1) which is able to oscillate
-//perpendicularly to the pendulum with amplitude A and frequency oscillation_frequency.
+//The swing and robot are modelled as a simple pendulum with one fixed mass (m2) at the end and one sliding mass (m1) which is able to
+//oscillate perpendicularly to the pendulum with amplitude A and frequency oscillation_frequency.
 
 #include <cmath>
 #include <fstream>
@@ -22,7 +22,7 @@ inline double theta_deriv(double omega)
     return omega;
 }
 
-//1st order differential equation 2 (equation of motion of the system). Split into multiple terms to make it easier to read.
+//1st order differential equation 2 (equation of motion of the system). Split into multiple terms to make it wasier to read.
 //(to machine learning group: this is the equation you will want to use)
 inline double omega_deriv(double length, double theta, double omega, double t, double c, double m1, double m2, double A, double osc_freq, double phi)
 {
@@ -60,7 +60,7 @@ int main()
     //declare variables
 
     //system parameters
-    double Theta=2*atan(1)/9; //initial angle = 10
+    double theta=2*atan(1)/9; //initial angle = 10
     double omega=0; //angular velocity
     double a=0; //angular acceleration
     double x=0; //x position
@@ -78,8 +78,10 @@ int main()
     //Runge Kutta parameters
     double h=0; //step size for Runge Kutta
     double N=10000; //number of intervals for Runge Kutta
-    double omega_halfstep=0; //omega at half interval in Runge Kutta calculation
-    double theta_halfstep=0; //theta at half interval in Runge Kutta calculation
+    double omega1=0, omega2=0, omega3 =0; //omega at quarter intervals in Runge Kutta calculation
+    double wk1=0,wk2=0,wk3=0,wk4=0; //Runge Kutta coefficients for omega
+    double theta1 =0, theta2 =0, theta3 =0; //theta at half interval in Runge Kutta calculation
+    double ok1=0,ok2=0,ok3=0,ok4=0; //Runge Kutta coefficients for theta
 
     //Link output file
     ofstream outFile("horizontal_sliding_mass_results.txt");
@@ -94,24 +96,43 @@ int main()
     for(int n=0; n<=N; n++){
 
         //Calculates x, y and a
-        x = XPosition(length, Theta);
-        y = YPosition(length, Theta);
-        a = omega_deriv(length, Theta, omega, t, c, m1, m2, A, oscillation_frequency, phi);
+        x = XPosition(length, theta);
+        y = YPosition(length, theta);
+        a = omega_deriv(length, theta, omega, t, c, m1, m2, A, oscillation_frequency, phi);
 
         //outputs t, theta, x, y and omega to file
-        outFile << t << "\t" << Theta << "\t" << x << "\t" << y << "\t" << omega << "\t" << a << endl;
+        outFile << t << "\t" << theta << "\t" << x << "\t" << y << "\t" << omega << "\t" << a << endl;
 
-        //calculates t, theta and omega after half a step
-        t = t+h/2;
-        theta_halfstep = omega*(h/2)+Theta;
-        omega_halfstep = -Theta*(h/2)+omega;
+        //uses 4th order Runge Kutta method to calculate next Theta and omega value
 
-        //uses Runge Kutta method to calculate next Theta and omega value
-        Theta = Theta + h*theta_deriv(omega_halfstep);
-        omega = omega + h*omega_deriv(length, theta_halfstep, omega_halfstep, t, c, m1, m2, A, oscillation_frequency, phi);
+        //step part 1
+        ok1 = theta_deriv(omega);
+        wk1 = omega_deriv(length, theta, omega, t, c, m1, m2, A, oscillation_frequency, phi);
+        theta1= theta + ok1*(h/2);
+        omega1 = omega + wk1*(h/2);
+
+        //step part 2
+        ok2 = theta_deriv(omega1);
+        wk2 = omega_deriv(length, theta1, omega1, t, c, m1, m2, A, oscillation_frequency, phi);
+        theta2 = theta + ok2*(h/2);
+        omega2 = omega + wk2*(h/2);
+
+        //step part 3
+        ok3 = theta_deriv(omega2);
+        wk3 = omega_deriv(length, theta2, omega2, t, c, m1, m2, A, oscillation_frequency, phi);
+        theta3 = theta + ok3*(h);
+        omega3 = omega + wk3*(h);
+
+        //step part 4
+        ok4 = theta_deriv(omega3);
+        wk4 = omega_deriv(length, theta3, omega3, t, c, m1, m2, A, oscillation_frequency, phi);
+
+        //increases theta and omega
+        theta = theta + (ok1+2*ok2+2*ok3+ok4)*(h/6);
+        omega = omega + (wk1+2*wk2+2*wk3+wk4)*(h/6);
 
         //calculates t after a whole step
-        t = t+h/2;
+        t = t+h;
 
     }
 
