@@ -19,6 +19,7 @@ PendulumWidget::PendulumWidget(QWidget *parent) :
 PendulumWidget::~PendulumWidget(){}
 
 void PendulumWidget::paintEvent(QPaintEvent *event){
+    (void)event;
     if(fIndex<=fMass->getLength()){
         //Set the painter to this Widget
         QPainter painter(this);
