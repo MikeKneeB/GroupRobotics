@@ -20,3 +20,5 @@ model.compile(loss='mse', optimizer=rms)
 def netReset():
     rms = RMSprop()
     model.compile(loss='mse', optimizer=rms)
+
+
