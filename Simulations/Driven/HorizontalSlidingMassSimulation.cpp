@@ -22,7 +22,7 @@ inline double theta_deriv(double omega)
     return omega;
 }
 
-//1st order differential equation 2 (equation of motion of the system). Split into multiple terms to make it wasier to read.
+//1st order differential equation 2 (equation of motion of the system). Split into multiple terms to make it easier to read.
 //(to machine learning group: this is the equation you will want to use)
 inline double omega_deriv(double length, double theta, double omega, double t, double c, double m1, double m2, double A, double osc_freq, double phi)
 {
