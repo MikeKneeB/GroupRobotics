@@ -11,7 +11,7 @@ PendulumWidget::PendulumWidget(QWidget *parent) :
 //    std::string filename="simple_pendulum_driven_length_results.dat";
 //    fMass=new Mass(20,filename);
     //Uncomment for OSX - need full path name
-    fMass=new Mass(20,"/Users/hargwit/Documents/Git/Robotics/build-PendulumSim-Desktop_Qt_5_7_0_clang_64bit-Debug/simple_pendulum_driven_length_results.dat");
+    fMass=new Mass(20,"/Users/hargwit/Documents/Git/Robotics/build-PendulumSim-Desktop_Qt_5_7_0_clang_64bit-Debug/simple_pendulum_driven_length_results.txt");
 
     fIndex=0;
 }
