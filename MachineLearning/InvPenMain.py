@@ -42,16 +42,19 @@ def trainNet(model, epochs):
             y[:] = qval[:]
             update = (reward + (gamma * maxQ))
             y[0][best_action] = update  # target output
-            print("Game #: %s" % (i,))
-            model.fit(current_state.reshape(1, 3), y, batch_size=1, nb_epoch=1, verbose=1)
+            #print("Game #: %s" % (i,))
+            model.fit(current_state.reshape(1, 3), y, batch_size=1, nb_epoch=1, verbose=0)
             current_state = new_state
         if epsilon > 0.1:
             epsilon -= (1 / epochs)
         if i%100 == 0:
             testNet(model)
+            print('Net state after: %s' % i)
 
                 
 def testNet(model):
+    gamma = 0.9
+
     env = gym.make('Pendulum-v0')
     current_state = env.reset()
     current_state = np.array(current_state)
@@ -72,12 +75,19 @@ def testNet(model):
         # Get max_Q(S',a)
         newQ = model.predict(new_state.reshape(1, 3), batch_size=1)
         maxQ = np.max(newQ)
+        y = np.zeros((1, 81))
+        y[:] = qval[:]
+        update = (reward + (gamma * maxQ))
+        y[0][best_action] = update  # target output
+        #print("Game #: %s" % (i,))
+        model.fit(current_state.reshape(1, 3), y, batch_size=1, nb_epoch=1, verbose=0)
+
         current_state = new_state
 
 def main():
     model = NN.buildModel()
     trainNet(model, 2000)
-    KS.SaveModel(model, 'model-json')
+    KS.SaveModel(model, 'model-1')
 
 if __name__ == '__main__':
     main()
