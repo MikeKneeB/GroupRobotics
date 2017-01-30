@@ -48,11 +48,11 @@ def trainNet(model, epochs):
         if epsilon > 0.1:
             epsilon -= (1 / epochs)
         if i%100 == 0:
-            testNet(model)
+            testNet(model, 300)
             print('Net state after: %s' % i)
 
                 
-def testNet(model):
+def testNet(model, run):
     gamma = 0.9
 
     env = gym.make('Pendulum-v0')
@@ -61,7 +61,7 @@ def testNet(model):
     current_state[0] = (current_state[0]+1)/2
     current_state[1] = (current_state[1]+1)/2
     current_state[2] = (current_state[2]+8)/16
-    for j in range(300):
+    for j in range(run):
         env.render()
         qval = model.predict(current_state.reshape(1, 3), batch_size=1)
         best_action = np.argmax(qval)
