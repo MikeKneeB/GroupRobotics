@@ -18,7 +18,7 @@ def train(epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilo
     actor_replay = []
     critic_replay = []
 
-    for epo in range(epochs):
+    for epo in range(epochs+1):
         print('Game: %s' % epo)
         raw_obs = env.reset()
 
@@ -31,8 +31,11 @@ def train(epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilo
 
         obs_1 = scale_obs[:]
 
+        if epo == epochs - 10:
+            raw_input('Enter to continue.')
+
         for j in range(run_length):
-            if epo % 10 == 0:
+            if epo % 10 == 0 or epo >= epochs - 10:
                 env.render()
 
             reward_1 = reward
@@ -116,4 +119,4 @@ def train(epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilo
             epsilon -= (1/epochs)
 
 if __name__ == '__main__':
-    train()
+    train(epochs=500)
