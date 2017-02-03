@@ -2,7 +2,7 @@ import random
 import time
 import gym
 import numpy as np
-from keras.models import Sequential
+from keras.models import Sequential, load_model
 from keras.layers.core import Dense, Dropout, Activation, Flatten
 from keras.optimizers import RMSprop, SGD
 
@@ -64,13 +64,17 @@ def create_critic():
     return critic_model
 
 
-def train(epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.1, buffer = 80):
+def train(epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.1, buffer = 80, critic_path=None, actor_path=None):
 
     #actor_model = ACNetworks.ActorNet.create_actor()
     #critic_model = ACNetworks.CriticNet.create_critic()
 
-    actor_model = create_actor()
-    critic_model = create_critic()
+    if actor_path == None or critic_path == None:
+        actor_model = create_actor()
+        critic_model = create_critic()
+    else:
+        actor_model = load_model(actor_path) 
+        critic_model = load_model(critic_path)
 
     actor_replay = []
     critic_replay = []
@@ -86,26 +90,29 @@ def train(epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilo
 
         reward = 0
 
+        reward_1 = reward[:]
+
         obs_1 = scale_obs[:]
 
         if epo == epochs - 10:
             raw_input('Enter to continue.')
 
         for j in range(run_length):
-            #if epo % 10 == 0 or epo >= epochs - 10:
-            env.render()
-
-            reward_1 = reward
+            if epo % 10 == 0 or epo >= epochs - 10:
+                env.render()
 
             critic_1 = critic_model.predict(obs_1.reshape(1, env.observation_space.shape[0]))
+            print('Critic 1: {}'.format(critic_1))
 
             if (random.random() < epsilon):
-               action = random.randint(0, 100) 
+                print('Rand action')
+                action = random.randint(0, 100) 
             else:
                 action = actor_model.predict(obs_1.reshape(1, env.observation_space.shape[0]))
+                print('Action: {}'.format(action))
                 action = np.argmax(action) 
 
-            #print(undiscrete_action(action))
+            print('Act int: {}, Act val: {} [{}]'.format(action, undiscrete_action(action), epo))
             obs_2, reward_2, d, i = env.step([undiscrete_action(action),0])
             obs_2[0] = (obs_2[0]+1)/2
             obs_2[1] = (obs_2[1]+1)/2
@@ -132,7 +139,6 @@ def train(epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilo
                 critic_replay.pop(0)
 
             if len(critic_replay) >= buffer:
-                #print('Critic Buffer.')
                 minibatch = random.sample(critic_replay, batch_size)
                 x_train = []
                 y_train = []
@@ -153,19 +159,18 @@ def train(epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilo
                 actor_replay.pop(0)
 
             if len(actor_replay) >= buffer:
-                #print('Actor Buffer.')
                 minibatch = random.sample(actor_replay, batch_size)
                 x_train = []
                 y_train = []
                 for memory in minibatch:
-                  m_orig_state, m_action, m_value = memory
-                  old_qval = actor_model.predict(m_orig_state.reshape(1, env.observation_space.shape[0]))
+                    m_orig_state, m_action, m_value = memory
+                    old_qval = actor_model.predict(m_orig_state.reshape(1, env.observation_space.shape[0]))
 
-                  y = np.zeros(( 1, D_ACTION_SIZE ))
-                  y[:] = old_qval[:]
-                  y[0][m_action] = m_value
-                  x_train.append(m_orig_state.reshape((env.observation_space.shape[0],)))
-                  y_train.append(y.reshape((D_ACTION_SIZE,)))
+                    y = np.zeros(( 1, D_ACTION_SIZE ))
+                    y[:] = old_qval[:]
+                    y[0][m_action] = m_value
+                    x_train.append(m_orig_state.reshape((env.observation_space.shape[0],)))
+                    y_train.append(y.reshape((D_ACTION_SIZE,)))
                 x_train = np.array(x_train)
                 y_train = np.array(y_train)
 
@@ -173,15 +178,23 @@ def train(epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilo
 
             obs_1 = obs_2[:]
             reward_1 = reward_2
+            reward += reward_2
 
         if epsilon > min_epsilon:
-            epsilon -= (1/epochs)
+            epsilon -= (1.0/epochs)
+        print('Reward earned: {}'.format(reward))
+    
+    critic_model.save('critic_model.h5')
+    actor_model.save('actor_model.h5')
 
 def discrete_action(action):
+    #Convert torque -2 to 2 to discrete value 0 to 100
+    #D_ACTION_SIZE is define as 101 because of array length shenanigans.
     return (int)((action - ACTION_MIN)/(ACTION_MAX-ACTION_MIN)*(D_ACTION_SIZE-1))
     
 def undiscrete_action(action):
+    #Available action integers go from 0 to 100, need to be in range -2 to 2
     return (float)(action-50)/(25)
 
 if __name__ == '__main__':
-    train(epochs=500)
+    train(epochs=1000)
