@@ -90,7 +90,7 @@ def train(epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilo
 
         reward = 0
 
-        reward_1 = reward[:]
+        reward_1 = reward
 
         obs_1 = scale_obs[:]
 
@@ -98,8 +98,10 @@ def train(epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilo
             raw_input('Enter to continue.')
 
         for j in range(run_length):
-            if epo % 10 == 0 or epo >= epochs - 10:
-                env.render()
+            #if epo % 10 == 0 or epo >= epochs - 10:
+            env.render()
+
+            print('Obs: {}'.format(obs_1.reshape(1, env.observation_space.shape[0])))
 
             critic_1 = critic_model.predict(obs_1.reshape(1, env.observation_space.shape[0]))
             print('Critic 1: {}'.format(critic_1))
@@ -112,7 +114,7 @@ def train(epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilo
                 print('Action: {}'.format(action))
                 action = np.argmax(action) 
 
-            print('Act int: {}, Act val: {} [{}]'.format(action, undiscrete_action(action), epo))
+            print('Act int: {}, Act val: {} [{}, {}]'.format(action, undiscrete_action(action), epo, j))
             obs_2, reward_2, d, i = env.step([undiscrete_action(action),0])
             obs_2[0] = (obs_2[0]+1)/2
             obs_2[1] = (obs_2[1]+1)/2
@@ -180,10 +182,12 @@ def train(epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilo
             reward_1 = reward_2
             reward += reward_2
 
-        if epsilon > min_epsilon:
-            epsilon -= (1.0/epochs)
+            if epsilon > min_epsilon:
+                epsilon -= (1.0/(epochs*run_length))
+
+
         print('Reward earned: {}'.format(reward))
-    
+
     critic_model.save('critic_model.h5')
     actor_model.save('actor_model.h5')
 
@@ -197,4 +201,4 @@ def undiscrete_action(action):
     return (float)(action-50)/(25)
 
 if __name__ == '__main__':
-    train(epochs=1000)
+    train(epochs=1, run_length=10000)
