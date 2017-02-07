@@ -1,6 +1,9 @@
 import numpy as np
 
-# Call get next action -> perform that action -> update state-action to action map -> critique with new sate->
+# Call get next action -> perform that action
+# -> update state-action to state (action knowledge), critique policy with new state
+
+beta = 4 # a learning parameter
 
 class ActorCritic:
 
@@ -13,19 +16,29 @@ class ActorCritic:
         return getNextAction(state, self.actor.policy)
 
     def critique(self, previousState, previousAction, state):
+        self.actor.updateActionKnowledge(previousState, previousAction, state)
+
         tDError = self.critic.getTDError(previousState, state, self.actor.policy)
         self.actor.updatePolicy(previousState, previousAction, tDError)
 
 class Actor:
     def __init__(self, stateSpaceDimensions, numberOfActions):
         policyDimensions = stateSpaceDimensions + (numberOfActions,)
+
         self.policy = np.zeros(policyDimensions)
 
-        nextStateFromStateActionDims = policyDimensions + (len(stateSpaceDimensions),)
-        self.actionToState = np.zeros(nextStateFromStateActionDims)
+        actionKnowledgeDims = policyDimensions + (len(stateSpaceDimensions),)
+        self.actionToState = np.zeros(actionKnowledgeDims)
 
-    def updateStateActionState(self, previousState, state):
-        pass
+    def updateActionKnowledge(self, previousState, previousAction, state):
+        actionKnowledgeIndex = previousState + (previousAction,)
+        previousKnowledge = self.actionToState[actionKnowledgeIndex]
+        newKnowledge = np.asarray(state)
+
+        if(previousKnowledge<0).any(): #If no previous knowledge
+            self.actionToState[actionKnowledgeIndex] = newKnowledge
+        else:
+            self.actionToState[actionKnowledgeIndex] = ((beta-1)*previousKnowledge + newKnowledge)/beta
 
     def updatePolicy(self, state, action, tDError):
         self.policy[state + (action,)] += tDError
@@ -37,16 +50,25 @@ class Critic:
         self.timeHorizon = timeHorizon
         self.discount = discount
 
-    def getTDError(self, state, nextState, policy):
-        return 0
+    def getTDError(self, state, nextState, policy, actionKnowledge):
+        r1 = self.rewards[nextState]
+        v1 = self.value(nextState, policy, actionKnowledge)
+        v0 = self.value(state, policy, actionKnowledge)
+        return r1 + self.discount*v1 - v0
 
-    def value(self, state, policy):
+    def value(self, currentState, policy, actionKnowledge):
         value = 0
-        for t in range(self.timeHorizon):
-            reward = self.rewards[state]
-            #calc value
+        state = currentState
+        for t in range(0,self.timeHorizon):
+            # Get next state
+            action = getNextAction(state, policy)
+            expectedState = actionKnowledge[state + (action,)]
+            state = tuple([round(stateVar) for stateVar in expectedState])
 
-            state = state #what am I doing
+            reward = self.rewards[state]
+            value += self.discount**t + reward
+
+        return value
 
 
 def getNextAction(state, policy):
