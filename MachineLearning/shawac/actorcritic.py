@@ -3,14 +3,15 @@ import numpy as np
 # Call get next action -> perform that action
 # -> update state-action to state (action knowledge), critique policy with new state
 
-beta = 4 # a learning parameter
-
 class ActorCritic:
 
     def __init__(self, numberOfActions, timeHorizon, stateDimensions, discount):
+        """
+        Call getNextAction -> perform that action -> call critique
+        """
         self.numberOfActions = numberOfActions
-        self.actor = Actor(stateDimensions, numberOfActions)
-        self.critic = Critic(timeHorizon, stateDimensions, discount)
+        self.actor = _Actor(stateDimensions, numberOfActions)
+        self.critic = _Critic(timeHorizon, stateDimensions, discount)
 
     def getNextAction(self, state):
         return getNextAction(state, self.actor.policy)
@@ -23,7 +24,7 @@ class ActorCritic:
         tDError = self.critic.getTDError(previousState, state, self.actor.policy, self.actor.actionToState)
         self.actor.updatePolicy(previousState, previousAction, tDError)
 
-class Actor:
+class _Actor:
     def __init__(self, stateSpaceDimensions, numberOfActions):
         policyDimensions = stateSpaceDimensions + (numberOfActions,)
         self.policy = np.zeros(policyDimensions)
@@ -33,19 +34,14 @@ class Actor:
 
     def updateActionKnowledge(self, previousState, previousAction, state):
         actionKnowledgeIndex = previousState + (previousAction,)
-        previousKnowledge = self.actionToState[actionKnowledgeIndex]
         newKnowledge = np.asarray(state)
-
-        if(previousKnowledge<0).any(): #If no previous knowledge
-            self.actionToState[actionKnowledgeIndex] = newKnowledge
-        else:
-            self.actionToState[actionKnowledgeIndex] = ((beta-1)*previousKnowledge + newKnowledge)/beta
+        self.actionToState[actionKnowledgeIndex] = newKnowledge
 
     def updatePolicy(self, state, action, tDError):
         self.policy[state + (action,)] += tDError
 
 
-class Critic:
+class _Critic:
     def __init__(self, timeHorizon, stateDimensions, discount):
         self.rewards = np.zeros(stateDimensions)
         self.timeHorizon = timeHorizon
@@ -64,7 +60,7 @@ class Critic:
             # Get next state
             action = getNextAction(state, policy)
             expectedState = actionKnowledge[state + (action,)]
-            state = tuple([round(stateVar) for stateVar in expectedState])
+            state = tuple([int(round(stateVar)) for stateVar in expectedState])
 
             reward = self.rewards[state]
             value += self.discount**t + reward
@@ -72,7 +68,7 @@ class Critic:
         return value
 
     def updateReward(self, state, reward):
-
+        self.rewards[state] = reward
 
 
 def getNextAction(state, policy):
