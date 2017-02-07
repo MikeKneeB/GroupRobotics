@@ -2,9 +2,11 @@ import random
 import time
 import gym
 import numpy as np
+import sys
 from keras.models import Sequential, load_model
 from keras.layers.core import Dense, Dropout, Activation, Flatten
 from keras.optimizers import RMSprop, SGD
+import keras.backend as K
 
 env = gym.make('Pendulum-v0')
 
@@ -63,15 +65,28 @@ def create_critic():
 
     return critic_model
 
+def action_gradient(c_model, inputs, actions):
+    weights = model.trainable_weights # weight tensors
+    weights = [weight for weight in weights if model.get_layer(weight.name[:-2]).trainable] # filter down weights tensors to only ones which are trainable
+    gradients = model.optimizer.get_gradients(model.total_loss, weights) # gradient tensors
 
-def train(epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.1, buffer = 80, critic_path=None, actor_path=None):
+    input_tensors = [inputs, [1], actions, 0]
+
+    return K.function(inputs=input_tensors, outputs=gradients)
+
+def train(epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.1, buffer = 80, critic_path=None, actor_path=None, filepath='ACOUT'):
 
     #actor_model = ACNetworks.ActorNet.create_actor()
     #critic_model = ACNetworks.CriticNet.create_critic()
 
-    if actor_path == None or critic_path == None:
+    f = open(filepath, 'w')
+
+    if actor_path == None and critic_path == None:
         actor_model = create_actor()
         critic_model = create_critic()
+    elif actor_path == None or critic_path == None:
+        print('If you supply one network, you must supply both.')
+        sys.exit(1)
     else:
         actor_model = load_model(actor_path) 
         critic_model = load_model(critic_path)
@@ -187,9 +202,11 @@ def train(epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilo
 
 
         print('Reward earned: {}'.format(reward))
+        f.write('{}\t{}\n'.format(epo, reward))
 
     critic_model.save('critic_model.h5')
     actor_model.save('actor_model.h5')
+    f.close()
 
 def discrete_action(action):
     #Convert torque -2 to 2 to discrete value 0 to 100
@@ -201,4 +218,4 @@ def undiscrete_action(action):
     return (float)(action-50)/(25)
 
 if __name__ == '__main__':
-    train(epochs=1, run_length=10000)
+    train(epochs=500, run_length=100)
