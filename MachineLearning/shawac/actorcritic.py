@@ -1,6 +1,6 @@
 import numpy as np
 
-# Call get next action -> perform that action -> critique with new sate->
+# Call get next action -> perform that action -> update state-action to action map -> critique with new sate->
 
 class ActorCritic:
 
@@ -20,6 +20,12 @@ class Actor:
     def __init__(self, stateSpaceDimensions, numberOfActions):
         policyDimensions = stateSpaceDimensions + (numberOfActions,)
         self.policy = np.zeros(policyDimensions)
+
+        nextStateFromStateActionDims = policyDimensions + (len(stateSpaceDimensions),)
+        self.actionToState = np.zeros(nextStateFromStateActionDims)
+
+    def updateStateActionState(self, previousState, state):
+        pass
 
     def updatePolicy(self, state, action, tDError):
         self.policy[state + (action,)] += tDError
