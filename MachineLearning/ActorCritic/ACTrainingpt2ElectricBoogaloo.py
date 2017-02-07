@@ -115,4 +115,4 @@ def column(matrix, i):
 
 if __name__ == '__main__':
     with tf.Session() as sess:
-        train(sess, epochs=500, run_length=100)
+        train(sess, epochs=200, run_length=300)
