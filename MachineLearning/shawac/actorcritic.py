@@ -7,28 +7,29 @@ beta = 4 # a learning parameter
 
 class ActorCritic:
 
-    def __init__(self, numberOfActions, timeHorizon, rewards, discount):
+    def __init__(self, numberOfActions, timeHorizon, stateDimensions, discount):
         self.numberOfActions = numberOfActions
-        self.actor = Actor(rewards.shape, numberOfActions)
-        self.critic = Critic(timeHorizon, rewards, discount)
+        self.actor = Actor(stateDimensions, numberOfActions)
+        self.critic = Critic(timeHorizon, stateDimensions, discount)
 
     def getNextAction(self, state):
         return getNextAction(state, self.actor.policy)
 
-    def critique(self, previousState, previousAction, state):
+    def critique(self, previousState, previousAction, state, reward):
         self.actor.updateActionKnowledge(previousState, previousAction, state)
 
-        tDError = self.critic.getTDError(previousState, state, self.actor.policy)
+        self.critic.updateReward(state, reward)
+
+        tDError = self.critic.getTDError(previousState, state, self.actor.policy, self.actor.actionToState)
         self.actor.updatePolicy(previousState, previousAction, tDError)
 
 class Actor:
     def __init__(self, stateSpaceDimensions, numberOfActions):
         policyDimensions = stateSpaceDimensions + (numberOfActions,)
-
         self.policy = np.zeros(policyDimensions)
 
         actionKnowledgeDims = policyDimensions + (len(stateSpaceDimensions),)
-        self.actionToState = np.zeros(actionKnowledgeDims)
+        self.actionToState = -np.ones(actionKnowledgeDims)
 
     def updateActionKnowledge(self, previousState, previousAction, state):
         actionKnowledgeIndex = previousState + (previousAction,)
@@ -45,8 +46,8 @@ class Actor:
 
 
 class Critic:
-    def __init__(self, timeHorizon, rewards, discount):
-        self.rewards = rewards
+    def __init__(self, timeHorizon, stateDimensions, discount):
+        self.rewards = np.zeros(stateDimensions)
         self.timeHorizon = timeHorizon
         self.discount = discount
 
@@ -69,6 +70,9 @@ class Critic:
             value += self.discount**t + reward
 
         return value
+
+    def updateReward(self, state, reward):
+
 
 
 def getNextAction(state, policy):
