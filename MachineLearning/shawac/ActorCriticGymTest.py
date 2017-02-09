@@ -1,0 +1,67 @@
+import actorcritic as ac
+import numpy as np
+import gym, time
+
+env = gym.make('Pendulum-v0')
+env.reset()
+
+def get_observations(action):
+    torque = np.array([action, 0])
+    observations = env.step(torque)
+    positions, reward, failed, info = observations
+
+    pendulumX, pendulumY, pendulumZ = positions
+    angleRad = np.arctan(pendulumY/pendulumX)
+    angleDeg = int(np.round(np.rad2deg(angleRad)*2))
+    velocity = int(np.round(pendulumZ))
+    reward = int(np.round(reward))
+    #print angleDeg, velocity, reward
+    return (angleDeg, velocity), reward
+  
+# resets enviroment to random position and returns the initial position and velocity  
+def reset_enviroment():
+    observations = env.reset()
+    initialPositions = observations
+    pendulumX, pendulumY, pendulumZ = initialPositions
+    angleRad = np.arctan(pendulumY/pendulumX)
+    angleDeg = int(np.round(np.rad2deg(angleRad)*2))
+    velocity = int(np.round(pendulumZ))
+    return (angleDeg, velocity)
+    
+# actions discretized
+numberOfActions = 9
+
+torqueValue = []
+# works for 10 actions, too tired to generalize 
+for i in range(numberOfActions):
+    torqueValue.append(i/2.0 - 2)
+
+# (positions, velocities)
+stateDimensions = (360, 16)
+
+discount = 0.85
+timeHorizon = 50
+
+actor = ac.ActorCritic(numberOfActions, timeHorizon, stateDimensions, discount)
+
+for epoch in range(100):
+
+    # reset enviroment and extract initial state
+    state = reset_enviroment()
+    
+    for step in range(2000):
+        
+        print "Epoch: ", epoch, " Step: ", step
+        
+        # get action from actor
+        action = actor.getNextAction(state)
+        print action
+        # convert action into torque magnitude
+        torque = torqueValue[action]
+        
+        # perform action on enviroment 
+        newstate, reward = get_observations(torque)
+        
+        # critique the quality of the action
+        actor.critique(state, action, newstate, reward)
+        
