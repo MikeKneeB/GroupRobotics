@@ -22,6 +22,7 @@ def train(sess, epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, 
 
     
     f = open(filepath, 'w')
+    f.write('{}\t{}\n'.format('ep','re'))
 
     #if actor_path == None and critic_path == None:
     #    actor_model = create_actor()
