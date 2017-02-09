@@ -1,9 +1,12 @@
-import actorcritic as ac
+import gym
 import numpy as np
-import gym, time
+
+import actorcritic as ac
 
 env = gym.make('Pendulum-v0')
 env.reset()
+f = open('shawac.txt', 'w')
+f.write('epoch\treward')
 
 def get_observations(action):
     torque = np.array([action, 0])
@@ -48,20 +51,25 @@ for epoch in range(100):
 
     # reset enviroment and extract initial state
     state = reset_enviroment()
-    
+    cumulativeReward = 0
+    print epoch
     for step in range(2000):
-        
-        print "Epoch: ", epoch, " Step: ", step
+        #print "****************************"
+        #print "Epoch: ", epoch, " Step: ", step
         
         # get action from actor
         action = actor.getNextAction(state)
-        print action
+        #print "Next action: ", action
         # convert action into torque magnitude
         torque = torqueValue[action]
         
         # perform action on enviroment 
         newstate, reward = get_observations(torque)
+        cumulativeReward += reward
         
         # critique the quality of the action
         actor.critique(state, action, newstate, reward)
-        
+        #env.render()
+
+    f.write('{}\t{}\n'.format(epoch, cumulativeReward))
+f.close()

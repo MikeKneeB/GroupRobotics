@@ -15,13 +15,16 @@ class ActorCritic:
 
     def getNextAction(self, state):
         """
-        state is a tuple of integers, from 0 to the state dimension size
+        :param state: tuple of integers, from 0 to the state dimension size
         """
         return getNextAction(state, self.actor.policy)
 
     def critique(self, previousState, previousAction, state, reward):
         """
-        action is an integer from 0 to numberOfActions
+        :param previousState: tuple of integers, from 0 to the state dimension size
+        :param previousAction: an integer from 0 to numberOfActions
+        :param state: tuple of integers, from 0 to the state dimension size
+        :param reward: arbitrary double
         """
         self.actor.updateActionKnowledge(previousState, previousAction, state)
 
@@ -41,10 +44,13 @@ class _Actor:
     def updateActionKnowledge(self, previousState, previousAction, state):
         actionKnowledgeIndex = previousState + (previousAction,)
         newKnowledge = np.asarray(state)
+        #print "Updated state-action ", actionKnowledgeIndex, " state from ", self.actionToState[actionKnowledgeIndex], " to ", newKnowledge
         self.actionToState[actionKnowledgeIndex] = newKnowledge
 
     def updatePolicy(self, state, action, tDError):
+        #print "Policy: ", self.policy[state],
         self.policy[state + (action,)] += tDError
+        #print " to ", self.policy[state]
 
 
 class _Critic:
@@ -74,6 +80,7 @@ class _Critic:
         return value
 
     def updateReward(self, state, reward):
+        #print "Updated state ", state, " reward from ", self.rewards[state], " to ", reward
         self.rewards[state] = reward
 
 
