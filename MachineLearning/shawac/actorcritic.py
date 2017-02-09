@@ -15,13 +15,16 @@ class ActorCritic:
 
     def getNextAction(self, state):
         """
-        state is a tuple of integers, from 0 to the state dimension size
+        :param state: tuple of integers, from 0 to the state dimension size
         """
         return getNextAction(state, self.actor.policy)
 
     def critique(self, previousState, previousAction, state, reward):
         """
-        action is an integer from 0 to numberOfActions
+        :param previousState: tuple of integers, from 0 to the state dimension size
+        :param previousAction: an integer from 0 to numberOfActions
+        :param state: tuple of integers, from 0 to the state dimension size
+        :param reward: arbitrary double
         """
         self.actor.updateActionKnowledge(previousState, previousAction, state)
 
