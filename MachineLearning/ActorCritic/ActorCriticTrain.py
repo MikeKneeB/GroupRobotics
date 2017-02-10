@@ -9,12 +9,11 @@ import random
 import actor
 import critic
 
-def train(sess, epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.1, buffer = 80, critic_path=None, actor_path=None, filepath='ACOUT'):
+def train(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.1, buffer = 80, critic_path=None, actor_path=None, filepath='ACOUT'):
 
     #actor_model = ACNetworks.ActorNet.create_actor()
     #critic_model = ACNetworks.CriticNet.create_critic()
 
-    env = gym.make('Pendulum-v0')
     state_dim = env.observation_space.shape[0]
     action_dim = env.action_space.shape[0]
 
@@ -58,12 +57,13 @@ def train(sess, epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, 
 
             print('Obs: {}'.format(obs_1.reshape(1, state_dim)))
 
-            if (random.random() < epsilon):
-                print('Rand action')
-                action = [random.uniform(-max_action, max_action)] 
-            else:
-                action = actor_model.predict(obs_1.reshape(1, state_dim)) 
-                print('Action: {}'.format(action))
+            #if (random.random() < epsilon):
+            #    print('Rand action')
+            #    action = [random.uniform(-max_action, max_action)] 
+            #else:
+            #    action = actor_model.predict(obs_1.reshape(1, state_dim)) 
+            #    print('Action: {}'.format(action))
+            action = actor_model.predict(obs_1.reshape(1, state_dim)) + (1./(1.+epo+j))
 
             print('Act val: {} [{}, {}]'.format(action, epo, j))
 
@@ -106,6 +106,9 @@ def train(sess, epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, 
 
             reward_total += reward
 
+            if d:
+                continue
+
         print('Reward earned: {}'.format(reward_total))
         f.write('{}\t{}\n'.format(epo, reward_total))
 
@@ -116,4 +119,13 @@ def column(matrix, i):
 
 if __name__ == '__main__':
     with tf.Session() as sess:
-        train(sess, epochs=200, run_length=300)
+        env = gym.make('Pendulum-v0')
+
+        state_dim = env.observation_space.shape[0]
+        action_dim = env.action_space.shape[0]
+        max_action = env.action_space.high
+
+        actor_model = actor.ActorNetwork(sess, state_dim, action_dim, max_action, 0.0001, 0.001) 
+        critic_model = critic.CriticNetwork(sess, state_dim, action_dim, max_action, 0.001, 0.001, actor_model.get_num_trainable_vars()) 
+
+        train(sess, actor_model, critic_model, env, epochs=200, run_length=300)
