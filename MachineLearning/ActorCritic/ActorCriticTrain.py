@@ -162,7 +162,7 @@ if __name__ == '__main__':
         actor_model = actor.ActorNetwork(sess, state_dim, action_dim, max_action, 0.0001, 0.001) 
         critic_model = critic.CriticNetwork(sess, state_dim, action_dim, max_action, 0.001, 0.001, actor_model.get_num_trainable_vars()) 
 
-        train(sess, actor_model, critic_model, env, epochs=200, run_length=300,filepath='ACOUT', render=True)
+        train(sess, actor_model, critic_model, env, epochs=200, run_length=300, render=True)
 
         raw_input('Training complete, press enter to continue to test.')
 
