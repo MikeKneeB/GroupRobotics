@@ -9,7 +9,7 @@ import random
 import actor
 import critic
 
-def train(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.1, buffer = 1000, critic_path=None, actor_path=None, filepath='ACOUT', render=False):
+def train(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.01, buffer = 1000, filepath='ACOUT', render=False):
 
     #actor_model = ACNetworks.ActorNet.create_actor()
     #critic_model = ACNetworks.CriticNet.create_critic()
@@ -115,6 +115,9 @@ def train(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300,
         f.write('{}\t{}\n'.format(epo, reward_total[0]))
 
     f.close()
+
+def test(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300):
+    return 0
 
 def column(matrix, i):
     return [row[i] for row in matrix]
