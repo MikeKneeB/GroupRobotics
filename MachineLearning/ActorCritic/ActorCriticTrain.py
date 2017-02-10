@@ -24,7 +24,7 @@ def train(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300,
     if filepath is not None: 
         f = open(filepath, 'w')
     else:
-        f = open('{}:{}_{}-{}-{}_e{}-l{}_m{}-b{}'.format(now.hour, now.minute, now.day, now.month, now.year, epochs, run_length, buffer, batch_size))
+        f = open('{}:{}_{}-{}-{}_e{}-l{}_m{}-b{}'.format(now.hour, now.minute, now.day, now.month, now.year, epochs, run_length, buffer, batch_size), 'w')
     f.write('{}\t{}\n'.format('ep','re'))
 
     #if actor_path == None and critic_path == None:
@@ -162,7 +162,7 @@ if __name__ == '__main__':
         actor_model = actor.ActorNetwork(sess, state_dim, action_dim, max_action, 0.0001, 0.001) 
         critic_model = critic.CriticNetwork(sess, state_dim, action_dim, max_action, 0.001, 0.001, actor_model.get_num_trainable_vars()) 
 
-        train(sess, actor_model, critic_model, env, epochs=200, run_length=300, render=True)
+        train(sess, actor_model, critic_model, env, epochs=200, run_length=300,filepath='ACOUT', render=True)
 
         raw_input('Training complete, press enter to continue to test.')
 
