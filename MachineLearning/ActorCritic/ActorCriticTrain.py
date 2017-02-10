@@ -9,7 +9,7 @@ import random
 import actor
 import critic
 
-def train(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.1, buffer = 80, critic_path=None, actor_path=None, filepath='ACOUT', render=True):
+def train(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.1, buffer = 1000, critic_path=None, actor_path=None, filepath='ACOUT', render=False):
 
     #actor_model = ACNetworks.ActorNet.create_actor()
     #critic_model = ACNetworks.CriticNet.create_critic()
