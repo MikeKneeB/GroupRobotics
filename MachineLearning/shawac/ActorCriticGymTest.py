@@ -6,7 +6,7 @@ import actorcritic as ac
 env = gym.make('Pendulum-v0')
 env.reset()
 f = open('shawac.txt', 'w')
-f.write('epoch\treward')
+f.write('epoch\treward\n')
 
 def get_observations(action):
     torque = np.array([action, 0])
@@ -29,7 +29,7 @@ def reset_enviroment():
     angleRad = np.arctan(pendulumY/pendulumX)
     angleDeg = int(np.round(np.rad2deg(angleRad)*2))
     velocity = int(np.round(pendulumZ))
-    return (angleDeg, velocity)
+    return angleDeg, velocity
     
 # actions discretized
 numberOfActions = 9
@@ -42,12 +42,12 @@ for i in range(numberOfActions):
 # (positions, velocities)
 stateDimensions = (360, 16)
 
-discount = 0.85
-timeHorizon = 50
+discount = 0.95
+timeHorizon = 100
 
 actor = ac.ActorCritic(numberOfActions, timeHorizon, stateDimensions, discount)
 
-for epoch in range(100):
+for epoch in range(1000):
 
     # reset enviroment and extract initial state
     state = reset_enviroment()
