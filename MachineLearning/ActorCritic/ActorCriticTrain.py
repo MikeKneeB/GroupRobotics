@@ -5,12 +5,14 @@ import tflearn
 import numpy as np
 import gym
 import random
+import datetime
 
 import actor
 import critic
 
-def train(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.01, buffer = 1000, filepath='ACOUT', render=False):
+def train(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.01, buffer = 1000, filepath=None, render=False):
 
+    now = datetime.datetime.now()
     #actor_model = ACNetworks.ActorNet.create_actor()
     #critic_model = ACNetworks.CriticNet.create_critic()
 
@@ -19,8 +21,10 @@ def train(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300,
 
     max_action = env.action_space.high
 
-    
-    f = open(filepath, 'w')
+    if filepath is not None: 
+        f = open(filepath, 'w')
+    else:
+        f = open('{}:{}_{}-{}-{}_e{}-l{}_m{}-b{}'.format(now.hour, now.minute, now.day, now.month, now.year, epochs, run_length, buffer, batch_size))
     f.write('{}\t{}\n'.format('ep','re'))
 
     #if actor_path == None and critic_path == None:
@@ -48,11 +52,8 @@ def train(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300,
         reward_total = 0
         reward = 0
 
-        if epo == epochs - 10:
-            raw_input('Enter to continue.')
-
         for j in range(run_length):
-            if render or epo >= epochs - 10:
+            if render:
                 env.render()
 
             print('Obs: {}'.format(obs_1.reshape(1, state_dim)))
@@ -117,6 +118,34 @@ def train(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300,
     f.close()
 
 def test(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300):
+    for epo in range(epochs+1):
+        print('Game: %s' % epo)
+
+        obs_1 = env.reset()
+
+        reward_total = 0
+        reward = 0
+
+        for j in range(run_length):
+            env.render()
+
+            print('Obs: {}'.format(obs_1.reshape(1, state_dim)))
+
+            action = actor_model.predict(obs_1.reshape(1, state_dim))
+
+            print('Act val: {} [{}, {}]'.format(action, epo, j))
+
+            obs_2, reward, d, i = env.step(action)
+
+            obs_1 = obs_2[:]
+
+            reward_total += reward
+
+            if d:
+                continue
+
+        print('Reward earned: {}'.format(reward_total))
+ 
     return 0
 
 def column(matrix, i):
@@ -133,4 +162,8 @@ if __name__ == '__main__':
         actor_model = actor.ActorNetwork(sess, state_dim, action_dim, max_action, 0.0001, 0.001) 
         critic_model = critic.CriticNetwork(sess, state_dim, action_dim, max_action, 0.001, 0.001, actor_model.get_num_trainable_vars()) 
 
-        train(sess, actor_model, critic_model, env, epochs=200, run_length=300)
+        train(sess, actor_model, critic_model, env, epochs=200, run_length=300, render=True)
+
+        raw_input('Training complete, press enter to continue to test.')
+
+        test(sess, actor_model, critic_model, env, epochs=50, run_length=300)
