@@ -59,10 +59,13 @@ class _Critic:
         self.timeHorizon = timeHorizon
         self.discount = discount
 
-    def getTDError(self, state, nextState, policy, actionKnowledge):
-        r1 = self.rewards[nextState]
-        v1 = self.value(nextState, policy, actionKnowledge)
-        v0 = self.value(state, policy, actionKnowledge)
+    def getTDError(self, previousState, newState, policy, actionKnowledge):
+        r1 = self.rewards[newState]
+        #print "Reward of new state: ", r1
+        v1 = self.value(newState, policy, actionKnowledge)
+        #print "Value of new state: ", v1
+        v0 = self.value(previousState, policy, actionKnowledge)
+        #print "Value of previous state: ", v0
         return r1 + self.discount*v1 - v0
 
     def value(self, currentState, policy, actionKnowledge):
@@ -75,12 +78,13 @@ class _Critic:
             state = tuple([int(round(stateVar)) for stateVar in expectedState])
 
             reward = self.rewards[state]
-            value += self.discount**t + reward
+            value += self.discount**t * reward
 
         return value
 
     def updateReward(self, state, reward):
         #print "Updated state ", state, " reward from ", self.rewards[state], " to ", reward
+        #print "Current reward space: ", self.rewards
         self.rewards[state] = reward
 
 
