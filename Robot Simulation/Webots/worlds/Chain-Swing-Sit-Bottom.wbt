@@ -1,0 +1,210 @@
+#VRML_SIM V8.5 utf8
+WorldInfo {
+  info [
+    "Aldebaran's Nao H25 V5.0"
+    "Author: Yvan Bourquin - www.cyberbotics.com"
+    "Date: 06 Feb 2012"
+  ]
+  title "Aldebaran Nao H25 V5.0"
+  basicTimeStep 20
+  FPS 20
+  contactProperties [
+    ContactProperties {
+      material1 "NAO foot material"
+      coulombFriction [
+        7
+      ]
+      bounce 0.3
+      bounceVelocity 0.003
+    }
+  ]
+}
+Viewpoint {
+  orientation 0.007303028 -0.99992333 0.0099995696 1.880073
+  position -3.1204859 1.1822812 -1.0196574
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+PointLight {
+  ambientIntensity 1
+  intensity 0.6
+  location 2 0.9 0
+}
+Floor {
+  size 25 25
+  tileSize 0.8 0.8
+  texture [
+    "/Users/hargwit/Documents/Robot Simulation/Webots/textures/checkered_marble.jpg"
+  ]
+}
+Nao {
+  translation -0.57143791 0.31687997 0.0031876509
+  rotation -0.37796386 -0.65465515 -0.65465254 3.8643285
+  controller "naoqisim"
+  controllerArgs "9559"
+  synchronization FALSE
+  bodySlot [
+    DEF Robot-Seat Connector {
+      translation -0.021213197 0 -0.080960121
+      rotation 0 1 0 4.1887901
+      name "Robot-Seat-Connector"
+      locked TRUE
+      isLocked TRUE
+      autoLock TRUE
+      distanceTolerance 0.1
+      snap FALSE
+    }
+  ]
+}
+DEF Swing Robot {
+  translation 0 2 0
+  children [
+    DEF RArm Transform {
+      translation 0 0 -0.25
+      children [
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 0 1
+            minStop -3
+            maxStop 3
+          }
+          endPoint Solid {
+            translation 0 -0.5 0
+            rotation 0 0 1 0
+            children [
+              DEF Second_Joint Transform {
+                translation 0 -0.5 0
+                children [
+                  HingeJoint {
+                    jointParameters HingeJointParameters {
+                      minStop -3
+                      maxStop 3
+                    }
+                    endPoint Solid {
+                      translation 0 -0.05 0
+                      children [
+                        Transform {
+                          translation 0 -0.05 0
+                          children [
+                            HingeJoint {
+                              jointParameters HingeJointParameters {
+                                minStop -3
+                                maxStop 3
+                              }
+                              endPoint Solid {
+                                translation 0 -0.05 0
+                                children [
+                                  Shape {
+                                    appearance Appearance {
+                                      material Material {
+                                      }
+                                    }
+                                    geometry DEF Side_Arm_3 Box {
+                                      size 0.01 0.1 0.01
+                                    }
+                                  }
+                                ]
+                                boundingObject USE Side_Arm_3
+                                physics Physics {
+                                  density -1
+                                  mass 2
+                                }
+                              }
+                            }
+                          ]
+                        }
+                        Shape {
+                          appearance Appearance {
+                            material Material {
+                            }
+                          }
+                          geometry DEF Side_Arm_2 Box {
+                            size 0.01 0.1 0.01
+                          }
+                        }
+                      ]
+                      boundingObject USE Side_Arm_2
+                      physics Physics {
+                        density -1
+                        mass 2
+                      }
+                    }
+                  }
+                ]
+              }
+              Shape {
+                appearance Appearance {
+                  material Material {
+                  }
+                }
+                geometry DEF Side_Arm_1 Box {
+                  size 0.01 1 0.01
+                }
+              }
+            ]
+            name "RightArm"
+            boundingObject USE Side_Arm_1
+            physics Physics {
+              density -1
+              mass 2
+            }
+          }
+        }
+      ]
+    }
+    DEF LArm Transform {
+      translation 0 0 0.25
+      children [
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 0 1
+            anchor 0 0 1
+            minStop -3
+            maxStop 3
+          }
+          endPoint Solid {
+            translation 0 -0.5 0
+            rotation 0 0 1 0
+            children [
+              DEF Arm-Seat Connector {
+                translation 0 -0.907 0
+                rotation 1 0 0 1.5707997
+                name "Arm-Seat-Connector"
+                locked TRUE
+                isLocked TRUE
+                autoLock TRUE
+                snap FALSE
+              }
+              Shape {
+                appearance Appearance {
+                  material Material {
+                  }
+                }
+                geometry USE Side_Arm_1
+              }
+            ]
+            name "Left_Arm"
+            boundingObject USE Side_Arm_1
+            physics DEF Arm_Physics Physics {
+              density -1
+              mass 2
+            }
+          }
+        }
+      ]
+    }
+    DEF Top_Bar Shape {
+      appearance Appearance {
+        material Material {
+        }
+      }
+      geometry DEF Top_Bar_Geometry Box {
+        size 0.01 0.01 0.5
+      }
+    }
+  ]
+  name "Swing"
+  boundingObject USE Top_Bar_Geometry
+}

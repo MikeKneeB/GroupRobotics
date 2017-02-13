@@ -1,0 +1,436 @@
+#VRML_SIM V8.3.2 utf8
+WorldInfo {
+  basicTimeStep 16
+}
+Viewpoint {
+  orientation 0.160688 -0.924214 -0.346422 3.96924
+  position 17.2822 20.1428 -14.0216
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+Ceiling {
+  translation 0 3 0
+  size 5 5
+}
+Nao {
+  hidden position_0_0 -3.6763e-08
+  hidden position2_0_0 -0.000164618
+  hidden position_0_1 -0.133947
+  hidden position2_0_1 -0.125207
+  hidden position_0_2 -0.153742
+  hidden position2_0_2 0.0801621
+  hidden position_0_3 -2.00459e-05
+  hidden position_0_4 -1.71989e-05
+  hidden linearVelocity_0 -0.00166689 0.0014227 0.000149784
+  hidden angularVelocity_0 0.00173596 5.43351e-05 -0.0124324
+  hidden translation_11 -6.28582e-05 3.71993e-07 0.126984
+  hidden rotation_11 -9.66575e-05 1 0.000185453 -0.000164796
+  hidden linearVelocity_11 -0.00109913 0.00288164 0.000237203
+  hidden angularVelocity_11 0.00173602 5.43892e-05 -0.0124325
+  hidden translation_18 0.000159942 -0.0979688 0.100483
+  hidden rotation_18 -0.0744725 0.994501 -0.0736366 1.28066
+  hidden position_18_0 -6.10883e-06
+  hidden linearVelocity_18 -0.0015461 0.0016689 -0.000254237
+  hidden angularVelocity_18 0.00795485 0.0306162 -0.0129631
+  hidden translation_19 0.105527 -0.0150159 0.000379138
+  hidden rotation_19 -0.924304 0.379607 0.0395177 1.0489e-05
+  hidden position_19_0 0.073569
+  hidden linearVelocity_19 -0.000823904 0.000664843 -0.00217625
+  hidden angularVelocity_19 0.00789527 0.0306192 -0.0129669
+  hidden translation_20 0.000318079 -3.29804e-07 0.000385165
+  hidden rotation_20 -4.13926e-05 5.41065e-05 1 0.0735627
+  hidden position_20_0 -0.0214096
+  hidden linearVelocity_20 -0.000780199 -6.7001e-05 -0.00301753
+  hidden angularVelocity_20 0.00636018 -0.000203411 -0.013183
+  hidden translation_21 0.0564897 -1.33269e-05 0.000494413
+  hidden rotation_21 -1 0.000287529 7.45013e-05 0.0213974
+  hidden position_21_0 0.268887
+  hidden position_21_1 -1.05337e-05
+  hidden position_21_2 7.94506e-10
+  hidden linearVelocity_21 -0.000779935 -0.00091068 -0.00302513
+  hidden angularVelocity_21 0.000762645 7.63565e-05 -0.0131494
+  hidden translation_22 0.0703176 -0.0110071 -0.00601012
+  hidden rotation_22 3.18563e-05 -1 7.3557e-05 -0.691119
+  hidden position_22_0 1.7335e-10
+  hidden linearVelocity_22 -0.00107198 -0.000907981 -0.00170959
+  hidden angularVelocity_22 0.000793995 0.000267489 -0.00107895
+  hidden translation_24 0.0140873 -1.45495e-05 -0.000233914
+  hidden rotation_24 -2.72546e-09 -1 1.31195e-07 -0.96
+  hidden position_24_0 -7.92382e-11
+  hidden linearVelocity_24 -0.0010888 -0.000918324 -0.00172452
+  hidden angularVelocity_24 0.000793995 0.000267489 -0.00107895
+  hidden translation_25 0.0142744 -2.70947e-06 -6.15962e-05
+  hidden rotation_25 -6.18517e-09 -1 -6.81897e-10 -0.96
+  hidden linearVelocity_25 -0.00110058 -0.00091152 -0.00173151
+  hidden angularVelocity_25 0.000793995 0.000267489 -0.00107896
+  hidden translation_26 0.0689358 0.0119185 -0.00415908
+  hidden rotation_26 9.74811e-06 -1 6.44686e-06 -0.960001
+  hidden position_26_0 -0.00213791
+  hidden linearVelocity_26 -0.000802423 -0.003335 -0.00453169
+  hidden angularVelocity_26 0.000805031 5.72594e-05 -0.0130833
+  hidden translation_27 0.0134574 -0.000684002 -0.000276639
+  hidden rotation_27 6.0521e-06 -1 2.24921e-06 -0.962138
+  hidden position_27_0 1.85599e-06
+  hidden linearVelocity_27 -0.000701526 -0.00652836 -0.00620606
+  hidden angularVelocity_27 0.000988975 0.000385141 0.0123182
+  hidden translation_28 0.0142621 -0.000212958 -0.000203984
+  hidden rotation_28 1.95656e-06 -1 4.23261e-07 -0.96
+  hidden linearVelocity_28 -5.59141e-05 -0.0106091 -0.00817842
+  hidden angularVelocity_28 0.000975502 0.000359694 0.0123063
+  hidden translation_29 0.0495912 -1.4691e-07 -0.0264413
+  hidden rotation_29 -0.000423699 0.999999 0.00137616 7.94494e-10
+  hidden position_29_0 2.35208e-10
+  hidden linearVelocity_29 -0.00118123 -0.00117149 -0.00304992
+  hidden angularVelocity_29 0.000762645 7.63566e-05 -0.0131494
+  hidden translation_30 0.0141939 6.39023e-08 0.000169287
+  hidden rotation_30 1.24231e-13 1 -3.19391e-13 -0.96
+  hidden linearVelocity_30 -0.00112208 -0.0013275 -0.00304739
+  hidden angularVelocity_30 0.000762645 7.63565e-05 -0.0131494
+  hidden translation_31 0.000174424 0.0979165 0.10052
+  hidden rotation_31 0.0479549 0.997677 0.0483746 1.25783
+  hidden position_31_0 5.15042e-06
+  hidden linearVelocity_31 -0.00138474 0.00199624 0.000536915
+  hidden angularVelocity_31 -0.00301298 -0.0233082 -0.0199949
+  hidden translation_32 0.105491 0.0149676 0.000410538
+  hidden rotation_32 -0.556765 0.536414 -0.634249 1.31267e-05
+  hidden position_32_0 -0.140059
+  hidden linearVelocity_32 -0.00070904 0.000701202 0.00192669
+  hidden angularVelocity_32 -0.00298628 -0.0233089 -0.0199974
+  hidden translation_33 0.000270028 -8.63505e-05 0.00041554
+  hidden rotation_33 -9.20637e-06 5.29772e-05 -1 0.140053
+  hidden position_33_0 -0.0476833
+  hidden linearVelocity_33 -0.000590052 -0.000364939 0.00255532
+  hidden angularVelocity_33 -0.00227128 -0.00020861 -0.0190867
+  hidden translation_34 0.0564502 -2.45738e-05 0.00052446
+  hidden rotation_34 -1 0.000225127 -0.000126292 0.0476877
+  hidden position_34_0 0.24954
+  hidden position_34_1 2.56261
+  hidden position_34_2 -2.35562
+  hidden linearVelocity_34 -0.000543034 -0.00161503 0.00256334
+  hidden angularVelocity_34 -0.000288478 -0.000265624 -0.0190746
+  hidden translation_35 0.0710952 -0.0214325 -0.00920023
+  hidden rotation_35 -5.32561e-05 -1 9.22491e-05 -0.710483
+  hidden position_35_0 -2.07172
+  hidden linearVelocity_35 -0.00107896 -0.00130559 0.00132729
+  hidden angularVelocity_35 -0.000350393 -0.000127225 -0.00114561
+  hidden translation_37 0.0101258 -0.00158112 -0.00475512
+  hidden rotation_37 1.39987e-05 -1 1.19145e-06 -3.03172
+  hidden position_37_0 7.24941e-06
+  hidden linearVelocity_37 -0.00111578 -0.00140031 0.00123537
+  hidden angularVelocity_37 -0.000276669 -0.000256128 -0.016165
+  hidden translation_38 0.014667 -0.000770362 -0.000303319
+  hidden rotation_38 2.43074e-06 -1 7.37904e-06 -0.959999
+  hidden linearVelocity_38 -0.000809642 -0.00141358 0.00118571
+  hidden angularVelocity_38 -0.000278057 -0.000256024 -0.0160719
+  hidden translation_39 0.0666942 0.0176571 -0.002243
+  hidden rotation_39 -5.61043e-06 -1 3.66614e-05 1.60261
+  hidden position_39_0 -0.984481
+  hidden linearVelocity_39 -0.00161132 -0.0036712 0.00303907
+  hidden angularVelocity_39 -0.00084184 0.00068339 0.0921132
+  hidden translation_40 0.0153196 0.00365219 -0.000205845
+  hidden rotation_40 -1.7573e-05 -1 -9.14459e-06 -1.94448
+  hidden position_40_0 -0.789232
+  hidden linearVelocity_40 -0.00204482 -0.00294523 0.00281112
+  hidden angularVelocity_40 -0.00164191 0.00207918 0.254785
+  hidden translation_41 0.013708 0.00179452 0.000182139
+  hidden rotation_41 -5.67637e-06 -1 -2.65573e-06 -1.74923
+  hidden linearVelocity_41 -0.000557276 -0.00177472 0.00270511
+  hidden angularVelocity_41 -0.000931044 0.000846807 0.110714
+  hidden translation_42 0.0474318 0.00103869 -0.024665
+  hidden rotation_42 1.73787e-06 1 -3.44716e-06 -2.35562
+  hidden position_42_0 -9.52922e-06
+  hidden linearVelocity_42 -0.00185137 -0.00318204 0.00279804
+  hidden angularVelocity_42 -0.00174249 0.00220482 0.270691
+  hidden translation_43 0.0148448 0.000432639 0.000363511
+  hidden rotation_43 -7.87769e-07 1 1.8333e-06 -0.960009
+  hidden linearVelocity_43 -0.00307775 -0.00490364 0.00315535
+  hidden angularVelocity_43 -0.00174145 0.00220372 0.270721
+  hidden translation_44 0.000161195 -0.0505993 -0.0848511
+  hidden rotation_44 0.427091 0.711344 0.558196 -5.11661e-05
+  hidden position_44_0 9.41459e-06
+  hidden linearVelocity_44 -0.00214824 0.000164623 7.57461e-05
+  hidden angularVelocity_44 0.00173603 5.45415e-05 -0.0124327
+  hidden translation_45 3.56678e-05 -6.73423e-06 0.000356144
+  hidden rotation_45 -0.0773828 0.996906 -0.0137956 -2.25172e-05
+  hidden position_45_0 1.27371e-06
+  hidden linearVelocity_45 -0.00237473 -0.000195386 4.14915e-05
+  hidden angularVelocity_45 0.00173256 4.48494e-05 -0.0124331
+  hidden translation_46 0.000456222 -6.44394e-06 2.91551e-05
+  hidden rotation_46 0.574096 0.592826 -0.564775 2.14854e-06
+  hidden position_46_0 5.15166e-07
+  hidden linearVelocity_46 -0.00237775 -0.000836318 3.76497e-05
+  hidden angularVelocity_46 0.00173263 4.50545e-05 -0.0124335
+  hidden translation_47 0.000768333 9.99529e-07 -0.10175
+  hidden rotation_47 -0.177599 0.375987 0.909446 1.37017e-06
+  hidden position_47_0 1.30351e-07
+  hidden linearVelocity_47 -0.0027411 -0.00198115 -1.81687e-05
+  hidden angularVelocity_47 0.00173267 4.51459e-05 -0.0124336
+  hidden translation_48 0.000307305 1.409e-06 -0.104534
+  hidden rotation_48 -0.583041 0.805499 -0.105995 2.36992e-07
+  hidden position_48_0 -5.53041e-07
+  hidden linearVelocity_48 -0.00298773 -0.00252049 -5.50673e-05
+  hidden angularVelocity_48 0.00173268 4.51529e-05 -0.0124336
+  hidden translation_49 0.00124129 1.60942e-06 -0.00108103
+  hidden rotation_49 -0.697346 0.704178 -0.133572 1.81306e-07
+  hidden linearVelocity_49 -0.00285124 -0.00310546 -3.85451e-05
+  hidden angularVelocity_49 0.00173249 4.46105e-05 -0.0124336
+  hidden translation_50 0.0198257 -0.00699857 -0.0415081
+  hidden rotation_50 2.35234e-07 -4.32507e-09 1 -3.14159
+  hidden linearVelocity_50 -0.00295624 -0.0031965 -5.36594e-05
+  hidden angularVelocity_50 0.00173249 4.46096e-05 -0.0124336
+  hidden translation_54 0.000243623 0.0505534 -0.0843741
+  hidden rotation_54 -0.377013 0.814849 -0.44032 -6.10912e-05
+  hidden position_54_0 -1.00496e-05
+  hidden linearVelocity_54 -0.00216049 0.00037062 8.74613e-05
+  hidden angularVelocity_54 0.00173587 5.58348e-05 -0.0124302
+  hidden translation_55 5.15576e-05 -3.9925e-06 0.000267517
+  hidden rotation_55 0.0619832 0.998077 -8.9287e-05 -1.92794e-05
+  hidden position_55_0 3.95875e-06
+  hidden linearVelocity_55 -0.00241948 7.5225e-05 6.11171e-05
+  hidden angularVelocity_55 0.00173989 6.67278e-05 -0.0124287
+  hidden translation_56 0.000438986 -3.72411e-06 -5.16117e-05
+  hidden rotation_56 -0.300522 0.916659 -0.263482 4.31867e-06
+  hidden position_56_0 5.14402e-07
+  hidden linearVelocity_56 -0.00246126 -0.000546785 6.30083e-05
+  hidden angularVelocity_56 0.00174045 6.79768e-05 -0.0124273
+  hidden translation_57 0.000774782 -3.29925e-06 -0.101753
+  hidden rotation_57 -0.451917 0.407703 0.793441 1.2617e-06
+  hidden position_57_0 2.03504e-07
+  hidden linearVelocity_57 -0.00282444 -0.00168949 4.8713e-06
+  hidden angularVelocity_57 0.00174049 6.80714e-05 -0.0124273
+  hidden translation_58 0.000306147 -2.24987e-06 -0.104534
+  hidden rotation_58 0.426184 0.896409 -0.12173 3.16792e-07
+  hidden position_58_0 2.0814e-07
+  hidden linearVelocity_58 -0.00307219 -0.00223729 -3.3405e-05
+  hidden angularVelocity_58 0.0017405 6.80813e-05 -0.0124273
+  hidden translation_59 0.00124014 -2.04701e-06 -0.00108092
+  hidden rotation_59 0.363827 0.910676 -0.1957 2.01602e-07
+  hidden linearVelocity_59 -0.00293398 -0.002807 -1.7519e-05
+  hidden angularVelocity_59 0.00174029 6.74895e-05 -0.0124273
+  hidden translation_60 0.0198281 0.00699839 -0.041485
+  hidden rotation_60 -1.11037e-07 -2.62113e-08 1 -3.14159
+  hidden linearVelocity_60 -0.00303656 -0.00287969 -3.24099e-05
+  hidden angularVelocity_60 0.00174029 6.74887e-05 -0.0124273
+  translation -0.00698599 0.879339 0.0272289
+  rotation -0.696557 -0.494768 0.519628 1.86092
+  controller "my_controller"
+  leftHandSlot [
+    DEF LeftConnector Connector {
+      boundingObject Box {
+        size 0.1 0.1 0.1
+      }
+      physics Physics {
+      }
+      isLocked TRUE
+      distanceTolerance 0.1
+      axisTolerance 3.14
+      rotationTolerance 3.14
+      numberOfRotations 0
+      snap FALSE
+    }
+  ]
+  rightHandSlot [
+    DEF RightConnector Connector {
+      boundingObject Box {
+        size 0.1 0.1 0.1
+      }
+      physics Physics {
+      }
+      isLocked TRUE
+      distanceTolerance 0.1
+      axisTolerance 3.14159
+      rotationTolerance 3.14
+      numberOfRotations 0
+      snap FALSE
+    }
+  ]
+}
+DirectionalLight {
+  ambientIntensity 1
+  direction -0.1 -0.5 -0.3
+}
+RectangleArena {
+  floorSize 5 5
+}
+FloorLight {
+  translation -2.00175 -8.88178e-16 1.89667
+}
+FloorLight {
+  translation 2.00366 2.22044e-15 -2.13347
+}
+DEF Swing Robot {
+  translation 0 2.2 0
+  rotation 1 0 0 -1.5708
+  children [
+    DEF RArm Transform {
+      translation 0 0.25 -0.06
+      children [
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position -0.151042
+            axis 0 1 0
+            anchor 0 1 0
+            minStop -3.1416
+            maxStop 3.1416
+            dampingConstant 1
+          }
+          endPoint Solid {
+            translation -0.056296 0.0107635 -0.71835
+            rotation -0.999797 -0.0115468 0.0165169 -1.56162
+            children [
+              Transform {
+                translation 0 -0.75 0
+                children [
+                  DEF SeatShape Solid {
+                    translation 0 0 0.25
+                    children [
+                      DEF Left_Hand_Bar Connector {
+                        translation 0.2 0.25 -0.1
+                        boundingObject Box {
+                          size 0.1 0.1 0.1
+                        }
+                        physics Physics {
+                        }
+                        isLocked TRUE
+                        distanceTolerance 0.1
+                        axisTolerance 3.14
+                        rotationTolerance 3.14
+                        numberOfRotations 0
+                        snap FALSE
+                      }
+                      DEF Right_Hand_Bar Connector {
+                        translation 0.2 0.25 0.1
+                        boundingObject Box {
+                          size 0.1 0.1 0.1
+                        }
+                        physics Physics {
+                        }
+                        isLocked TRUE
+                        distanceTolerance 0.1
+                        rotationTolerance 3.14
+                        numberOfRotations 0
+                        snap FALSE
+                      }
+                      DEF C1 Connector {
+                        translation 0 0 0.25
+                        rotation 1 0 0 -1.5708
+                        isLocked TRUE
+                        autoLock TRUE
+                        distanceTolerance 0.05
+                        numberOfRotations 0
+                        snap FALSE
+                      }
+                      DEF SeatCon Connector {
+                        translation 0 0 0.25
+                        rotation 1 0 0 -1.5708
+                        autoLock TRUE
+                        numberOfRotations 0
+                      }
+                      Shape {
+                        appearance Appearance {
+                          material Material {
+                          }
+                        }
+                        geometry DEF SSeat Box {
+                          size 0.1 0.01 0.5
+                        }
+                      }
+                    ]
+                    boundingObject USE SSeat
+                    physics Physics {
+                    }
+                  }
+                ]
+              }
+              DEF RVBar Shape {
+                appearance Appearance {
+                  material Material {
+                  }
+                }
+                geometry Cylinder {
+                  height 1.5
+                  radius 0.05
+                }
+              }
+            ]
+            boundingObject USE RVBar
+            physics Physics {
+              centerOfMass [
+                0 0 0
+              ]
+            }
+            linearVelocity -0.000874069 3.66615e-05 3.06634e-06
+            angularVelocity -2.51255e-06 4.18651e-06 -0.00107319
+          }
+        }
+      ]
+    }
+    DEF LArm Transform {
+      translation 0 -0.25 -0.06
+      children [
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position -0.15455
+            axis 0 1 0
+            anchor 0 1 0
+            minStop -3.1416
+            maxStop 3.1416
+            dampingConstant 1
+          }
+          endPoint Solid {
+            translation -0.037316 -0.0137804 -0.764081
+            rotation -0.99985 -0.0122481 0.0122189 -1.56743
+            children [
+              DEF C1 Connector {
+                translation 0 -0.75 0
+                rotation 1 0 0 1.5708
+                isLocked TRUE
+                autoLock TRUE
+                distanceTolerance 0.05
+                numberOfRotations 0
+                snap FALSE
+              }
+              DEF SVBar2 Shape {
+                appearance Appearance {
+                  material Material {
+                  }
+                }
+                geometry Cylinder {
+                  height 1.5
+                  radius 0.05
+                }
+              }
+            ]
+            boundingObject USE SVBar2
+            physics Physics {
+              centerOfMass [
+                0 0 0
+              ]
+            }
+            linearVelocity -0.000817737 4.31552e-05 2.2018e-06
+            angularVelocity -1.82609e-06 1.31626e-06 -0.00107373
+          }
+        }
+      ]
+    }
+    DEF SHBarShape Shape {
+      appearance DEF SwingApp Appearance {
+        material Material {
+          diffuseColor 0.7 0.4 0.8
+        }
+        texture ImageTexture {
+        }
+      }
+      geometry DEF SHBar Cylinder {
+        height 0.5
+        radius 0.05
+      }
+    }
+  ]
+  name "Swing"
+  boundingObject USE SHBarShape
+  selfCollision TRUE
+}

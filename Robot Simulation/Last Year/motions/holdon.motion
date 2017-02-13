@@ -1,0 +1,2 @@
+#WEBOTS_MOTION,V1.0,RShoulderRoll,LShoulderRoll,LElbowYaw,RElbowYaw,LElbowRoll,RElbowRoll,LWristYaw,RWristYaw
+00:00:000,Pose1,-0.6,0.6,-.5,.5,-1,1,-1.5,1.5

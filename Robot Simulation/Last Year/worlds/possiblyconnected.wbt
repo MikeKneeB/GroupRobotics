@@ -1,0 +1,225 @@
+#VRML_SIM V8.3.2 utf8
+WorldInfo {
+  basicTimeStep 16
+}
+Viewpoint {
+  orientation 0.0698463 0.996642 0.042734 5.05274
+  position -14.9918 2.58071 5.39744
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+Ceiling {
+  translation 0 3 0
+  size 5 5
+}
+Nao {
+  hidden position_0_0 1.84972e-09
+  hidden position2_0_0 1.61146e-07
+  hidden position_0_1 -3.78879e-08
+  hidden position2_0_1 -4.88198e-08
+  hidden position_0_2 -3.71895e-08
+  hidden position2_0_2 -3.25842e-08
+  hidden position_0_3 2.98248e-07
+  hidden position_0_4 1.01485e-06
+  hidden position_19_0 -1.02995e-08
+  hidden position_20_0 1.18157e-08
+  hidden position_21_0 6.6407e-09
+  hidden position_22_0 -1.54537e-10
+  hidden position_22_1 -1.54543e-10
+  hidden position_22_2 7.55312e-11
+  hidden position_23_0 -6.76135e-11
+  hidden position_24_0 1.61822e-11
+  hidden position_26_0 -6.76162e-11
+  hidden position_27_0 1.61807e-11
+  hidden position_29_0 -1.63957e-11
+  hidden position_31_0 1.07822e-08
+  hidden position_32_0 -1.21989e-08
+  hidden position_33_0 -2.25653e-08
+  hidden position_34_0 1.52856e-10
+  hidden position_34_1 1.52877e-10
+  hidden position_34_2 2.34182e-11
+  hidden position_35_0 6.95551e-11
+  hidden position_36_0 6.87696e-12
+  hidden position_38_0 6.95484e-11
+  hidden position_39_0 6.87918e-12
+  hidden position_41_0 1.69326e-11
+  hidden position_43_0 1.26698e-06
+  hidden position_44_0 -1.1
+  hidden position_45_0 1
+  hidden position_46_0 -3.71555e-07
+  hidden position_47_0 -3.13558e-07
+  hidden translation_49 0.02 -0.00699817 -0.0409595
+  hidden rotation_49 2.32477e-07 -4.49798e-09 1 -3.14159
+  hidden position_53_0 7.49552e-07
+  hidden position_54_0 -1.1
+  hidden position_55_0 1
+  hidden position_56_0 -2.98394e-07
+  hidden position_57_0 2.70765e-07
+  hidden translation_59 0.0199988 0.00699817 -0.0409595
+  hidden rotation_59 2.35339e-07 4.52782e-09 1 -3.14159
+  translation 0 0.79 0
+  controller "my_controller"
+  bodySlot [
+    Connector {
+      translation 0 0 -0.12
+      rotation 0 1 0 3.14159
+      autoLock TRUE
+      numberOfRotations 0
+    }
+  ]
+}
+DirectionalLight {
+  ambientIntensity 1
+  direction -0.1 -0.5 -0.3
+}
+RectangleArena {
+  floorSize 5 5
+}
+FloorLight {
+  translation -2.00175 -8.88178e-16 1.89667
+}
+FloorLight {
+  translation 2.00366 2.22044e-15 -2.13347
+}
+DEF Swing Robot {
+  translation 0 2.2 0
+  rotation 1 0 0 -1.5708
+  children [
+    DEF RArm Transform {
+      translation 0 0.25 -0.06
+      children [
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position -0.209083
+            axis 0 1 0
+            anchor 0 1 0
+            minStop -3.1416
+            maxStop 3.1416
+            dampingConstant 1
+          }
+          endPoint Solid {
+            translation -0.000928172 0.000934127 -0.757171
+            rotation -0.999775 0.0150067 -0.0150035 -1.57265
+            children [
+              Transform {
+                translation 0 -0.75 0
+                children [
+                  DEF SeatShape Solid {
+                    translation 0 0 0.25
+                    children [
+                      Connector {
+                        rotation 1 0 0 -1.5708
+                        autoLock TRUE
+                        numberOfRotations 0
+                      }
+                      DEF SeatCon Connector {
+                        translation 0 0 0.25
+                        rotation 1 0 0 -1.5708
+                        autoLock TRUE
+                        numberOfRotations 0
+                      }
+                      Shape {
+                        appearance Appearance {
+                          material Material {
+                          }
+                        }
+                        geometry DEF SSeat Box {
+                          size 0.1 0.01 0.5
+                        }
+                      }
+                    ]
+                    boundingObject USE SSeat
+                    physics Physics {
+                    }
+                  }
+                ]
+              }
+              DEF RVBar Shape {
+                appearance Appearance {
+                  material Material {
+                  }
+                }
+                geometry Cylinder {
+                  height 1.5
+                  radius 0.05
+                }
+              }
+            ]
+            boundingObject USE RVBar
+            physics Physics {
+              centerOfMass [
+                0 0 0
+              ]
+            }
+            linearVelocity 0.00772472 -5.78217e-06 -2.92445e-05
+            angularVelocity 1.82485e-05 2.38873e-09 0.00931717
+          }
+        }
+      ]
+    }
+    DEF LArm Transform {
+      translation 0 -0.25 -0.06
+      children [
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position -0.208869
+            axis 0 1 0
+            anchor 0 1 0
+            minStop -3.1416
+            maxStop 3.1416
+            dampingConstant 1
+          }
+          endPoint Solid {
+            translation -0.00112516 2.38875e-05 -0.754574
+            rotation -0.999778 0.0149084 -0.0149075 -1.57128
+            children [
+              DEF C1 Connector {
+                translation 0 -0.75 0
+                rotation 1 0 0 1.5708
+                autoLock TRUE
+                numberOfRotations 0
+              }
+              DEF SVBar2 Shape {
+                appearance Appearance {
+                  material Material {
+                  }
+                }
+                geometry Cylinder {
+                  height 1.5
+                  radius 0.05
+                }
+              }
+            ]
+            boundingObject USE SVBar2
+            physics Physics {
+              centerOfMass [
+                0 0 0
+              ]
+            }
+            linearVelocity 0.00702777 6.19609e-06 2.86426e-05
+            angularVelocity -1.92499e-05 -4.57186e-07 0.00931446
+          }
+        }
+      ]
+    }
+    DEF SHBarShape Shape {
+      appearance DEF SwingApp Appearance {
+        material Material {
+          diffuseColor 0.7 0.4 0.8
+        }
+        texture ImageTexture {
+        }
+      }
+      geometry DEF SHBar Cylinder {
+        height 0.5
+        radius 0.05
+      }
+    }
+  ]
+  name "Swing"
+  boundingObject USE SHBarShape
+  selfCollision TRUE
+}

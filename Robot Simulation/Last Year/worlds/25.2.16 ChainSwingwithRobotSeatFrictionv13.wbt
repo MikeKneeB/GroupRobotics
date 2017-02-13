@@ -1,0 +1,1212 @@
+#VRML_SIM V8.3.2 utf8
+WorldInfo {
+  basicTimeStep 16
+  contactProperties [
+    ContactProperties {
+      material1 "Seat"
+      material2 "NAO finger material"
+      coulombFriction [
+        -1
+      ]
+      bounce 0
+    }
+    ContactProperties {
+      material1 "Seat"
+      material2 "NAO material"
+      coulombFriction [
+        -1
+      ]
+      bounce 0
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.0095498 0.998442 0.0549698 2.7981
+  position 28.2041 9.20445 -78.0338
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+Ceiling {
+  translation 0 3 0
+  size 5 5
+}
+DirectionalLight {
+  ambientIntensity 1
+  direction -0.1 -0.5 -0.3
+}
+RectangleArena {
+  floorSize 5 5
+}
+FloorLight {
+  translation -2.00175 -8.88178e-16 1.89667
+}
+FloorLight {
+  translation 2.00366 2.22044e-15 -2.13347
+}
+Nao {
+  hidden position_0_0 2.07085e-09
+  hidden position2_0_0 0.000153235
+  hidden position_0_1 -0.358753
+  hidden position2_0_1 -1.02867
+  hidden position_0_2 -0.344078
+  hidden position2_0_2 0.996613
+  hidden position_0_3 -3.72657e-05
+  hidden position_0_4 -7.00614e-08
+  hidden linearVelocity_0 -0.00298525 0.0532114 -0.000130416
+  hidden angularVelocity_0 -0.000352513 -0.0180864 0.242189
+  hidden translation_12 7.21228e-06 -6.03118e-07 0.126558
+  hidden rotation_12 -3.04498e-05 1 1.35121e-05 0.000153235
+  hidden linearVelocity_12 -0.0331607 0.0478024 -0.000571379
+  hidden angularVelocity_12 -0.000352536 -0.0180863 0.242189
+  hidden translation_19 0.000148073 -0.0981029 0.100141
+  hidden rotation_19 -0.174153 0.298899 0.938259 -1.08359
+  hidden position_19_0 0.0729342
+  hidden linearVelocity_19 -0.0183634 0.0415248 0.00025384
+  hidden angularVelocity_19 0.00800117 0.0514311 0.681722
+  hidden translation_20 0.105186 -0.0149006 4.5334e-05
+  hidden rotation_20 -1 0.00021217 -0.000225729 -0.0729316
+  hidden position_20_0 1.35869
+  hidden linearVelocity_20 -0.021975 0.0320422 0.00100679
+  hidden angularVelocity_20 -0.334038 0.120239 0.10793
+  hidden translation_21 0.000202589 0.00016309 4.96426e-05
+  hidden rotation_21 2.50491e-05 4.12719e-05 -1 -1.35869
+  hidden position_21_0 -0.508949
+  hidden linearVelocity_21 -0.025499 0.0219864 0.00101375
+  hidden angularVelocity_21 -0.344241 0.0834604 0.109529
+  hidden translation_22 0.0561881 -0.00015361 8.9343e-05
+  hidden rotation_22 -1 3.77475e-05 -3.8081e-05 0.50894
+  hidden position_22_0 -2.35841e-07
+  hidden position_22_1 3.55129e-06
+  hidden position_22_2 0.158913
+  hidden linearVelocity_22 -0.0252772 0.0237898 0.000278119
+  hidden angularVelocity_22 0.00722486 -0.0186799 -0.0170597
+  hidden translation_23 0.0690382 -0.0132538 -0.0051583
+  hidden rotation_23 6.96581e-06 -1 1.80201e-06 -0.959998
+  hidden position_23_0 2.98972e-06
+  hidden linearVelocity_23 -0.0250546 0.0245398 -0.00048499
+  hidden angularVelocity_23 0.00722744 -0.0186862 -0.0170494
+  hidden translation_24 0.0141183 -0.000226438 -0.000109572
+  hidden rotation_24 4.13967e-06 -1 3.60341e-06 -0.959999
+  hidden position_24_0 1.28304e-06
+  hidden linearVelocity_24 -0.025128 0.024699 -0.000712281
+  hidden angularVelocity_24 0.00722895 -0.0186893 -0.0170438
+  hidden translation_25 0.0141571 -0.000223187 1.5213e-05
+  hidden rotation_25 1.05171e-06 -1 2.31826e-06 -0.96
+  hidden linearVelocity_25 -0.0251698 0.0246825 -0.000731507
+  hidden angularVelocity_25 0.0072294 -0.0186901 -0.0170421
+  hidden translation_26 0.0695844 0.0126623 -0.00477162
+  hidden rotation_26 3.82317e-06 -1 2.57279e-06 -0.959999
+  hidden position_26_0 1.98236e-08
+  hidden linearVelocity_26 -0.0255882 0.0243865 -0.000461801
+  hidden angularVelocity_26 0.00722497 -0.0186806 -0.0170581
+  hidden translation_27 0.014047 -0.000195929 -5.35482e-05
+  hidden rotation_27 2.57308e-06 -1 1.20579e-06 -0.960001
+  hidden position_27_0 1.03967e-10
+  hidden linearVelocity_27 -0.0256596 0.0245444 -0.000661463
+  hidden angularVelocity_27 0.00722497 -0.0186806 -0.0170581
+  hidden translation_28 0.0140137 -9.7654e-05 2.36601e-06
+  hidden rotation_28 1.27935e-06 -1 1.28365e-06 -0.960001
+  hidden linearVelocity_28 -0.0257017 0.0245255 -0.000653039
+  hidden angularVelocity_28 0.00722497 -0.0186806 -0.0170581
+  hidden translation_29 0.0495957 -0.000112438 -0.0269954
+  hidden rotation_29 -3.39175e-05 1 4.85376e-07 0.158913
+  hidden position_29_0 4.13105e-06
+  hidden linearVelocity_29 -0.0256173 0.0244571 -0.000428354
+  hidden angularVelocity_29 0.00722217 -0.0186727 -0.0170733
+  hidden translation_30 0.0141796 -0.000184706 -0.000436006
+  hidden rotation_30 1.05403e-06 1 9.95569e-07 -0.96
+  hidden linearVelocity_30 -0.0256942 0.0246193 -0.000587188
+  hidden angularVelocity_30 0.00722149 -0.0186713 -0.0170764
+  hidden translation_31 0.000173159 0.0981226 0.100081
+  hidden rotation_31 0.163125 0.300208 -0.939822 -1.04962
+  hidden position_31_0 -0.0818147
+  hidden linearVelocity_31 -0.0216182 0.0416245 -0.000524552
+  hidden angularVelocity_31 0.00232647 -0.0176129 0.67797
+  hidden translation_32 0.105212 0.0149047 -9.46149e-06
+  hidden rotation_32 1 0.000113276 0.000493007 -0.0818174
+  hidden position_32_0 -1.31755
+  hidden linearVelocity_32 -0.0236138 0.0306707 -0.000802842
+  hidden angularVelocity_32 0.370089 -0.0944144 0.0901197
+  hidden translation_33 0.000232314 -0.000136931 -7.1458e-06
+  hidden rotation_33 -2.98772e-05 1.05119e-05 1 -1.31755
+  hidden position_33_0 0.486151
+  hidden linearVelocity_33 -0.0262081 0.0205042 -0.000551144
+  hidden angularVelocity_33 0.369473 -0.0969129 0.090015
+  hidden translation_34 0.0561739 0.000182118 2.5818e-05
+  hidden rotation_34 -1 0.000313666 -0.000173885 -0.486149
+  hidden position_34_0 3.50623e-05
+  hidden position_34_1 4.86871e-06
+  hidden position_34_2 0.224516
+  hidden linearVelocity_34 -0.0252823 0.0235454 -0.000441048
+  hidden angularVelocity_34 -0.00952538 0.00842195 -0.0378755
+  hidden translation_35 0.0693023 -0.0126327 -0.00471017
+  hidden rotation_35 -4.9184e-06 -1 -3.72997e-06 -0.959967
+  hidden position_35_0 1.95111e-07
+  hidden linearVelocity_35 -0.0255603 0.0248933 -7.56406e-05
+  hidden angularVelocity_35 -0.00952532 0.00842203 -0.0378749
+  hidden translation_36 0.0139142 0.000345222 -0.000106624
+  hidden rotation_36 -2.36978e-06 -1 -1.0359e-06 -0.960001
+  hidden position_36_0 4.89536e-09
+  hidden linearVelocity_36 -0.0258742 0.0251972 7.06621e-05
+  hidden angularVelocity_36 -0.00952532 0.00842203 -0.0378749
+  hidden translation_37 0.014011 9.97699e-05 1.17852e-06
+  hidden rotation_37 -6.58322e-07 -1 -1.03987e-06 -0.960001
+  hidden linearVelocity_37 -0.0261896 0.0250947 0.000125833
+  hidden angularVelocity_37 -0.00952532 0.00842203 -0.0378749
+  hidden translation_38 0.0691996 0.0132143 -0.0051047
+  hidden rotation_38 -5.3543e-06 -1 -2.03207e-06 -0.959998
+  hidden position_38_0 2.82365e-06
+  hidden linearVelocity_38 -0.0251092 0.0252589 -0.000138365
+  hidden angularVelocity_38 -0.00952597 0.00842084 -0.0378788
+  hidden translation_39 0.0141625 0.000182413 5.48665e-05
+  hidden rotation_39 -2.73226e-06 -1 -2.97372e-06 -0.96
+  hidden position_39_0 4.64092e-07
+  hidden linearVelocity_39 -0.0255406 0.0256386 1.45944e-05
+  hidden angularVelocity_39 -0.00952646 0.00842021 -0.0378801
+  hidden translation_40 0.0140451 0.000178218 0.000141335
+  hidden rotation_40 -4.47679e-07 -1 -1.42827e-06 -0.96
+  hidden linearVelocity_40 -0.0259676 0.0256098 7.4468e-05
+  hidden angularVelocity_40 -0.00952634 0.00842004 -0.0378805
+  hidden translation_41 0.04974 0.000110294 -0.0268721
+  hidden rotation_41 1.31633e-05 1 1.02278e-05 0.224518
+  hidden position_41_0 1.16731e-05
+  hidden linearVelocity_41 -0.0258922 0.0247333 1.91772e-06
+  hidden angularVelocity_41 -0.00952783 0.00842859 -0.0378626
+  hidden translation_42 0.0144238 0.000173355 -0.00032892
+  hidden rotation_42 -1.4661e-06 1 -1.99734e-06 -0.95999
+  hidden linearVelocity_42 -0.0257132 0.0250846 6.72995e-05
+  hidden angularVelocity_42 -0.00952959 0.00843353 -0.0378537
+  hidden translation_43 0.000115789 -0.0500103 -0.0851435
+  hidden rotation_43 -0.182938 0.760975 0.622455 -3.97899e-05
+  hidden position_43_0 -1.02286e-05
+  hidden linearVelocity_43 0.021969 0.0577915 0.000199029
+  hidden angularVelocity_43 -0.000336078 -0.0180798 0.24219
+  hidden translation_44 0.000116813 -8.19107e-06 -8.65048e-05
+  hidden rotation_44 -0.0420552 0.786777 0.615803 -3.20636e-05
+  hidden position_44_0 -0.117273
+  hidden linearVelocity_44 0.0294805 0.0608031 0.0003881
+  hidden angularVelocity_44 -0.000268607 -0.0180665 0.242189
+  hidden translation_45 0.000210234 1.8385e-06 -0.000237528
+  hidden rotation_45 8.27698e-05 1 0.000162049 -0.117273
+  hidden position_45_0 1.42051
+  hidden linearVelocity_45 0.0759343 0.0569585 -0.0002019
+  hidden angularVelocity_45 0.00363513 -0.0159976 0.872357
+  hidden translation_46 -0.000312098 -1.06783e-06 -0.100389
+  hidden rotation_46 -7.87014e-06 1 -3.99524e-06 1.42052
+  hidden position_46_0 2.86396e-07
+  hidden linearVelocity_46 0.129558 0.118777 0.000243842
+  hidden angularVelocity_46 0.00575949 -0.0148754 1.22337
+  hidden translation_47 -2.18938e-05 2.49401e-07 -0.103093
+  hidden rotation_47 0.174785 0.984585 -0.00645853 2.87633e-07
+  hidden position_47_0 -6.66889e-09
+  hidden linearVelocity_47 0.131616 0.176296 0.000933766
+  hidden angularVelocity_47 0.00575951 -0.0148753 1.22337
+  hidden translation_48 9.00764e-05 -9.33357e-08 -0.000161219
+  hidden rotation_48 0.00122967 0.999976 -0.00678416 2.34955e-07
+  hidden linearVelocity_48 0.168027 0.220328 0.00129552
+  hidden angularVelocity_48 0.00575959 -0.0148748 1.22337
+  hidden translation_51 0.0199526 -0.00700105 -0.04109
+  hidden rotation_51 -3.03299e-09 6.56701e-11 1 -3.14159
+  hidden linearVelocity_51 0.162775 0.231705 0.00145894
+  hidden angularVelocity_51 0.00575959 -0.0148748 1.22337
+  hidden translation_55 -0.000319356 0.0499985 -0.0851217
+  hidden rotation_55 0.928237 0.235929 -0.2876 1.42934e-05
+  hidden position_55_0 2.18926e-05
+  hidden linearVelocity_55 0.0205422 0.0580241 0.000207212
+  hidden angularVelocity_55 -0.000385831 -0.0180211 0.242098
+  hidden translation_56 -0.000321458 -1.96954e-06 -6.25972e-05
+  hidden rotation_56 -0.996836 0.0380309 0.0697928 -6.33581e-06
+  hidden position_56_0 -0.110936
+  hidden linearVelocity_56 0.0276581 0.0611641 0.000401882
+  hidden angularVelocity_56 -0.000357142 -0.0180357 0.242095
+  hidden translation_57 -2.36008e-05 1.07877e-05 0.000175457
+  hidden rotation_57 -7.69686e-05 1 0.000122016 -0.110936
+  hidden position_57_0 1.42051
+  hidden linearVelocity_57 0.0747196 0.0577452 -0.00018785
+  hidden angularVelocity_57 0.00364127 -0.0159263 0.890737
+  hidden translation_58 -0.000439857 4.4681e-06 -0.100527
+  hidden rotation_58 -6.52541e-06 1 -3.24028e-06 1.42051
+  hidden position_58_0 2.88487e-07
+  hidden linearVelocity_58 0.128677 0.120971 0.000247814
+  hidden angularVelocity_58 0.0057817 -0.0148111 1.24176
+  hidden translation_59 -2.27967e-05 2.36566e-07 -0.103099
+  hidden rotation_59 -0.167414 0.985798 0.0131853 2.89752e-07
+  hidden position_59_0 2.84124e-07
+  hidden linearVelocity_59 0.130485 0.179365 0.000936329
+  hidden angularVelocity_59 0.00578172 -0.0148111 1.24176
+  hidden translation_60 9.24535e-05 -1.03861e-07 -0.000165924
+  hidden rotation_60 0.0549306 0.998366 0.0157192 2.3811e-07
+  hidden linearVelocity_60 0.167061 0.224298 0.00130012
+  hidden angularVelocity_60 0.00578167 -0.0148116 1.24176
+  hidden translation_61 0.0199493 0.00699959 -0.0410891
+  hidden rotation_61 -3.47237e-09 4.92527e-11 1 -3.14159
+  hidden linearVelocity_61 0.161515 0.235825 0.00146375
+  hidden angularVelocity_61 0.00578167 -0.0148116 1.24176
+  translation 0.550191 0.942892 0.000337607
+  rotation -0.0525644 0.70713 0.705127 -3.02778
+  controller "my_controller"
+  bodySlot [
+    Receiver {
+      name "Robot_Receiver"
+    }
+  ]
+  rightFootSlot [
+    Gyro {
+      rotation 1 0 0 1.5708
+      name "Right_Foot_Gyro"
+    }
+    InertialUnit {
+      name "Right_Foot_IU"
+    }
+  ]
+}
+DEF Swing Robot {
+  translation -1.3 2.2 0
+  rotation 1 0 0 -1.5708
+  children [
+    DEF RArm Transform {
+      translation 0 0.25 -0.04
+      children [
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position -0.199434
+            axis 0 1 0
+            anchor 0 1 0
+            minStop -3.1416
+            maxStop 3.1416
+            dampingConstant 1
+          }
+          endPoint Solid {
+            translation -0.00787759 0.00171481 -0.761475
+            rotation -0.999895 0.010229 -0.0102197 -1.57359
+            children [
+              Transform {
+                translation 0 -0.755 0
+                children [
+                  DEF MidHJ HingeJoint {
+                    jointParameters HingeJointParameters {
+                      position 0.0141428
+                      axis 0 0 1
+                      anchor 0 0 1
+                      minStop -3.14159
+                      maxStop 3.14159
+                    }
+                    endPoint Solid {
+                      translation 0.000975922 -0.0702955 8.5994e-06
+                      rotation -0.0105497 0.000883056 0.999944 0.0141441
+                      children [
+                        Solid {
+                          translation -0.05 0 0
+                          rotation 0 0 1 1.5708
+                          children [
+                            Connector {
+                              translation 0 -0.05 0
+                              rotation 1 0 0 1.5708
+                              name "newcon"
+                              locked TRUE
+                              type "passive"
+                              autoLock TRUE
+                              distanceTolerance 0.02
+                              numberOfRotations 0
+                              snap FALSE
+                            }
+                            DEF SBcon1 Connector {
+                              rotation 0 1 0 1.5708
+                              name "SBCon1"
+                              locked TRUE
+                              type "active"
+                              isLocked TRUE
+                              autoLock TRUE
+                              distanceTolerance 0.03
+                              numberOfRotations 0
+                              snap FALSE
+                            }
+                            Transform {
+                              translation 0 0 0.125
+                              children [
+                                Solid {
+                                  translation 0 0.05 0
+                                  rotation 1 0 0 1.5708
+                                  children [
+                                    Connector {
+                                      translation 0 0.125 0
+                                      rotation 1 0 0 -1.5708
+                                      name "BarConTest"
+                                      isLocked TRUE
+                                      autoLock TRUE
+                                      numberOfRotations 0
+                                      snap FALSE
+                                    }
+                                    DEF RBARH Shape {
+                                      appearance Appearance {
+                                        material Material {
+                                        }
+                                      }
+                                      geometry DEF RHBar Cylinder {
+                                        height 0.25
+                                        radius 0.009
+                                      }
+                                    }
+                                  ]
+                                  boundingObject USE RHBar
+                                  physics Physics {
+                                  }
+                                }
+                              ]
+                            }
+                            DEF LHBarS Shape {
+                              appearance Appearance {
+                                material Material {
+                                }
+                              }
+                              geometry Cylinder {
+                                height 0.1
+                                radius 0.009
+                              }
+                            }
+                          ]
+                          boundingObject USE LHBarS
+                          physics Physics {
+                          }
+                        }
+                        Transform {
+                          translation 0 -0.07 0
+                          children [
+                            DEF MidHJ HingeJoint {
+                              jointParameters HingeJointParameters {
+                                position -0.0162902
+                                axis 0 0 1
+                                anchor 0 0 1
+                                minStop -3.14159
+                                maxStop 3.14159
+                              }
+                              endPoint Solid {
+                                translation -0.00253875 -0.160221 1.12568e-05
+                                rotation -0.00653154 -0.000617414 -0.999978 0.0162905
+                                children [
+                                  Transform {
+                                    translation 0 -0.14 0.25
+                                    children [
+                                      Solid {
+                                        children [
+                                          DEF SeatCon Connector {
+                                            translation 0 0 0.25
+                                            rotation 1 0 0 -1.5708
+                                            isLocked TRUE
+                                            autoLock TRUE
+                                            distanceTolerance 0.05
+                                            numberOfRotations 0
+                                            snap FALSE
+                                          }
+                                          Shape {
+                                            appearance Appearance {
+                                              material Material {
+                                              }
+                                            }
+                                            geometry DEF Seat Box {
+                                              size 0.17 0.02 0.5
+                                            }
+                                          }
+                                        ]
+                                        boundingObject USE Seat
+                                        physics Physics {
+                                          density -1
+                                          mass 1.0366
+                                        }
+                                      }
+                                    ]
+                                  }
+                                  Shape {
+                                    appearance Appearance {
+                                      material Material {
+                                      }
+                                    }
+                                    geometry Cylinder {
+                                      height 0.28
+                                      radius 0.009
+                                    }
+                                  }
+                                ]
+                                boundingObject DEF LMIDVBAR Cylinder {
+                                  height 0.28
+                                  radius 0.009
+                                }
+                                physics Physics {
+                                  density -1
+                                  mass 0.1631
+                                }
+                                linearVelocity -2.53896e-06 -1.08796e-06 -7.47363e-09
+                                angularVelocity 2.07013e-09 3.11722e-07 -0.000133672
+                              }
+                            }
+                          ]
+                        }
+                        Shape {
+                          appearance Appearance {
+                            material Material {
+                            }
+                          }
+                          geometry Cylinder {
+                            height 0.12
+                            radius 0.009
+                          }
+                        }
+                      ]
+                      boundingObject DEF LMIDVBAR Cylinder {
+                        height 0.12
+                        radius 0.009
+                      }
+                      physics Physics {
+                        density -1
+                        mass 0.2475
+                      }
+                      linearVelocity 4.40121e-05 2.87447e-06 1.75119e-09
+                      angularVelocity 2.08461e-09 3.20292e-07 -0.000129988
+                    }
+                  }
+                ]
+              }
+              DEF RVBar Shape {
+                appearance Appearance {
+                  material Material {
+                  }
+                }
+                geometry Cylinder {
+                  height 1.46
+                  radius 0.009
+                }
+              }
+            ]
+            boundingObject USE RVBar
+            physics Physics {
+              density -1
+              mass 0.948
+              centerOfMass [
+                0 0 0
+              ]
+            }
+            linearVelocity 2.66789e-05 -2.91405e-07 -3.01863e-09
+            angularVelocity 7.45661e-09 -6.03351e-08 3.51145e-05
+          }
+        }
+      ]
+    }
+    DEF LArm Transform {
+      translation 0 -0.25 -0.04
+      children [
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position -0.199067
+            axis 0 1 0
+            anchor 0 1 0
+            minStop -3.1416
+            maxStop 3.1416
+            dampingConstant 1
+          }
+          endPoint Solid {
+            translation -0.0079315 0.00171355 -0.761493
+            rotation -0.999899 0.0100557 -0.0100429 -1.57182
+            children [
+              Transform {
+                translation 0 -0.755 0
+                children [
+                  HingeJoint {
+                    jointParameters HingeJointParameters {
+                      position 0.0141859
+                      axis 0 0 1
+                      anchor 0 0 1
+                      minStop -3.14159
+                      maxStop 3.14159
+                    }
+                    endPoint Solid {
+                      translation 0.000996636 -0.0703226 1.3889e-05
+                      rotation 0.0115717 0.000368794 -0.999933 -0.0141871
+                      children [
+                        Solid {
+                          translation -0.05 0 0
+                          rotation 0 0 1 1.5708
+                          children [
+                            Connector {
+                              translation 0 -0.05 0
+                              rotation 1 0 0 1.5708
+                              name "newcon"
+                              locked TRUE
+                              type "passive"
+                              autoLock TRUE
+                              distanceTolerance 0.02
+                              numberOfRotations 0
+                              snap FALSE
+                            }
+                            DEF SBcon1 Connector {
+                              rotation 0 1 0 1.5708
+                              name "SBCon1"
+                              locked TRUE
+                              type "active"
+                              isLocked TRUE
+                              autoLock TRUE
+                              distanceTolerance 0.03
+                              numberOfRotations 0
+                              snap FALSE
+                            }
+                            Transform {
+                              translation 0 0 -0.125
+                              children [
+                                Solid {
+                                  translation 0 0.05 0
+                                  rotation 1 0 0 1.5708
+                                  children [
+                                    Connector {
+                                      translation 0 -0.125 0
+                                      rotation 1 0 0 1.5708
+                                      name "BarConTest"
+                                      isLocked TRUE
+                                      autoLock TRUE
+                                      numberOfRotations 0
+                                      snap FALSE
+                                    }
+                                    DEF RBARH Shape {
+                                      appearance Appearance {
+                                        material Material {
+                                        }
+                                      }
+                                      geometry DEF RHBar Cylinder {
+                                        height 0.25
+                                        radius 0.009
+                                      }
+                                    }
+                                  ]
+                                  boundingObject USE RHBar
+                                  physics Physics {
+                                  }
+                                }
+                              ]
+                            }
+                            DEF LHBarS Shape {
+                              appearance Appearance {
+                                material Material {
+                                }
+                              }
+                              geometry Cylinder {
+                                height 0.1
+                                radius 0.009
+                              }
+                            }
+                          ]
+                          boundingObject USE LHBarS
+                          physics Physics {
+                          }
+                        }
+                        Transform {
+                          translation 0 -0.09 0
+                          children [
+                            DEF MidHJ HingeJoint {
+                              jointParameters HingeJointParameters {
+                                position -0.0162949
+                                axis 0 0 1
+                                anchor 0 0 1
+                                minStop -3.14159
+                                maxStop 3.14159
+                              }
+                              endPoint Solid {
+                                translation -0.00239551 -0.140146 1.84133e-05
+                                rotation -0.00535222 0.00291506 -0.999981 0.0162952
+                                children [
+                                  DEF SeatCon Connector {
+                                    translation 0 -0.12 0
+                                    rotation 1 0 0 1.5708
+                                    isLocked TRUE
+                                    autoLock TRUE
+                                    distanceTolerance 0.03
+                                    numberOfRotations 0
+                                    snap FALSE
+                                  }
+                                  Shape {
+                                    appearance Appearance {
+                                      material Material {
+                                      }
+                                    }
+                                    geometry Cylinder {
+                                      height 0.28
+                                      radius 0.009
+                                    }
+                                  }
+                                ]
+                                boundingObject DEF LMIDVBAR Cylinder {
+                                  height 0.28
+                                  radius 0.009
+                                }
+                                physics Physics {
+                                  density -1
+                                  mass 0.1631
+                                }
+                                linearVelocity 1.38004e-05 -7.56893e-07 -5.7962e-09
+                                angularVelocity 3.23139e-09 2.98136e-07 -0.000133674
+                              }
+                            }
+                          ]
+                        }
+                        Shape {
+                          appearance Appearance {
+                            material Material {
+                            }
+                          }
+                          geometry Cylinder {
+                            height 0.12
+                            radius 0.009
+                          }
+                        }
+                      ]
+                      boundingObject DEF LMIDVBAR Cylinder {
+                        height 0.12
+                        radius 0.009
+                      }
+                      physics Physics {
+                        density -1
+                        mass 0.2475
+                      }
+                      linearVelocity 4.4153e-05 2.91172e-06 3.82435e-09
+                      angularVelocity 2.89274e-09 2.72635e-07 -0.000129989
+                    }
+                  }
+                ]
+              }
+              DEF SVBar2 Shape {
+                appearance Appearance {
+                  material Material {
+                  }
+                }
+                geometry Cylinder {
+                  height 1.46
+                  radius 0.009
+                }
+              }
+            ]
+            boundingObject USE SVBar2
+            physics Physics {
+              density -1
+              mass 0.948
+              centerOfMass [
+                0 0 0
+              ]
+            }
+            linearVelocity 2.6875e-05 -2.68979e-07 -2.72193e-11
+            angularVelocity -3.43902e-09 6.14651e-08 3.52118e-05
+          }
+        }
+      ]
+    }
+    DEF SHBarShape Shape {
+      appearance DEF SwingApp Appearance {
+        material Material {
+          diffuseColor 0.7 0.4 0.8
+        }
+        texture ImageTexture {
+        }
+      }
+      geometry DEF SHBar Cylinder {
+        height 0.5
+        radius 0.05
+      }
+    }
+  ]
+  name "Swing"
+  boundingObject USE SHBarShape
+  selfCollision TRUE
+}
+DEF ChainSwing Robot {
+  translation 0.382872 1.05967 0.000168664
+  rotation -0.000301515 -6.09779e-05 -1 0.369338
+  children [
+    Solid {
+      translation -1.55163e-05 -0.000122954 -2.21311e-07
+      rotation 1 -1.66544e-06 1.84052e-06 -1.5708
+      children [
+        Solid {
+          translation 0.075 0.25 0
+          rotation 0 0 1 1.5708
+          children [
+            Solid {
+              translation 0 -0.08 0
+              rotation 1 0 0 1.5708
+              children [
+                Transform {
+                  translation 0 0.08 0
+                  children [
+                    HingeJoint {
+                      jointParameters HingeJointParameters {
+                        position -0.400288
+                        minStop -3.14159
+                        maxStop 3.14159
+                        dampingConstant 0.2
+                      }
+                      endPoint Solid {
+                        translation -5.62381e-06 0.691388 -0.292283
+                        rotation 0.194174 0.961396 -0.194972 -1.61414
+                        children [
+                          Transform {
+                            translation 0 0.755 0
+                            children [
+                              DEF MidHJ HingeJoint {
+                                jointParameters HingeJointParameters {
+                                  position -0.0308107
+                                  axis 0 0 1
+                                  minStop -3.14159
+                                  maxStop 3.14159
+                                  dampingConstant 0.2
+                                }
+                                endPoint Solid {
+                                  translation 0.00340481 0.110469 -6.30537e-06
+                                  rotation 0.999763 -0.0154029 -0.0154021 1.57107
+                                  children [
+                                    Connector {
+                                      translation 0 -0.05 0
+                                      rotation 1 0 0 1.5708
+                                      name "TCon2"
+                                      isLocked TRUE
+                                      autoLock TRUE
+                                      distanceTolerance 0.02
+                                      numberOfRotations 0
+                                      snap FALSE
+                                    }
+                                    Shape {
+                                      appearance USE SwingApp
+                                      geometry DEF STopBar Cylinder {
+                                        height 0.1
+                                        radius 0.05
+                                      }
+                                    }
+                                  ]
+                                  boundingObject USE STopBar
+                                  physics Physics {
+                                  }
+                                  linearVelocity 2.43897e-06 4.03927e-06 -3.85259e-06
+                                  angularVelocity 4.32901e-06 8.18609e-07 1.07955e-07
+                                }
+                              }
+                            ]
+                          }
+                          DEF RVBar Shape {
+                            appearance Appearance {
+                              material Material {
+                              }
+                            }
+                            geometry Cylinder {
+                              height 1.46
+                              radius 0.009
+                            }
+                          }
+                        ]
+                        boundingObject USE RVBar
+                        physics Physics {
+                          density -1
+                          mass 0.948
+                          centerOfMass [
+                            0 0 0
+                          ]
+                        }
+                        linearVelocity -0.0120888 -0.000358605 -5.94624e-05
+                        angularVelocity 7.04524e-05 1.57096e-06 -0.0160238
+                      }
+                    }
+                  ]
+                }
+                Transform {
+                  translation 0 -0.07 0
+                  children [
+                    DEF MidHJ HingeJoint {
+                      jointParameters HingeJointParameters {
+                        position -1.23796
+                        minStop -3.14159
+                        maxStop 3.14159
+                      }
+                      endPoint Solid {
+                        translation 0.000534445 -0.0259556 0.100137
+                        rotation 0.50164 0.704588 -0.501909 -1.91382
+                        children [
+                          Transform {
+                            translation 0 -0.067 0.25
+                            children [
+                              Emitter {
+                                name "Seat_Emitter"
+                              }
+                              InertialUnit {
+                                rotation 0 1 0 3.14159
+                                name "Seat_IU"
+                              }
+                              Solid {
+                                children [
+                                  Solid {
+                                    translation -0.09 0.08 0
+                                    children [
+                                      DEF GuideRail Shape {
+                                        appearance USE SwingApp
+                                        geometry Box {
+                                          size 0.1 0.01 0.5
+                                        }
+                                      }
+                                    ]
+                                    boundingObject USE GuideRail
+                                    physics Physics {
+                                      mass 0.01
+                                    }
+                                  }
+                                  DEF SeatCon Connector {
+                                    translation 0 0 0.25
+                                    rotation 1 0 0 -1.5708
+                                    isLocked TRUE
+                                    autoLock TRUE
+                                    distanceTolerance 0.05
+                                    numberOfRotations 0
+                                    snap FALSE
+                                  }
+                                  Shape {
+                                    appearance Appearance {
+                                      material Material {
+                                      }
+                                    }
+                                    geometry DEF Seat Box {
+                                      size 0.17 0.02 0.5
+                                    }
+                                  }
+                                ]
+                                contactMaterial "Seat"
+                                boundingObject USE Seat
+                                physics Physics {
+                                  density -1
+                                  mass 1.0366
+                                }
+                              }
+                              Gyro {
+                                rotation 0 1 0 3.14159
+                                name "Seat_Gyro"
+                              }
+                            ]
+                          }
+                          Shape {
+                            appearance Appearance {
+                              material Material {
+                              }
+                            }
+                            geometry DEF SBottomBar Cylinder {
+                              height 0.155
+                              radius 0.009
+                            }
+                          }
+                        ]
+                        boundingObject USE SBottomBar
+                        physics Physics {
+                          density -1
+                          mass 0.1631
+                        }
+                        linearVelocity 0.0422677 0.116681 -0.000133705
+                        angularVelocity 7.01015e-05 0.000104448 0.867928
+                      }
+                    }
+                  ]
+                }
+                Shape {
+                  appearance Appearance {
+                    material Material {
+                    }
+                  }
+                  geometry Cylinder {
+                    height 0.12
+                    radius 0.009
+                  }
+                }
+              ]
+              boundingObject DEF LMIDVBAR Cylinder {
+                height 0.12
+                radius 0.009
+              }
+              physics Physics {
+                density -1
+                mass 0.2475
+              }
+            }
+            DEF LHShape Shape {
+              appearance Appearance {
+                material Material {
+                }
+              }
+              geometry DEF HBarL Cylinder {
+                height 0.15
+                radius 0.009
+              }
+            }
+          ]
+          boundingObject USE HBarL
+          physics Physics {
+            density -1
+            mass 0.1139
+          }
+        }
+        Solid {
+          translation 0.075 -0.25 0
+          rotation 0 0 1 1.5708
+          children [
+            DEF LHShape Shape {
+              appearance Appearance {
+                material Material {
+                }
+              }
+              geometry DEF HBarL Cylinder {
+                height 0.15
+                radius 0.009
+              }
+            }
+            Solid {
+              translation 0 -0.08 0
+              rotation 1 0 0 1.5708
+              children [
+                Transform {
+                  translation 0 0.08 0
+                  children [
+                    HingeJoint {
+                      jointParameters HingeJointParameters {
+                        position -0.40029
+                        minStop -3.14159
+                        maxStop 3.14159
+                        dampingConstant 0.2
+                      }
+                      endPoint Solid {
+                        translation 7.11968e-06 0.691386 -0.292285
+                        rotation 0.19419 0.961397 -0.194949 -1.61417
+                        children [
+                          Transform {
+                            translation 0 0.755 0
+                            children [
+                              DEF MidHJ HingeJoint {
+                                jointParameters HingeJointParameters {
+                                  position -0.0308116
+                                  axis 0 0 1
+                                  minStop -3.14159
+                                  maxStop 3.14159
+                                }
+                                endPoint Solid {
+                                  translation 0.00340569 0.110452 6.14408e-06
+                                  rotation 0.999763 -0.0154032 -0.0154036 1.57101
+                                  children [
+                                    Connector {
+                                      translation 0 0.05 0
+                                      rotation 1 0 0 -1.5708
+                                      name "TCon1"
+                                      isLocked TRUE
+                                      autoLock TRUE
+                                      distanceTolerance 0.02
+                                      numberOfRotations 0
+                                      snap FALSE
+                                    }
+                                    Shape {
+                                      appearance USE SwingApp
+                                      geometry USE STopBar
+                                    }
+                                  ]
+                                  boundingObject USE STopBar
+                                  physics Physics {
+                                  }
+                                  linearVelocity 1.68198e-06 -1.28537e-05 -3.95407e-06
+                                  angularVelocity 3.72757e-06 1.02553e-06 2.18136e-07
+                                }
+                              }
+                            ]
+                          }
+                          DEF RVBar Shape {
+                            appearance Appearance {
+                              material Material {
+                              }
+                            }
+                            geometry Cylinder {
+                              height 1.46
+                              radius 0.009
+                            }
+                          }
+                        ]
+                        boundingObject USE RVBar
+                        physics Physics {
+                          density -1
+                          mass 0.948
+                          centerOfMass [
+                            0 0 0
+                          ]
+                        }
+                        linearVelocity -0.012088 -0.000384333 -5.94768e-05
+                        angularVelocity 7.03627e-05 1.39487e-06 -0.0160214
+                      }
+                    }
+                  ]
+                }
+                Transform {
+                  translation 0 -0.07 0
+                  children [
+                    DEF MidHJ HingeJoint {
+                      jointParameters HingeJointParameters {
+                        position -1.23982
+                        minStop -3.14159
+                        maxStop 3.14159
+                        dampingConstant 0.2
+                      }
+                      endPoint Solid {
+                        translation -0.000480371 -0.0252147 0.0992857
+                        rotation 0.502262 0.703932 -0.502208 -1.91493
+                        children [
+                          DEF SeatCon Connector {
+                            translation 0 -0.13 0
+                            rotation 1 0 0 1.5708
+                            isLocked TRUE
+                            autoLock TRUE
+                            distanceTolerance 0.05
+                            numberOfRotations 0
+                            snap FALSE
+                          }
+                          Transform {
+                            translation 0 -0.14 0.25
+                          }
+                          Shape {
+                            appearance Appearance {
+                              material Material {
+                              }
+                            }
+                            geometry Cylinder {
+                              height 0.155
+                              radius 0.009
+                            }
+                          }
+                        ]
+                        boundingObject USE SBottomBar
+                        physics Physics {
+                          density -1
+                          mass 0.1631
+                        }
+                        linearVelocity 0.00838385 0.0789331 -0.000137571
+                        angularVelocity 7.21652e-05 0.000104465 0.867898
+                      }
+                    }
+                  ]
+                }
+                Shape {
+                  appearance Appearance {
+                    material Material {
+                    }
+                  }
+                  geometry Cylinder {
+                    height 0.12
+                    radius 0.009
+                  }
+                }
+              ]
+              boundingObject DEF LMIDVBAR Cylinder {
+                height 0.12
+                radius 0.009
+              }
+              physics Physics {
+                density -1
+                mass 0.2475
+              }
+            }
+          ]
+          boundingObject USE LHBarS
+          physics Physics {
+            density -1
+            mass 0.1139
+          }
+        }
+        Shape {
+          appearance DEF SwingApp2 Appearance {
+            material DEF SwingMat Material {
+            }
+          }
+          geometry DEF SBar Cylinder {
+            height 0.5
+            radius 0.009
+          }
+        }
+      ]
+      contactMaterial "Seat"
+      boundingObject USE SBar
+      physics Physics {
+        density -1
+        mass 0.3127
+      }
+      linearVelocity 6.7322e-07 -1.34944e-07 2.98415e-10
+      angularVelocity -4.82458e-10 -4.45531e-12 4.38447e-08
+    }
+  ]
+  boundingObject Transform {
+    rotation 1 0 0 1.5708
+    children [
+      USE SBar
+    ]
+  }
+  physics Physics {
+  }
+  controller "swingcontroller"
+  selfCollision TRUE
+  linearVelocity -0.030811 0.0132503 -0.000118985
+  angularVelocity 6.93912e-05 -1.33323e-05 -0.141963
+}
+Robot {
+  translation 0 2 0
+  children [
+    Solid {
+      translation 0.51 0.694257 -0.359992
+      rotation 1 9.34839e-08 -2.69041e-07 1.57081
+      children [
+        Connector {
+          translation 0 0.05 0
+          rotation 1 0 0 -1.5708
+          name "TCon2"
+          isLocked TRUE
+          autoLock TRUE
+          distanceTolerance 0.02
+          numberOfRotations 0
+          snap FALSE
+        }
+        Shape {
+          appearance USE SwingApp
+          geometry USE STopBar
+        }
+      ]
+      boundingObject USE STopBar
+      physics Physics {
+      }
+      linearVelocity 1.17485e-06 2.25636e-06 -1.92448e-06
+      angularVelocity 2.16451e-06 4.09305e-07 5.39762e-08
+    }
+    Solid {
+      translation 0.509999 0.694275 0.359991
+      rotation 1 3.00999e-08 -6.01639e-09 1.5708
+      children [
+        Connector {
+          translation 0 -0.05 0
+          rotation 1 0 0 1.5708
+          name "TCon1"
+          isLocked TRUE
+          autoLock TRUE
+          distanceTolerance 0.02
+          numberOfRotations 0
+          snap FALSE
+        }
+        Shape {
+          appearance USE SwingApp
+          geometry USE STopBar
+        }
+      ]
+      boundingObject USE STopBar
+      physics Physics {
+      }
+      linearVelocity 8.9745e-07 -6.62805e-06 -1.97536e-06
+      angularVelocity 1.86378e-06 5.12765e-07 1.09068e-07
+    }
+  ]
+}
+DEF SwingBar Robot {
+  translation 1 -481766 1
+  rotation 1 0 0 4.69282e-06
+  physics Physics {
+  }
+  linearVelocity 0 -3074.37 0
+}

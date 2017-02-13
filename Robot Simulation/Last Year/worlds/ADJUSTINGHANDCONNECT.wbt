@@ -1,0 +1,344 @@
+#VRML_SIM V8.3.2 utf8
+WorldInfo {
+  basicTimeStep 16
+}
+Viewpoint {
+  orientation -0.00668007 -0.999471 -0.0318275 2.91685
+  position -6.67216 3.10514 -28.9265
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+Ceiling {
+  translation 0 3 0
+  size 5 5
+}
+Nao {
+  hidden position_0_0 -3.66506e-08
+  hidden position2_0_0 -0.000164531
+  hidden position_0_1 -0.838041
+  hidden position2_0_1 -1.62647e-06
+  hidden position_0_2 -0.838488
+  hidden position2_0_2 -3.96974e-07
+  hidden position_0_3 -1.82965e-05
+  hidden position_0_4 -1.77523e-05
+  hidden translation_11 -6.14048e-05 5.17722e-07 0.126987
+  hidden rotation_11 -5.33603e-05 1 0.000184865 -0.000164709
+  hidden translation_18 -0.000170921 -0.0980295 0.100528
+  hidden rotation_18 -1.13993e-05 1 -3.56954e-05 0.571282
+  hidden position_18_0 1.42578e-05
+  hidden translation_19 0.105513 -0.0150195 0.000435288
+  hidden rotation_19 0.0830177 0.966939 -0.241118 1.45457e-05
+  hidden position_19_0 -1.6139e-06
+  hidden translation_20 0.000303307 -2.81897e-05 0.000440781
+  hidden rotation_20 0.0279324 0.999539 -0.0119086 1.4535e-05
+  hidden position_20_0 0.000442025
+  hidden translation_21 0.0564759 -2.8394e-05 0.000548883
+  hidden rotation_21 0.999086 0.0425579 -0.00407835 0.000454512
+  hidden position_21_0 -0.0356428
+  hidden position_21_1 -6.89344e-11
+  hidden position_21_2 7.27575e-10
+  hidden translation_22 0.0701905 -0.0130123 0.0149682
+  hidden rotation_22 -8.2081e-07 -1 -1.17439e-06 -0.995644
+  hidden position_22_0 2.42351e-11
+  hidden translation_24 0.030428 -1.45492e-05 -0.0116741
+  hidden rotation_24 -2.16411e-09 -1 1.31629e-07 -0.96
+  hidden position_24_0 6.87581e-11
+  hidden translation_25 0.0142744 -2.7097e-06 -6.15846e-05
+  hidden rotation_25 -6.18512e-09 -1 -6.81773e-10 -0.96
+  hidden translation_26 0.0695059 0.0129847 -0.00498156
+  hidden rotation_26 2.0813e-07 -1 2.94688e-07 -0.96
+  hidden position_26_0 9.40181e-11
+  hidden translation_27 0.0140764 -1.47831e-05 -0.000244419
+  hidden rotation_27 -2.18482e-09 -1 1.3353e-07 -0.96
+  hidden position_27_0 6.84179e-11
+  hidden translation_28 0.0142749 -2.75271e-06 -6.45362e-05
+  hidden rotation_28 -5.95233e-09 -1 -5.0879e-10 -0.96
+  hidden translation_29 0.0495911 -1.46238e-07 -0.0264412
+  hidden rotation_29 -5.76138e-05 1 0.000555366 7.27567e-10
+  hidden position_29_0 1.02311e-10
+  hidden translation_30 0.0141939 6.4236e-08 0.000169275
+  hidden rotation_30 5.08044e-14 1 -9.83781e-14 -0.96
+  hidden translation_31 -0.000163915 0.0979617 0.100533
+  hidden rotation_31 -1.51231e-06 1 -1.21032e-07 0.570865
+  hidden position_31_0 1.50045e-05
+  hidden translation_32 0.10551 0.0149736 0.000440433
+  hidden rotation_32 0.0761749 0.952561 -0.29466 1.46994e-05
+  hidden position_32_0 -0.0128292
+  hidden translation_33 0.0002971 -3.97135e-05 0.000444913
+  hidden rotation_33 -0.000190368 0.00112696 -0.999999 0.0128202
+  hidden position_33_0 1.10518e-05
+  hidden translation_34 0.0564683 -3.58479e-05 0.000552071
+  hidden rotation_34 0.0256756 0.99309 -0.114513 1.95752e-05
+  hidden position_34_0 -0.0360927
+  hidden position_34_1 -6.89119e-11
+  hidden position_34_2 6.77313e-10
+  hidden translation_35 0.066918 -0.0130372 0.0199927
+  hidden rotation_35 2.20509e-06 -1 7.4833e-06 -0.99611
+  hidden position_35_0 2.35208e-10
+  hidden translation_37 0.0364233 -1.45271e-05 -0.0116775
+  hidden rotation_37 -2.05837e-09 -1 1.31431e-07 -0.96
+  hidden position_37_0 6.87798e-11
+  hidden translation_38 0.0142747 -2.71067e-06 -6.23918e-05
+  hidden rotation_38 -6.08429e-09 -1 -6.10496e-10 -0.96
+  hidden translation_39 0.0695006 0.0129847 -0.00498121
+  hidden rotation_39 2.0858e-07 -1 2.94383e-07 -0.96
+  hidden position_39_0 9.41607e-11
+  hidden translation_40 0.0140737 -1.47652e-05 -0.000248025
+  hidden rotation_40 -1.90531e-09 -1 1.33738e-07 -0.96
+  hidden position_40_0 6.8425e-11
+  hidden translation_41 0.0142754 -2.75499e-06 -6.53358e-05
+  hidden rotation_41 -5.7358e-09 -1 -3.55259e-10 -0.96
+  hidden translation_42 0.0495911 -1.28266e-07 -0.0264412
+  hidden rotation_42 0.00029384 0.999999 -0.00165526 6.77313e-10
+  hidden position_42_0 1.19197e-10
+  hidden translation_43 0.0141937 6.93427e-08 0.000169279
+  hidden rotation_43 -1.38288e-13 1 2.71798e-13 -0.96
+  hidden translation_44 0.000158936 -0.0505988 -0.0849139
+  hidden rotation_44 0.441086 0.689886 0.574021 -5.03267e-05
+  hidden position_44_0 7.44021e-06
+  hidden translation_45 3.32637e-05 -6.27056e-06 0.000292823
+  hidden rotation_45 -0.0673632 0.997638 -0.0134575 -2.05464e-05
+  hidden position_45_0 -1.1
+  hidden translation_46 0.000171682 -6.00707e-06 0.000360826
+  hidden rotation_46 -1.26003e-06 1 1.85233e-07 -1.1
+  hidden position_46_0 1
+  hidden translation_47 -0.00105354 1.15111e-06 -0.101591
+  hidden rotation_47 4.04636e-07 1 1.26622e-06 1
+  hidden position_47_0 7.96134e-08
+  hidden translation_48 0.000308085 1.4829e-06 -0.104532
+  hidden rotation_48 -0.706666 0.699175 -0.108529 2.01282e-07
+  hidden position_48_0 -3.90516e-07
+  hidden translation_49 0.00124166 1.65753e-06 -0.00107992
+  hidden rotation_49 -0.792836 0.592224 -0.143809 1.46565e-07
+  hidden translation_50 0.0198235 -0.00699855 -0.0415099
+  hidden rotation_50 2.35249e-07 -4.3234e-09 1 -3.14159
+  hidden translation_54 0.000236649 0.0505492 -0.0843722
+  hidden rotation_54 -0.401138 0.810398 -0.427017 -6.08322e-05
+  hidden position_54_0 -7.6284e-06
+  hidden translation_55 4.44334e-05 -8.14607e-06 0.000268775
+  hidden rotation_55 0.0245743 0.999698 0.000402738 -1.96865e-05
+  hidden position_55_0 -1.1
+  hidden translation_56 0.000184521 -7.89948e-06 0.000336541
+  hidden rotation_56 -6.18222e-07 1 4.69542e-07 -1.1
+  hidden position_56_0 1
+  hidden translation_57 -0.00105252 -3.14773e-06 -0.101598
+  hidden rotation_57 -4.02428e-09 1 1.18878e-06 1
+  hidden position_57_0 1.52914e-07
+  hidden translation_58 0.000306922 -2.17502e-06 -0.104532
+  hidden rotation_58 0.512458 0.846494 -0.144343 2.76246e-07
+  hidden position_58_0 3.70653e-07
+  hidden translation_59 0.0012405 -2.00039e-06 -0.00107981
+  hidden rotation_59 0.509713 0.827408 -0.235771 1.72649e-07
+  hidden translation_60 0.0198259 0.00699841 -0.0414868
+  hidden rotation_60 -1.11022e-07 -2.62096e-08 1 -3.14159
+  translation 0.0362757 0.699262 0.00100189
+  rotation -0.839642 -0.378778 0.389267 1.74107
+  controller "my_controller"
+  leftHandSlot [
+    DEF LeftConnector Connector {
+      translation 0 0 0.08
+      boundingObject Box {
+        size 0.05 0.05 0.05
+      }
+      physics Physics {
+      }
+      distanceTolerance 0.05
+      axisTolerance 3.14
+      rotationTolerance 3.14
+      numberOfRotations 0
+      snap FALSE
+    }
+  ]
+  rightHandSlot [
+    DEF RightConnector Connector {
+      translation 0 0 0.08
+      boundingObject Box {
+        size 0.05 0.05 0.05
+      }
+      physics Physics {
+      }
+      distanceTolerance 0.05
+      axisTolerance 3.14159
+      rotationTolerance 3.14
+      numberOfRotations 0
+      snap FALSE
+    }
+  ]
+}
+DirectionalLight {
+  ambientIntensity 1
+  direction -0.1 -0.5 -0.3
+}
+RectangleArena {
+  floorSize 5 5
+}
+FloorLight {
+  translation -2.00175 -8.88178e-16 1.89667
+}
+FloorLight {
+  translation 2.00366 2.22044e-15 -2.13347
+}
+DEF Swing Robot {
+  translation 0 2.2 0
+  rotation 1 0 0 -1.5708
+  children [
+    DEF RArm Transform {
+      translation 0 0.25 -0.06
+      children [
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position -0.181267
+            axis 0 1 0
+            anchor 0 1 0
+            minStop -3.1416
+            maxStop 3.1416
+            dampingConstant 1
+          }
+          endPoint Solid {
+            translation -0.0217558 0.00569792 -0.754094
+            rotation -0.999999 0.0011735 -0.00111442 -1.57341
+            children [
+              Transform {
+                translation 0 -0.75 0
+                children [
+                  DEF SeatShape Solid {
+                    translation 0 0 0.25
+                    children [
+                      DEF Left_Hand_Bar Connector {
+                        translation 0.2 0.5 -0.1
+                        distanceTolerance 0.05
+                        axisTolerance 3.14
+                        rotationTolerance 3.14
+                        numberOfRotations 0
+                        snap FALSE
+                      }
+                      DEF Right_Hand_Bar Connector {
+                        translation 0.2 0.5 0.1
+                        distanceTolerance 0.05
+                        rotationTolerance 3.14
+                        numberOfRotations 0
+                        snap FALSE
+                      }
+                      DEF C1 Connector {
+                        translation 0 0 0.25
+                        rotation 1 0 0 -1.5708
+                        isLocked TRUE
+                        autoLock TRUE
+                        distanceTolerance 0.05
+                        numberOfRotations 0
+                        snap FALSE
+                      }
+                      DEF SeatCon Connector {
+                        translation 0 0 0.25
+                        rotation 1 0 0 -1.5708
+                        autoLock TRUE
+                        numberOfRotations 0
+                      }
+                      Shape {
+                        appearance Appearance {
+                          material Material {
+                          }
+                        }
+                        geometry DEF SSeat Box {
+                          size 0.1 0.01 0.5
+                        }
+                      }
+                    ]
+                    boundingObject USE SSeat
+                    physics Physics {
+                    }
+                  }
+                ]
+              }
+              DEF RVBar Shape {
+                appearance Appearance {
+                  material Material {
+                  }
+                }
+                geometry Cylinder {
+                  height 1.5
+                  radius 0.05
+                }
+              }
+            ]
+            boundingObject USE RVBar
+            physics Physics {
+              centerOfMass [
+                0 0 0
+              ]
+            }
+            linearVelocity 4.60505e-05 -1.27437e-06 2.66832e-08
+            angularVelocity -1.14575e-08 -7.61501e-09 5.87039e-05
+          }
+        }
+      ]
+    }
+    DEF LArm Transform {
+      translation 0 -0.25 -0.06
+      children [
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position -0.180868
+            axis 0 1 0
+            anchor 0 1 0
+            minStop -3.1416
+            maxStop 3.1416
+            dampingConstant 1
+          }
+          endPoint Solid {
+            translation -0.02201 0.00223511 -0.754132
+            rotation -0.999999 0.000968379 -0.000921795 -1.571
+            children [
+              DEF C1 Connector {
+                translation 0 -0.75 0
+                rotation 1 0 0 1.5708
+                isLocked TRUE
+                autoLock TRUE
+                distanceTolerance 0.05
+                numberOfRotations 0
+                snap FALSE
+              }
+              DEF SVBar2 Shape {
+                appearance Appearance {
+                  material Material {
+                  }
+                }
+                geometry Cylinder {
+                  height 1.5
+                  radius 0.05
+                }
+              }
+            ]
+            boundingObject USE SVBar2
+            physics Physics {
+              centerOfMass [
+                0 0 0
+              ]
+            }
+            linearVelocity 4.42569e-05 -1.28573e-06 1.62111e-08
+            angularVelocity -8.43258e-09 -6.08071e-09 5.87008e-05
+          }
+        }
+      ]
+    }
+    DEF SHBarShape Shape {
+      appearance DEF SwingApp Appearance {
+        material Material {
+          diffuseColor 0.7 0.4 0.8
+        }
+        texture ImageTexture {
+        }
+      }
+      geometry DEF SHBar Cylinder {
+        height 0.5
+        radius 0.05
+      }
+    }
+  ]
+  name "Swing"
+  boundingObject USE SHBarShape
+  selfCollision TRUE
+}
