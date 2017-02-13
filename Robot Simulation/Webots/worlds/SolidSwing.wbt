@@ -20,8 +20,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.034307761 -0.988189 -0.14935016 2.6951574
-  position -1.0865868 1.1260195 -2.4061296
+  orientation 0.79192239 0.60506592 0.082183713 5.9434619
+  position 0.00093764504 2.380527 4.4805202
 }
 TexturedBackground {
 }
@@ -40,7 +40,7 @@ Floor {
   ]
 }
 Nao {
-  translation 0.057555547 0.28743126 0.0031877818
+  translation -3.7382001 0.90187342 0.0031852452
   rotation -0.37796386 -0.65465515 -0.65465254 3.8643285
   controller "naoqisim"
   controllerArgs "9559"
@@ -66,37 +66,32 @@ DEF Swing Robot {
       children [
         HingeJoint {
           jointParameters HingeJointParameters {
+            position 1
             axis 0 0 1
             minStop -3
             maxStop 3
           }
           endPoint Solid {
-            translation 2.8623506e-09 -0.9075 0
-            rotation 0 0 1 0
+            translation 0.76363492 -0.49032434 0
+            rotation 0 0 1 1
             children [
-              Transform {
+              Solid {
                 translation 0 -0.9075 0.25
-                rotation 1 0 0 0
                 children [
-                  DEF Seat-Arm Connector {
-                    translation 0 0 0.25
+                  Connector {
                     rotation 1 0 0 -1.5707997
-                    name "Seat-Arm-Connector"
+                    name "Seat Robot"
                     locked TRUE
                     isLocked TRUE
                     autoLock TRUE
-                    distanceTolerance 0.1
-                    axisTolerance 0
-                    rotationTolerance 0
                     snap FALSE
                   }
-                  DEF Seat-Robot Connector {
+                  Connector {
+                    translation 0 0 0.25
                     rotation 1 0 0 -1.5707997
-                    name "Seat Connector"
                     locked TRUE
                     isLocked TRUE
                     autoLock TRUE
-                    distanceTolerance 0.1
                     snap FALSE
                   }
                   Shape {
@@ -104,11 +99,16 @@ DEF Swing Robot {
                       material Material {
                       }
                     }
-                    geometry DEF Seat_Shaoe Box {
+                    geometry DEF Seat_Shape Box {
                       size 0.1 0.01 0.5
                     }
                   }
                 ]
+                boundingObject USE Seat_Shape
+                physics Physics {
+                  density -1
+                  mass 2
+                }
               }
               Shape {
                 appearance Appearance {
@@ -134,15 +134,16 @@ DEF Swing Robot {
       translation 0 0 0.25
       children [
         HingeJoint {
-          jointParameters HingeJointParameters {
+          jointParameters DEF Joint_Params HingeJointParameters {
+            position 1
             axis 0 0 1
             anchor 0 0 1
             minStop -3
             maxStop 3
           }
           endPoint Solid {
-            translation 2.8623506e-09 -0.9075 0
-            rotation 0 0 1 0
+            translation 0.76363492 -0.49032434 0
+            rotation 0 0 1 1
             children [
               DEF Arm-Seat Connector {
                 translation 0 -0.907 0
