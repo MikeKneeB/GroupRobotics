@@ -42,10 +42,10 @@ for i in range(numberOfActions):
 # (positions, velocities)
 stateDimensions = (360, 16)
 
-discount = 0.95
-timeHorizon = 100
+discount = 0.85
+timeHorizon = 50
 
-actor = ac.ActorCritic(numberOfActions, timeHorizon, stateDimensions, discount)
+actor = ac.ActorCritic(numberOfActions, timeHorizon, stateDimensions, discount, 10)
 
 for epoch in range(1000):
 
@@ -72,4 +72,5 @@ for epoch in range(1000):
         #env.render()
 
     f.write('{}\t{}\n'.format(epoch, cumulativeReward))
+    print "Buffer: ", actor.avgBufferSize()
 f.close()
