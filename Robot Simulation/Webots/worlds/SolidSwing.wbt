@@ -20,8 +20,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.79192239 0.60506592 0.082183713 5.9434619
-  position 0.00093764504 2.380527 4.4805202
+  orientation 0.055853753 0.99001403 0.12943176 3.9490936
+  position -1.9200487 0.94251416 -1.7079317
 }
 TexturedBackground {
 }
@@ -36,7 +36,7 @@ Floor {
   size 25 25
   tileSize 0.8 0.8
   texture [
-    "/Users/hargwit/Documents/Robot Simulation/Webots/textures/checkered_marble.jpg"
+    "textures/checkered_marble.jpg"
   ]
 }
 Nao {
@@ -66,14 +66,13 @@ DEF Swing Robot {
       children [
         HingeJoint {
           jointParameters HingeJointParameters {
-            position 1
             axis 0 0 1
             minStop -3
             maxStop 3
           }
           endPoint Solid {
-            translation 0.76363492 -0.49032434 0
-            rotation 0 0 1 1
+            translation 2.8623506e-09 -0.9075 0
+            rotation 0 0 1 0
             children [
               Solid {
                 translation 0 -0.9075 0.25
@@ -107,7 +106,7 @@ DEF Swing Robot {
                 boundingObject USE Seat_Shape
                 physics Physics {
                   density -1
-                  mass 2
+                  mass 1.6
                 }
               }
               Shape {
@@ -122,9 +121,9 @@ DEF Swing Robot {
             ]
             name "RightArm"
             boundingObject USE Side_Arm
-            physics Physics {
+            physics DEF Side_Arm_Phy Physics {
               density -1
-              mass 2
+              mass 1.543
             }
           }
         }
@@ -135,15 +134,14 @@ DEF Swing Robot {
       children [
         HingeJoint {
           jointParameters DEF Joint_Params HingeJointParameters {
-            position 1
             axis 0 0 1
             anchor 0 0 1
             minStop -3
             maxStop 3
           }
           endPoint Solid {
-            translation 0.76363492 -0.49032434 0
-            rotation 0 0 1 1
+            translation 2.8623506e-09 -0.9075 0
+            rotation 0 0 1 0
             children [
               DEF Arm-Seat Connector {
                 translation 0 -0.907 0
@@ -164,10 +162,7 @@ DEF Swing Robot {
             ]
             name "Left_Arm"
             boundingObject USE Side_Arm
-            physics DEF Arm_Physics Physics {
-              density -1
-              mass 2
-            }
+            physics USE Side_Arm_Phy
           }
         }
       ]
