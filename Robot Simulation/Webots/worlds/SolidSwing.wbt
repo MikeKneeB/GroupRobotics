@@ -21,7 +21,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation 0.055853753 0.99001403 0.12943176 3.9490936
-  position -1.9200487 0.94251416 -1.7079317
+  position -6.7996979 2.726653 -6.3089611
 }
 TexturedBackground {
 }

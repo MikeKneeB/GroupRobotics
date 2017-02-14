@@ -20,8 +20,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.8859273 -0.46234068 0.037066306 0.18049628
-  position 0.021379699 0.1803032 0.33809279
+  orientation -0.18595718 0.98132991 0.049107449 0.52575231
+  position 2.3529199 1.3832877 4.2125333
 }
 TexturedBackground {
 }
@@ -36,7 +36,7 @@ Floor {
   size 25 25
   tileSize 0.8 0.8
   texture [
-    "/Users/hargwit/Documents/Git/Robotics/Robot Simulation/Webots/textures/checkered_marble.jpg"
+    "textures/checkered_marble.jpg"
   ]
 }
 Nao {
