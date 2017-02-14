@@ -20,8 +20,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.18595718 0.98132991 0.049107449 0.52575231
-  position 2.3529199 1.3832877 4.2125333
+  orientation 0.035015269 0.99657732 0.074883797 4.0137425
+  position -1.0560249 0.63776629 -0.91525538
 }
 TexturedBackground {
 }
@@ -40,8 +40,8 @@ Floor {
   ]
 }
 Nao {
-  translation 0.97381335 1.4489658 -3.1957606e-08
-  rotation -0.092691605 -0.70406259 -0.70406259 3.3264476
+  translation 0.22052348 0.3009955 -5.1474334e-09
+  rotation -6.767198e-09 -0.70710678 -0.70710678 3.1415926
   controller "naoqisim"
   controllerArgs "9559"
   synchronization FALSE
@@ -87,6 +87,41 @@ DEF Swing Robot {
                       translation 0 -0.06 0
                       rotation 0 0 1 0
                       children [
+                        Solid {
+                          translation -0.05 0 0
+                          children [
+                            Solid {
+                              translation -0.05 0 0.25
+                              children [
+                                Connector {
+                                  translation 0 0 0.25
+                                  locked TRUE
+                                  isLocked TRUE
+                                  autoLock TRUE
+                                  snap FALSE
+                                }
+                                Shape {
+                                  appearance Appearance {
+                                    material Material {
+                                    }
+                                  }
+                                  geometry Box {
+                                    size 0.01 0.01 0.5
+                                  }
+                                }
+                              ]
+                            }
+                            Shape {
+                              appearance Appearance {
+                                material Material {
+                                }
+                              }
+                              geometry DEF Handle_Arm Box {
+                                size 0.1 0.01 0.01
+                              }
+                            }
+                          ]
+                        }
                         Transform {
                           translation 0 -0.06 0
                           children [
@@ -220,6 +255,26 @@ DEF Swing Robot {
                       translation 0 -0.06 0
                       rotation 0 0 1 0
                       children [
+                        Solid {
+                          translation -0.05 0 0
+                          children [
+                            Connector {
+                              translation -0.05 0 0.005
+                              rotation 0 1 0 3.1415927
+                              locked TRUE
+                              isLocked TRUE
+                              autoLock TRUE
+                              snap FALSE
+                            }
+                            Shape {
+                              appearance Appearance {
+                                material Material {
+                                }
+                              }
+                              geometry USE Handle_Arm
+                            }
+                          ]
+                        }
                         Transform {
                           translation 0 -0.06 0
                           children [
