@@ -10,8 +10,8 @@ class ActorCritic:
         Call getNextAction -> perform that action -> call critique
         """
         self.numberOfActions = numberOfActions
-        self.actor = _Actor(stateDimensions, numberOfActions, bufferSize)
-        self.critic = _Critic(timeHorizon, stateDimensions, discount)
+        self.actor = _Actor(stateDimensions, numberOfActions, )
+        self.critic = _Critic(stateDimensions, numberOfActions, timeHorizon, discount, bufferSize)
 
     def getNextAction(self, state):
         """
@@ -27,51 +27,20 @@ class ActorCritic:
         :param reward: arbitrary double
         """
         #print "state: ", state
-        self.actor.updateActionKnowledge(previousState, previousAction, state)
+        self.critic.updateActionKnowledge(previousState, previousAction, state)
 
         self.critic.updateReward(state, reward)
 
-        tDError = self.critic.getTDError(previousState, state, self.actor.policy, self.actor.actionKnowledge)
+        tDError = self.critic.getTDError(previousState, state, self.actor.policy, self.critic.actionKnowledge)
         self.actor.updatePolicy(previousState, previousAction, tDError)
 
     def avgBufferSize(self):
-        return self.actor.bufferIndex.mean()
+        return self.critic.bufferIndex.mean()
 
 class _Actor:
-    def __init__(self, stateSpaceDimensions, numberOfActions, bufferSize):
-        policyDimensions = stateSpaceDimensions + (numberOfActions,)
+    def __init__(self, stateDimensions, numberOfActions):
+        policyDimensions = stateDimensions + (numberOfActions,)
         self.policy = np.zeros(policyDimensions)
-        self.bufferSize = bufferSize
-
-        actionKnowledgeDims = policyDimensions + (len(stateSpaceDimensions),)
-        self.actionKnowledge = np.zeros(actionKnowledgeDims, dtype=np.int_)
-        actionKnowledgeBufferDims = actionKnowledgeDims + (bufferSize,)
-        self.actionKnowledgeBuffer = -np.ones(actionKnowledgeBufferDims, dtype=np.int_)
-        self.bufferIndex = np.zeros(policyDimensions, dtype=np.int_)
-
-    def updateActionKnowledge(self, previousState, previousAction, state):
-        stateAction = previousState + (previousAction,)
-
-        if self.bufferIndex[stateAction] < self.bufferSize:
-            bufferTop = stateAction + (Ellipsis, self.bufferIndex[stateAction])
-            newKnowledge = np.asarray(state)
-            self.actionKnowledgeBuffer[bufferTop] = newKnowledge
-
-            #print self.actionKnowledgeBuffer[stateAction]
-
-            filledBufferIndexes = stateAction + (Ellipsis, slice(0,self.bufferIndex[stateAction]+1))
-            filledBuffer = self.actionKnowledgeBuffer[filledBufferIndexes]
-
-            # print "state action: ", stateAction
-            # print "action knowledge: ", self.actionKnowledge[stateAction]
-            #print "Filled buffer: ", self.actionKnowledgeBuffer[filledBufferIndexes]
-            stateFromAction = np.mean(filledBuffer, axis=1)
-
-            self.actionKnowledge[stateAction] = stateFromAction.round().astype(int)
-
-
-            self.bufferIndex[stateAction] += 1
-
 
     def updatePolicy(self, state, action, tDError):
         #print "Policy: ", self.policy[state],
@@ -80,13 +49,47 @@ class _Actor:
 
 
 class _Critic:
-    def __init__(self, timeHorizon, stateDimensions, discount):
+    def __init__(self, stateDimensions, numberOfActions, timeHorizon, discount, bufferSize):
         self.rewards = np.zeros(stateDimensions)
         self.timeHorizon = timeHorizon
         self.discount = discount
 
+        self.bufferSize = bufferSize
+        stateActionDims = stateDimensions + (numberOfActions,)
+        actionKnowledgeDims = stateActionDims + (len(stateDimensions),)
+        self.actionKnowledge = np.zeros(actionKnowledgeDims, dtype=np.int_)
+        actionKnowledgeBufferDims = actionKnowledgeDims + (bufferSize,)
+        self.actionKnowledgeBuffer = -np.ones(actionKnowledgeBufferDims, dtype=np.int_)
+        self.bufferIndex = np.zeros(stateActionDims, dtype=np.int_)
+
+    def updateActionKnowledge(self, previousState, previousAction, state):
+        stateAction = previousState + (previousAction,)
+
+        # if self.bufferIndex[stateAction] < self.bufferSize:
+        #     bufferTop = stateAction + (Ellipsis, self.bufferIndex[stateAction])
+        #     newKnowledge = np.asarray(state)
+        #     self.actionKnowledgeBuffer[bufferTop] = newKnowledge
+        #
+        #     #print self.actionKnowledgeBuffer[stateAction]4
+        #
+        #     filledBufferIndexes = stateAction + (Ellipsis, slice(0,self.bufferIndex[stateAction]+1))
+        #     filledBuffer = self.actionKnowledgeBuffer[filledBufferIndexes]
+        #
+        #     # print "state action: ", stateAction
+        #     # print "action knowledge: ", self.actionKnowledge[stateAction]
+        #     #print "Filled buffer: ", self.actionKnowledgeBuffer[filledBufferIndexes]
+        #     stateAfterAction = np.mean(filledBuffer, axis=1)
+        #
+        #     self.actionKnowledge[stateAction] = stateAfterAction.round().astype(int)
+        #     #print "Next state: ", self.actionKnowledge[stateAction]
+        #     self.bufferIndex[stateAction] += 1
+
+        ##DEBUG
+        newKnowledge = np.asarray(state)
+        self.actionKnowledge[stateAction] = newKnowledge
+
     def getTDError(self, previousState, newState, policy, actionKnowledge):
-        r1 = self.rewards[newState]
+        r1 = self.rewards[previousState]
         #print "Reward of new state: ", r1
         v1 = self.value(newState, policy, actionKnowledge)
         #print "Value of new state: ", v1
@@ -94,10 +97,9 @@ class _Critic:
         #print "Value of previous state: ", v0
         return r1 + self.discount*v1 - v0
 
-    def value(self, currentState, policy, actionKnowledge):
-        value = 0
-        state = currentState
-        for t in range(0,self.timeHorizon):
+    def value(self, state, policy, actionKnowledge):
+        value = self.rewards[state]
+        for t in range(1,self.timeHorizon+1):
             # Get next state
             action = getNextAction(state, policy)
             expectedState = actionKnowledge[state + (action,)]
@@ -118,3 +120,6 @@ def getNextAction(state, policy):
     actions = policy[state]
     nextAction = np.argmax(actions)
     return nextAction
+
+def wrapAroundAverage(numpyIn, wrap):
+    pass
