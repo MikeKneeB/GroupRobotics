@@ -20,8 +20,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.00026218368 0.99998747 0.0050000163 3.2463694
-  position -0.039602891 0.44749322 -2.2329098
+  orientation 0.1301349 0.98494725 0.11377096 4.8313248
+  position -0.83871004 0.55346908 0.24306617
 }
 TexturedBackground {
 }
@@ -55,6 +55,15 @@ Nao {
       autoLock TRUE
       distanceTolerance 0.1
       snap FALSE
+    }
+  ]
+  leftHandSlot [
+    Connector {
+      name "LHand-Handle"
+    }
+  ]
+  rightHandSlot [
+    Connector {
     }
   ]
 }
