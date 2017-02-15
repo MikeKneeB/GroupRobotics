@@ -20,8 +20,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.18595718 0.98132991 0.049107449 0.52575231
-  position 2.3529199 1.3832877 4.2125333
+  orientation -0.0014306032 -0.99848686 0.054972182 3.1935506
+  position -0.018421009 0.33666808 -2.2966282
 }
 TexturedBackground {
 }
@@ -40,8 +40,8 @@ Floor {
   ]
 }
 Nao {
-  translation 0.97381335 1.4489658 -3.1957606e-08
-  rotation -0.092691605 -0.70406259 -0.70406259 3.3264476
+  translation 0.10342404 0.2901073 2.4297818e-12
+  rotation -0.37796449 -0.65465367 -0.65465366 3.8643269
   controller "naoqisim"
   controllerArgs "9559"
   synchronization FALSE
