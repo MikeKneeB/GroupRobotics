@@ -89,7 +89,7 @@ class _Critic:
         self.actionKnowledge[stateAction] = newKnowledge
 
     def getTDError(self, previousState, newState, policy, actionKnowledge):
-        r1 = self.rewards[previousState]
+        r1 = self.rewards[newState]
         #print "Reward of new state: ", r1
         v1 = self.value(newState, policy, actionKnowledge)
         #print "Value of new state: ", v1
@@ -98,7 +98,7 @@ class _Critic:
         return r1 + self.discount*v1 - v0
 
     def value(self, state, policy, actionKnowledge):
-        value = self.rewards[state]
+        value = 0
         for t in range(1,self.timeHorizon+1):
             # Get next state
             action = getNextAction(state, policy)
