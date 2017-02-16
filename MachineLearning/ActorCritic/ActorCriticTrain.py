@@ -226,7 +226,7 @@ if __name__ == '__main__':
         critic_model = critic.CriticNetwork(sess, state_dim, action_dim, max_action, 0.001, 0.001, actor_model.get_num_trainable_vars()) 
 
         # Train.
-        train(sess, actor_model, critic_model, env, epochs=500, run_length=300, render=False)
+        train(sess, actor_model, critic_model, env, epochs=500, run_length=300, render=True)
 
         raw_input('Training complete, press enter to continue to test.')
 
