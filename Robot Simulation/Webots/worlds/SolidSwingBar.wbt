@@ -45,18 +45,6 @@ Nao {
   controller "naoqisim"
   controllerArgs "9559"
   synchronization FALSE
-  bodySlot [
-    DEF Robot-Seat Connector {
-      translation -0.021213197 0 -0.080960121
-      rotation 0 1 0 4.1887901
-      name "Robot-Seat-Connector"
-      locked TRUE
-      isLocked TRUE
-      autoLock TRUE
-      distanceTolerance 0.1
-      snap FALSE
-    }
-  ]
 }
 DEF Swing Robot {
   translation 0 2 0
