@@ -12,6 +12,7 @@ class Dumbell(object):
 		# velocity and position
         self.omega = 0
         self.theta = 0
+        # currently set up for a target of 45 deg
         self.target = 0.785398
 	
     # differential equations to be solved
@@ -23,26 +24,31 @@ class Dumbell(object):
 
     # function to calculate x position of mass
     def x_position(self):
-        return self.length_0 * np.sin(self.theta)
+        return self.length_0 * np.cos(self.theta)
 
     # function to calculate y position of mass
     def y_position(self, theta):
-        return self.length_0 * np.cos(theta)
+        return self.length_0 * (1 - np.cos(theta))
 		
     def calc_potential_energy(self, theta):
         return self.m * 9.81 * self.y_position(theta)
 		
     def calc_kinetic_energy(self, omega):
-	    return (self.m + self.length_0*self.length_0 + omega*omega)/2.0 
+	    return (self.m * self.length_0*self.length_0 * omega*omega)/2.0 
+        #return (self.m * self.length_0 *self.length_0 *omega*omega)/2.0 
 	
     def calc_reward(self, targetTheta):
         targetEnergy = self.calc_potential_energy(targetTheta)
-        currentEnergy = self.calc_kinetic_energy(self.theta) + self.calc_potential_energy(self.theta)
+        currentKineticEnergy = self.calc_kinetic_energy(self.omega) * 0.259965599 
+        currentPotentialEnergy = self.calc_potential_energy(self.theta)
+        currentEnergy = currentKineticEnergy + currentPotentialEnergy
+        
+        #print self.y_position(self.theta), "\t", self.omega, "\t", currentKineticEnergy, "\t", currentPotentialEnergy, "\t", currentEnergy
         reward = -1 * (targetEnergy - currentEnergy) * (targetEnergy - currentEnergy)
         return reward
 		
     def reset(self):
-		# position is a random position under the target position
+		# position at zero, comment out for random under target
         self.theta = self.target * (2 * np.random.random() - 1)
 		# no initial speed (this could be a problem!)
         self.omega = 0
@@ -105,10 +111,10 @@ class Dumbell(object):
 def main():
 
     # cheeky code for printing to file
-    #import sys
-    #orig_stdout = sys.stdout
-    #f = file('dumbellOut.txt', 'w')
-    #sys.stdout = f
+    import sys
+    orig_stdout = sys.stdout
+    f = file('dumbellOut.txt', 'w')
+    sys.stdout = f
     
     # create dumbell enviroment
     env = Dumbell()
@@ -116,16 +122,28 @@ def main():
     theta, omega = env.reset()
     
     # step a bunch o times
-    for i in range(2500):
+    for i in range(25000):
         # step takes in an action and spits out percepts ala OpenAi
         # action can be float and continuous
         # not sure which values work yet, no noticable movement <10, breaks for >1000
-        obs, reward, done, info = env.step(100)
+        torque = 0
+        
+        if theta < 0:
+            torque = -100
+        else:
+            torque = 100
+        
+				
+        # going to change direction of torque depending on position of 
+        obs, reward, done, info = env.step(torque)
         # states are angle and angular velocity in rads (floats and continuous)
         theta, omega = obs
-        print theta, "\t", omega, "\t", reward
+        print theta, "\t", omega, "\t", reward, "\t", torque
         
-    #sys.stdout = orig_stdout
-    #f.close()
+		
+	
+        
+    sys.stdout = orig_stdout
+    f.close()
 		
 main()
