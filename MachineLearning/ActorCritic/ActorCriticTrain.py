@@ -29,25 +29,25 @@ buffer: memory buffer size (number of stored memories).
 filepath: optional filepath to save data too, in most cases not needed.
 render: show environment state during training.
 """
-def train(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.01, buffer = 1000, filepath=None, render=False):
+def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action, epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.01, buffer = 1000, filepath=None, render=False):
 
     # For file naming purposes.
     now = datetime.datetime.now()
 
-    # Get the dimensions of this environment
-    state_dim = env.observation_space.shape[0]
-    action_dim = env.action_space.shape[0]
-    max_action = env.action_space.high
+    # Get the dimensions of this environment (no longer)
+    # state_dim = env.observation_space.shape[0]
+    # action_dim = env.action_space.shape[0]
+    # max_action = env.action_space.high
 
     # Build filename if required.
-    if filepath is None: 
+    if filepath is None:
         filepath = '{}:{}_{}-{}-{}'.format(now.hour, now.minute, now.day, now.month, now.year)
 
     with open(filepath, 'w') as f:
 
         f.write('# Epochs: {} | Run Length: {} | Memory Size: {} | Batch Size: {} | Initial Epsilon: {}\n'.format(epochs, run_length, buffer, batch_size, epsilon))
 
-        f.write('{}\t{}\n'.format('ep','re'))
+        f.write('{:10s}{:s}\n'.format('ep','re'))
 
         # Initialise global variables for tensorflow session.
         sess.run(tf.global_variables_initializer())
@@ -149,12 +149,12 @@ def train(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300,
                     continue
 
             print('Reward earned: {}'.format(reward_total))
-            f.write('{}\t{}\n'.format(epo, reward_total[0]))
+            f.write('{:<10d}{:<f}\n'.format(epo, reward_total[0]))
 
         f.close()
 
 """
-Test tests a trained agent (both nets) on an environment. This does not produce  
+Test tests a trained agent (both nets) on an environment. This does not produce
 data and always renders.
 
 sess: tensorflow learn session.
@@ -198,7 +198,7 @@ def test(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300):
                 continue
 
         print('Reward earned: {}'.format(reward_total))
- 
+
     # HEHEHHEHEHE
     return 0
 
@@ -222,11 +222,11 @@ if __name__ == '__main__':
         max_action = env.action_space.high
 
         # Build our actor and critic agents.
-        actor_model = actor.ActorNetwork(sess, state_dim, action_dim, max_action, 0.0001, 0.001) 
-        critic_model = critic.CriticNetwork(sess, state_dim, action_dim, max_action, 0.001, 0.001, actor_model.get_num_trainable_vars()) 
+        actor_model = actor.ActorNetwork(sess, state_dim, action_dim, max_action, 0.0001, 0.001)
+        critic_model = critic.CriticNetwork(sess, state_dim, action_dim, max_action, 0.001, 0.001, actor_model.get_num_trainable_vars())
 
         # Train.
-        train(sess, actor_model, critic_model, env, epochs=500, run_length=300, render=False)
+        train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action, epochs=50, run_length=300, render=True)
 
         raw_input('Training complete, press enter to continue to test.')
 
