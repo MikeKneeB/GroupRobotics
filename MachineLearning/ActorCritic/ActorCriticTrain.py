@@ -85,6 +85,9 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
                 # Perform action.
                 obs_2, reward, d, i = env.step(action)
 
+                print(obs_2)
+                print(reward)
+
                 # Add what happened to the memory.
                 replay.append([np.reshape(obs_1, state_dim), np.reshape(action, action_dim), reward, np.reshape(obs_2, state_dim)])
 
@@ -221,12 +224,14 @@ if __name__ == '__main__':
         action_dim = env.action_space.shape[0]
         max_action = env.action_space.high
 
+        print('{} {} {}'.format(state_dim, action_dim, max_action))
+
         # Build our actor and critic agents.
         actor_model = actor.ActorNetwork(sess, state_dim, action_dim, max_action, 0.0001, 0.001)
         critic_model = critic.CriticNetwork(sess, state_dim, action_dim, max_action, 0.001, 0.001, actor_model.get_num_trainable_vars())
 
         # Train.
-        train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action, epochs=50, run_length=300, render=True)
+        train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action, epochs=50, run_length=300, render=False)
 
         raw_input('Training complete, press enter to continue to test.')
 

@@ -59,6 +59,9 @@ class Dumbell(object):
 	    # calculate reward of previous action (target energy being at 45deg oscillations)
         reward = self.calc_reward(self.target)
 
+        if type(action) is list or type(action) is tuple:
+            action = action[0]
+
 		# Runge Kutta parameters
         h = 0.01 # step size for Runge Kutta
         N = 2500.0 # number of intervals for Runge Kutta
