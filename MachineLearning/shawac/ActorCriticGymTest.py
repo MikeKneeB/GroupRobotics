@@ -12,8 +12,10 @@ def get_observations(action):
     pendulumX, pendulumY, pendulumZ = positions
     angleRad = np.arctan(pendulumY/pendulumX)
     angleDeg = int(round(np.rad2deg(angleRad)*2/18))+10
+    if angleDeg == 20:
+        angleDeg = 0
     velocity = int(np.round(pendulumZ)) + 8
-    #print angleDeg, velocity
+   # print angleDeg, velocity
     return (angleDeg, velocity), reward
 
 # resets enviroment to random position and returns the initial position and velocity
@@ -22,7 +24,9 @@ def reset_enviroment():
     initialPositions = observations
     pendulumX, pendulumY, pendulumZ = initialPositions
     angleRad = np.arctan(pendulumY/pendulumX)
-    angleDeg = int(round(np.rad2deg(angleRad)*2/18))
+    angleDeg = int(round(np.rad2deg(angleRad)*2/18))+10
+    if angleDeg == 20:
+        angleDeg = 0
     velocity = int(np.round(pendulumZ)) + 8
     return angleDeg, velocity
 
@@ -39,22 +43,22 @@ for i in range(numberOfActions):
     torqueValue.append(i/2.0 - 2)
 
 # (positions, velocities)
-stateDimensions = (21, 17)
+stateDimensions = (20, 17)
 
 discount = 0.8
 timeHorizon = 30
 
-actor = ac.ActorCritic(numberOfActions, timeHorizon, stateDimensions, discount, 10)
+actor = ac.ActorCritic(numberOfActions, timeHorizon, stateDimensions, discount, 20)
 
 f.write('epoch\treward\n')
-epochs = 1000
+epochs = 10000
 exploration = epochs/2
 for epoch in range(epochs):
     # reset enviroment and extract initial state
     state = reset_enviroment()
     cumulativeReward = 0
     print epoch
-    for step in range(2000):
+    for step in range(300):
         #print "****************************"
         #print "Epoch: ", epoch, " Step: ", step
 
@@ -67,7 +71,7 @@ for epoch in range(epochs):
         # convert action into torque magnitude
         torque = torqueValue[action]
 
-        # perform action on enviroment
+        # perform action on environment
         newstate, reward = get_observations(torque)
         cumulativeReward += reward
 

@@ -1,5 +1,6 @@
 import numpy as np
 
+
 # Call get next action -> perform that action
 # -> update state-action to state (action knowledge), critique policy with new state
 
@@ -58,35 +59,43 @@ class _Critic:
         stateActionDims = stateDimensions + (numberOfActions,)
         actionKnowledgeDims = stateActionDims + (len(stateDimensions),)
         self.actionKnowledge = np.zeros(actionKnowledgeDims, dtype=np.int_)
-        actionKnowledgeBufferDims = actionKnowledgeDims + (bufferSize,)
-        self.actionKnowledgeBuffer = -np.ones(actionKnowledgeBufferDims, dtype=np.int_)
+        actionKnowledgeBufferDims = stateActionDims + (len(stateDimensions)+1, bufferSize)
+        self.actionKnowledgeBuffer = np.zeros(actionKnowledgeBufferDims, dtype=np.int_)
         self.bufferIndex = np.zeros(stateActionDims, dtype=np.int_)
 
     def updateActionKnowledge(self, previousState, previousAction, state):
         stateAction = previousState + (previousAction,)
+        newKnowledge = np.asarray(state).T
+        numberInBuffer = self.bufferIndex[stateAction]
 
-        # if self.bufferIndex[stateAction] < self.bufferSize:
-        #     bufferTop = stateAction + (Ellipsis, self.bufferIndex[stateAction])
-        #     newKnowledge = np.asarray(state)
-        #     self.actionKnowledgeBuffer[bufferTop] = newKnowledge
-        #
-        #     #print self.actionKnowledgeBuffer[stateAction]4
-        #
-        #     filledBufferIndexes = stateAction + (Ellipsis, slice(0,self.bufferIndex[stateAction]+1))
-        #     filledBuffer = self.actionKnowledgeBuffer[filledBufferIndexes]
-        #
-        #     # print "state action: ", stateAction
-        #     # print "action knowledge: ", self.actionKnowledge[stateAction]
-        #     #print "Filled buffer: ", self.actionKnowledgeBuffer[filledBufferIndexes]
-        #     stateAfterAction = np.mean(filledBuffer, axis=1)
-        #
-        #     self.actionKnowledge[stateAction] = stateAfterAction.round().astype(int)
-        #     #print "Next state: ", self.actionKnowledge[stateAction]
-        #     self.bufferIndex[stateAction] += 1
+        print "\n"
+        print self.actionKnowledgeBuffer[stateAction]
+        print "New knowledge: ", newKnowledge
+        observationLocation = -1
+        # check for next state in buffer
+        for i in range(0, numberInBuffer):
+            index = stateAction+(slice(1,3), i)
+            if np.array_equal(self.actionKnowledgeBuffer[index], newKnowledge):
+                observationLocation = i
 
-        ##DEBUG
-        newKnowledge = np.asarray(state)
-        self.actionKnowledge[stateAction] = newKnowledge
+        if observationLocation < 0:
+            if numberInBuffer < self.bufferSize:
+                self.actionKnowledgeBuffer[stateAction + (slice(1, 3), numberInBuffer)] = newKnowledge
+                self.actionKnowledgeBuffer[stateAction + (0, numberInBuffer)] += 1
+                self.bufferIndex[stateAction] += 1
+        else:
+            self.actionKnowledgeBuffer[stateAction+(0,observationLocation)] +=1
+
+        modeIndex = np.argmax(self.actionKnowledgeBuffer[stateAction + (0, Ellipsis)])
+        modeAction = self.actionKnowledgeBuffer[stateAction + (slice(1,3), modeIndex)]
+
+        print self.actionKnowledgeBuffer[stateAction]
+        print "Mode state after action: ", modeAction
+        print "\n"
+
+        self.actionKnowledge[stateAction] = modeAction
+        #print "Next state: ", self.actionKnowledge[stateAction]
+
 
     def getTDError(self, previousState, newState, policy, actionKnowledge):
         r1 = self.rewards[newState]
