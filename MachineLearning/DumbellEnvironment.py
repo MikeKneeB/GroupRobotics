@@ -2,19 +2,19 @@ import numpy as np
 
 class Dumbell(object):
 
-    def __init__(self):
-        self.length_0 = 2.5 # initial length (equilibrium)
+    def __init__(self, length=2.5, mass=1.0, target=0.785398):
+        self.length_0 = length # initial length (equilibrium)
 		# defining system parameters
 		# combined mass of the two dumbbell masses
-        self.m = 1.0
+        self.m = mass
 		# arbitrary time
         t = 0.0
 		# velocity and position
         self.omega = 0
         self.theta = 0
         # currently set up for a target of 45 deg
-        self.target = 0.785398
-	
+        self.target = target
+
     # differential equations to be solved
     def theta_deriv(self, length, length_deriv, theta, omega):
         return -1 * omega
@@ -29,36 +29,36 @@ class Dumbell(object):
     # function to calculate y position of mass
     def y_position(self, theta):
         return self.length_0 * (1 - np.cos(theta))
-		
+
     def calc_potential_energy(self, theta):
         return self.m * 9.81 * self.y_position(theta)
-		
+
     def calc_kinetic_energy(self, omega):
-	    return (self.m * self.length_0*self.length_0 * omega*omega)/2.0 
-        #return (self.m * self.length_0 *self.length_0 *omega*omega)/2.0 
-	
+	    return (self.m * self.length_0*self.length_0 * omega*omega)/2.0
+        #return (self.m * self.length_0 *self.length_0 *omega*omega)/2.0
+
     def calc_reward(self, targetTheta):
         targetEnergy = self.calc_potential_energy(targetTheta)
-        currentKineticEnergy = self.calc_kinetic_energy(self.omega) * 0.259965599 
+        currentKineticEnergy = self.calc_kinetic_energy(self.omega) * 0.259965599
         currentPotentialEnergy = self.calc_potential_energy(self.theta)
         currentEnergy = currentKineticEnergy + currentPotentialEnergy
-        
+
         #print self.y_position(self.theta), "\t", self.omega, "\t", currentKineticEnergy, "\t", currentPotentialEnergy, "\t", currentEnergy
         reward = -1 * (targetEnergy - currentEnergy) * (targetEnergy - currentEnergy)
         return reward
-		
+
     def reset(self):
 		# position at zero, comment out for random under target
         self.theta = self.target * (2 * np.random.random() - 1)
 		# no initial speed (this could be a problem!)
         self.omega = 0
         return np.array([self.theta, self.omega])
-	    
-	
+
+
     def step(self, action):
 	    # calculate reward of previous action (target energy being at 45deg oscillations)
         reward = self.calc_reward(self.target)
-	
+
 		# Runge Kutta parameters
         h = 0.01 # step size for Runge Kutta
         N = 2500.0 # number of intervals for Runge Kutta
@@ -103,9 +103,9 @@ class Dumbell(object):
         self.theta = self.theta + (ok1+2.0*ok2+2.0*ok3+ok4)*(h/6.0)
         self.omega = self.omega + (wk1+2.0*wk2+2.0*wk3+wk4)*(h/6.0)
 
-        return np.array([self.theta, self.omega]), reward, False, {}    
+        return np.array([self.theta, self.omega]), reward, False, {}
 
-		
+
 
 
 def main():
@@ -115,35 +115,36 @@ def main():
     orig_stdout = sys.stdout
     f = file('dumbellOut.txt', 'w')
     sys.stdout = f
-    
+
     # create dumbell enviroment
     env = Dumbell()
     # spit out initial (randomish) state
     theta, omega = env.reset()
-    
+
     # step a bunch o times
     for i in range(25000):
         # step takes in an action and spits out percepts ala OpenAi
         # action can be float and continuous
         # not sure which values work yet, no noticable movement <10, breaks for >1000
         torque = 0
-        
+
         if theta < 0:
             torque = -100
         else:
             torque = 100
-        
-				
-        # going to change direction of torque depending on position of 
+
+
+        # going to change direction of torque depending on position of
         obs, reward, done, info = env.step(torque)
         # states are angle and angular velocity in rads (floats and continuous)
         theta, omega = obs
         print theta, "\t", omega, "\t", reward, "\t", torque
-        
-		
-	
-        
+
+
+
+
     sys.stdout = orig_stdout
     f.close()
-		
-main()
+
+if __name__ == '__main__':
+    main()
