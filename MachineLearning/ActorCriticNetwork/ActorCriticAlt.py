@@ -6,7 +6,7 @@ import numpy as np
 import random
 import datetime
 
-from MachineLearning import DumbellEnvironment as denv
+from MachineLearning.Models import DumbellEnvironment as denv
 import actor
 import critic
 
