@@ -28,8 +28,10 @@ min_epsilon: smallest epsilon to use (reached at final run of training).
 buffer: memory buffer size (number of stored memories).
 envname: environment name, for creating filepath.
 render: show environment state during training.
+obsComp: optional observation comprehension function.
+rewComp: optional reward comprehension function.
 """
-def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action, epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.01, buffer = 1000, envname=None, render=False):
+def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action, epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.01, buffer = 1000, envname=None, render=False, obsComp=None, rewComp=None):
 
     # For file naming purposes.
     now = datetime.datetime.now()
@@ -40,16 +42,16 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
     # max_action = env.action_space.high
 
     # Build filename.
-    if envname = None:
+    if envname is None:
         envname = 'NOENV'
 
-    filepath = '{}:{}_{}-{}-{}'.format(now.hour, now.minute, now.day, now.month, now.year, envname)
+    filepath = '{}:{}_{}-{}-{}_{}'.format(now.hour, now.minute, now.day, now.month, now.year, envname)
 
     with open(filepath, 'w') as f:
 
         f.write('# Epochs: {} | Run Length: {} | Memory Size: {} | Batch Size: {} | Initial Epsilon: {}\n'.format(epochs, run_length, buffer, batch_size, epsilon))
 
-        f.write('{:10s}{:s}\n'.format('ep','re'))
+        f.write('{:10s}{:15s}{:10s}\n'.format('ep','re','rol_re'))
 
         # Initialise global variables for tensorflow session.
         sess.run(tf.global_variables_initializer())
@@ -60,12 +62,15 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
 
         # Replay is a simple list of lists, start of as an empty list.
         replay = []
+        running_reward = []
 
         for epo in range(epochs):
             print('Game: %s' % epo)
 
             # Reset env and get initial observation.
             obs_1 = env.reset()
+            if obsComp is not None:
+                obs_1 = obsComp(obs_1)
 
             # reward_total for output.
             reward_total = 0
@@ -86,6 +91,10 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
 
                 # Perform action.
                 obs_2, reward, d, i = env.step(action)
+                if obsComp is not None:
+                    obs_2 = obsComp(obs_2)
+                if rewComp is not None:
+                    reward = rewComp(reward)
 
                 print(obs_2)
                 print(reward)
@@ -154,7 +163,12 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
                     continue
 
             print('Reward earned: {}'.format(reward_total))
-            f.write('{:<10d}{:<f}\n'.format(epo, reward_total[0]))
+
+            if len(running_reward) > 20:
+                del running_reward[0]
+                print(len(running_reward))
+            running_reward.append(reward_total[0])
+            f.write('{:<10d}{:<15f}{:<15f}\n'.format(epo, reward_total[0], sum(running_reward)/len(running_reward)))
 
         f.close()
 
@@ -169,12 +183,14 @@ env: openai environment.
 epochs: number of test runs.
 run_length: number of actions available to the agent in one run.
 """
-def test(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300):
+def test(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300, obsComp=None, rewComp=None):
     for epo in range(epochs+1):
         print('Game: %s' % epo)
 
         # Get initial epoch observations.
         obs_1 = env.reset()
+        if obsComp is not None:
+            obs_1 = obsComp(obs_1)
 
         # Not strictly necessary...
         reward_total = 0
@@ -192,6 +208,10 @@ def test(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300):
 
             # Step and observe.
             obs_2, reward, d, i = env.step(action)
+            if obsComp is not None:
+                obs_2 = obsComp(obs_2)
+            if rewComp is not None:
+                reward = rewComp(reward)
 
             # Move to our new state.
             obs_1 = obs_2[:]
@@ -233,9 +253,9 @@ if __name__ == '__main__':
         critic_model = critic.CriticNetwork(sess, state_dim, action_dim, max_action, 0.001, 0.001, actor_model.get_num_trainable_vars())
 
         # Train.
-        train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action, epochs=50, run_length=300, render=False, envname='pendulum')
+        train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action, epochs=200, run_length=200, render=False, envname='pendulum')
 
         raw_input('Training complete, press enter to continue to test.')
 
         # Test.
-        test(sess, actor_model, critic_model, env, epochs=50, run_length=300)
+        test(sess, actor_model, critic_model, env, epochs=10, run_length=300)

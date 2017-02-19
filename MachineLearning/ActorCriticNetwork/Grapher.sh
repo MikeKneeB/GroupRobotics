@@ -4,7 +4,7 @@ COMM="plot"
 echo $COMM
 for item in $@
 do
-  COMM="$COMM '$item' using 'ep':'re' with lines title '$item', "
+  COMM="$COMM '$item' using 'ep':'re' with lines title '$item', '$item' using 'ep':'rol_re' with lines title '$item rolling', "
 done
 
 echo $COMM
