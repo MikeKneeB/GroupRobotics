@@ -13,12 +13,15 @@ import critic
 """
 train trains the neural network objects using the tensorflow session sess.
 Can be run with varying parameters, though recommended defaults will be fine
-in many cases. Environments can be any kind of continuous openai env.
+in many cases. Environments can be any kind of continuous env with, at a
+minimum, a reset and step function.
 
 sess: tensorflow session to run on.
 actor_model: actor network object.
 critic_model: critic network object.
 env: openai environment.
+state_dim: dimension of the state space of env.
+action_dim: dimensions of the action space of env.
 epochs: number of training runs to run.
 run_length: number of actions available to the agent in one run.
 batch_size: memory batch for online training.
@@ -27,7 +30,8 @@ epsilon: noise range.
 min_epsilon: smallest epsilon to use (reached at final run of training).
 buffer: memory buffer size (number of stored memories).
 envname: environment name, for creating filepath.
-render: show environment state during training.
+render: show environment state during training. Must be False if env has no
+    render method.
 obsComp: optional observation comprehension function.
 rewComp: optional reward comprehension function.
 """
@@ -35,11 +39,6 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
 
     # For file naming purposes.
     now = datetime.datetime.now()
-
-    # Get the dimensions of this environment (no longer)
-    # state_dim = env.observation_space.shape[0]
-    # action_dim = env.action_space.shape[0]
-    # max_action = env.action_space.high
 
     # Build filename.
     if envname is None:
@@ -174,16 +173,21 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
 
 """
 Test tests a trained agent (both nets) on an environment. This does not produce
-data and always renders.
+data and always renders. Cannot be run on environments withouth a render
+method.
 
 sess: tensorflow learn session.
 actor_model: actor object (should already be trained).
 critic_model: critic object (should also already be trained).
 env: openai environment.
+state_dim: dimension of state space of env.
+action_dim: dimensions of action space of env.
 epochs: number of test runs.
 run_length: number of actions available to the agent in one run.
+obsComp: optional observation comprehension function.
+rewComp: optional reward comprehension function.
 """
-def test(sess, actor_model, critic_model, env, epochs = 1000, run_length = 300, obsComp=None, rewComp=None):
+def test(sess, actor_model, critic_model, env, state_dim, action_dim, epochs = 1000, run_length = 300, obsComp=None, rewComp=None):
     for epo in range(epochs+1):
         print('Game: %s' % epo)
 
@@ -258,4 +262,4 @@ if __name__ == '__main__':
         raw_input('Training complete, press enter to continue to test.')
 
         # Test.
-        test(sess, actor_model, critic_model, env, epochs=10, run_length=300)
+        test(sess, actor_model, critic_model, env, state_dim, action_dim, epochs=10, run_length=300)
