@@ -1,12 +1,11 @@
 import numpy as np
 import gym
-import Bumbell
 
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
 from keras.optimizers import Adam
 
-from QNetTest import DeepQNetwork
+from QNet import DeepQNetwork
 import Policy
 import Memory
 
