@@ -46,18 +46,6 @@ Nao {
   controller "naoqisim"
   controllerArgs "9559"
   synchronization FALSE
-  bodySlot [
-    DEF Robot-Seat Connector {
-      translation -0.0212132 0 -0.0809601
-      rotation 0 1 0 4.45059
-      name "Robot-Seat-Connector"
-      locked TRUE
-      isLocked TRUE
-      autoLock TRUE
-      distanceTolerance 0.1
-      snap FALSE
-    }
-  ]
 }
 DEF Swing Robot {
   translation 0 2 0
@@ -104,17 +92,29 @@ DEF Swing Robot {
                                   Solid {
                                     translation 0 -0.0925 0.25
                                     children [
-                                      Connector {
-                                        rotation 1 0 0 -1.5708
-                                        name "Robot-Seat"
-                                        locked TRUE
-                                        isLocked TRUE
-                                        autoLock TRUE
-                                        snap FALSE
+                                      Solid {
+                                        translation -0.04 0.06 0
+                                        children [
+                                          Shape {
+                                            appearance Appearance {
+                                              material Material {
+                                              }
+                                            }
+                                            geometry DEF Bar Box {
+                                              size 0.01 0.01 0.5
+                                            }
+                                          }
+                                        ]
+                                        boundingObject USE Bar
+                                        physics Physics {
+                                          density -1
+                                          mass 1
+                                        }
                                       }
                                       Connector {
                                         translation 0 0 0.25
                                         rotation 1 0 0 -1.5708
+                                        name "Seat-Arm"
                                         locked TRUE
                                         isLocked TRUE
                                         autoLock TRUE
