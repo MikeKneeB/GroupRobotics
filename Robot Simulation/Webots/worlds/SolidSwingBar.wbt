@@ -1,4 +1,4 @@
-#VRML_SIM V8.5 utf8
+#VRML_SIM V8.2.1 utf8
 WorldInfo {
   info [
     "Aldebaran's Nao H25 V5.0"
@@ -20,8 +20,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.0016827275 0.99898626 0.044984737 3.2162947
-  position -0.14336646 0.37220157 -1.2746598
+  orientation 0.00168273 0.998986 0.0449847 3.21629
+  position -0.143366 0.372202 -1.27466
 }
 TexturedBackground {
 }
@@ -36,12 +36,13 @@ Floor {
   size 25 25
   tileSize 0.8 0.8
   texture [
+    "textures/checkered_marble.png"
     "textures/checkered_marble.jpg"
   ]
 }
 Nao {
-  translation 0.093536297 0.28511075 0.0031877919
-  rotation -0.37796386 -0.65465515 -0.65465254 3.8643285
+  translation 0.0935363 0.285111 0.00318779
+  rotation -0.377964 -0.654655 -0.654653 3.86433
   controller "naoqisim"
   controllerArgs "9559"
   synchronization FALSE
@@ -59,7 +60,7 @@ DEF Swing Robot {
             maxStop 3
           }
           endPoint Solid {
-            translation 2.8623506e-09 -0.9075 0
+            translation 2.86235e-09 -0.9075 0
             rotation 0 0 1 0
             children [
               Solid {
@@ -85,7 +86,7 @@ DEF Swing Robot {
                     }
                   }
                   Connector {
-                    rotation 1 0 0 -1.5707997
+                    rotation 1 0 0 -1.5708
                     name "Seat Robot"
                     locked TRUE
                     isLocked TRUE
@@ -94,7 +95,7 @@ DEF Swing Robot {
                   }
                   Connector {
                     translation 0 0 0.25
-                    rotation 1 0 0 -1.5707997
+                    rotation 1 0 0 -1.5708
                     locked TRUE
                     isLocked TRUE
                     autoLock TRUE
@@ -147,12 +148,12 @@ DEF Swing Robot {
             maxStop 3
           }
           endPoint Solid {
-            translation 2.8623506e-09 -0.9075 0
+            translation 2.86235e-09 -0.9075 0
             rotation 0 0 1 0
             children [
               DEF Arm-Seat Connector {
                 translation 0 -0.907 0
-                rotation 1 0 0 1.5707997
+                rotation 1 0 0 1.5708
                 name "Arm-Seat-Connector"
                 locked TRUE
                 isLocked TRUE
