@@ -264,7 +264,7 @@ if __name__ == '__main__':
 
         # Train.
         train(sess, actor_model, critic_model, env, state_dim, action_dim,
-        max_action, epochs=200, run_length=200, render=False, envname='pendulum')
+        max_action, epochs=200, run_length=200, render=True, envname='pendulum')
 
         raw_input('Training complete, press enter to continue to test.')
 
