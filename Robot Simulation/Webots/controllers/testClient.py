@@ -1,15 +1,29 @@
 import socket
+import cPickle
 
-TCP_IP="127.0.0.1"
-TCP_PORT=5005
-BUFFER_SIZE=20
+class SwingSensor:
+    def __init__(self, TCP_IP, TCP_PORT):
+        self.BUFFER_SIZE = 20
+        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.s.connect((TCP_IP, TCP_PORT))
 
-MESSAGE="Hello World!"
+    def getUpdate(self):
+        self.s.send(cPickle.dumps(1))
+        rec = self.s.recv(self.BUFFER_SIZE)
+        return cPickle.loads(rec)
 
-s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-s.connect((TCP_IP,TCP_PORT))
-s.send(MESSAGE)
-data=s.recv(BUFFER_SIZE)
-s.close()
+    def closeConnection(self):
+        self.s.close()
 
-print "received data:",data
+
+swingProxy = SwingSensor('127.0.0.1', 5005)
+data = swingProxy.getUpdate()
+print data
+data = swingProxy.getUpdate()
+print data
+data = swingProxy.getUpdate()
+print data
+data = swingProxy.getUpdate()
+print data
+data = swingProxy.getUpdate()
+print data
