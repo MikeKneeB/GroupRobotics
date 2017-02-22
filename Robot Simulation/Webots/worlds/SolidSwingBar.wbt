@@ -187,4 +187,5 @@ DEF Swing Robot {
   ]
   name "Swing"
   boundingObject USE Top_Bar_Geometry
+  controller "SwingController"
 }
