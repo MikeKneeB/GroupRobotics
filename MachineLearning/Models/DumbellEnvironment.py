@@ -167,7 +167,7 @@ def main():
     # cheeky code for printing to file
     import sys
     orig_stdout = sys.stdout
-    f = file('dumbellOut.txt', 'w')
+    f = open('dumbellOut.txt', 'w')
     sys.stdout = f
 
     # create dumbell enviroment
@@ -193,7 +193,7 @@ def main():
         env.render()
         # states are angle and angular velocity in rads (floats and continuous)
         theta, omega = obs
-        print theta, "\t", omega, "\t", reward, "\t", torque
+        print(theta, "\t", omega, "\t", reward, "\t", torque)
 
 
 
