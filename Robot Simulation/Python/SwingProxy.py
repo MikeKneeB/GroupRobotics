@@ -7,7 +7,7 @@ class SwingProxy:
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.s.connect((TCP_IP, TCP_PORT))
 
-    def getUpdate(self):
+    def get_angle(self):
         #Pack instruction
         values=(1)
         packer = struct.Struct('I')
