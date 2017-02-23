@@ -59,6 +59,11 @@ DEF Swing Robot {
             minStop -3
             maxStop 3
           }
+          device [
+            PositionSensor {
+              name "swingAngle"
+            }
+          ]
           endPoint Solid {
             translation 2.86235e-09 -0.9075 0
             rotation 0 0 1 0

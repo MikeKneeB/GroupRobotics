@@ -8,6 +8,6 @@ def Main():
     robotIP="127.0.0.1"
     PORT=9559
     motionProxy=ALProxy("ALMotion",robotIP,PORT)
-    SwingAPI.position2(motionProxy)
+    SwingAPI.position1(motionProxy)
 
 Main()
