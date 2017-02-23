@@ -20,8 +20,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.00168273 0.998986 0.0449847 3.21629
-  position -0.143366 0.372202 -1.27466
+  orientation 0.02657 0.983496 0.178966 3.43157
+  position -0.743482 1.16444 -2.26813
 }
 TexturedBackground {
 }
@@ -41,14 +41,14 @@ Floor {
   ]
 }
 Nao {
-  translation 0.0935363 0.285111 0.00318779
+  translation 0.0935363 0.48511 0.00318779
   rotation -0.377964 -0.654655 -0.654653 3.86433
   controller "naoqisim"
   controllerArgs "9559"
   synchronization FALSE
 }
 DEF Swing Robot {
-  translation 0 2 0
+  translation 0 2.2 0
   children [
     DEF RArm Transform {
       translation 0 0 -0.25
