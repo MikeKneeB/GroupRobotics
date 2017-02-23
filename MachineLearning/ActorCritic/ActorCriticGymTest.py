@@ -2,84 +2,77 @@ import gym
 import numpy as np
 import random
 
-import actorcritic as ac
+import ActorCritic as ac
 
-def get_observations(action):
-    torque = np.array([action, 0])
+#global variables
+THETAS = 20
+OMEGAS = 17
+ACTIONS = 9
+
+def rescale(observations):
+    x, y, omega_raw = observations
+    theta_raw = np.arctan(x/y)
+    theta = int(round((theta_raw+np.pi)*THETAS/(2*np.pi)))
+    if theta == THETAS:
+        theta = 0
+    omega = int(round(omega_raw+8)*(OMEGAS-1)/16)
+    return theta, omega
+
+def torque_from(action):
+    return np.array((action*4.0/ACTIONS - 2,))
+
+def get_observations(torque, env):
     observations = env.step(torque)
     positions, reward, failed, info = observations
+    theta, omega = rescale(positions)
 
-    pendulumX, pendulumY, pendulumZ = positions
-    angleRad = np.arctan(pendulumY/pendulumX)
-    angleDeg = int(round(np.rad2deg(angleRad)*2/18))+10
-    if angleDeg == 20:
-        angleDeg = 0
-    velocity = int(np.round(pendulumZ)) + 8
-   # print angleDeg, velocity
-    return (angleDeg, velocity), reward
+    return (theta, omega), reward
 
 # resets enviroment to random position and returns the initial position and velocity
-def reset_enviroment():
+def reset_enviroment(env):
     observations = env.reset()
-    initialPositions = observations
-    pendulumX, pendulumY, pendulumZ = initialPositions
-    angleRad = np.arctan(pendulumY/pendulumX)
-    angleDeg = int(round(np.rad2deg(angleRad)*2/18))+10
-    if angleDeg == 20:
-        angleDeg = 0
-    velocity = int(np.round(pendulumZ)) + 8
-    return angleDeg, velocity
+    theta, omega = rescale(observations)
+    return theta, omega
 
-env = gym.make('Pendulum-v0')
-env.reset()
-f = open('shawac.txt', 'w')
+def main():
+    env = gym.make('Pendulum-v0')
+    env.reset()
+    f = open('shawac.txt', 'w')
 
-# actions discretized
-numberOfActions = 9
+    # (positions, velocities)
+    state_dimensions = (THETAS, OMEGAS)
 
-torqueValue = []
-# works for 10 actions, too tired to generalize
-for i in range(numberOfActions):
-    torqueValue.append(i/2.0 - 2)
+    discount = 0.8
+    time_horizon = 30
 
-# (positions, velocities)
-stateDimensions = (20, 17)
+    actor = ac.ActorCritic(ACTIONS, time_horizon, state_dimensions, discount, 10)
 
-discount = 0.8
-timeHorizon = 30
+    f.write('epoch\treward\n')
+    epochs = 10000
+    exploration = epochs/2
+    for epoch in range(epochs):
+        # reset enviroment and extract initial state
+        state = reset_enviroment(env)
+        cumulativeReward = 0
+        print epoch
+        for step in range(300):
+            if epoch<exploration:
+                action = random.randint(0,8)
+            else:
+                action = actor.getNextAction(state)
+            torque = torque_from(action)
 
-actor = ac.ActorCritic(numberOfActions, timeHorizon, stateDimensions, discount, 20)
+            # perform action on environment
+            new_state, reward = get_observations(torque, env)
+            cumulativeReward += reward
 
-f.write('epoch\treward\n')
-epochs = 10000
-exploration = epochs/2
-for epoch in range(epochs):
-    # reset enviroment and extract initial state
-    state = reset_enviroment()
-    cumulativeReward = 0
-    print epoch
-    for step in range(300):
-        #print "****************************"
-        #print "Epoch: ", epoch, " Step: ", step
+            # critique the quality of the action
+            actor.critique(state, action, new_state, reward)
+            state = new_state
 
-        # get action from actor
-        if epoch<exploration:
-            action = random.randint(0,8)
-        else:
-            action = actor.getNextAction(state)
-        #print "Next action: ", action
-        # convert action into torque magnitude
-        torque = torqueValue[action]
+        f.write('{}\t{}\n'.format(epoch, cumulativeReward))
+        #print "Buffer: ", actor.avgBufferSize()
+    f.close()
 
-        # perform action on environment
-        newstate, reward = get_observations(torque)
-        cumulativeReward += reward
-
-        # critique the quality of the action
-        actor.critique(state, action, newstate, reward)
-        #env.render()
-
-
-    f.write('{}\t{}\n'.format(epoch, cumulativeReward))
-    #print "Buffer: ", actor.avgBufferSize()
-f.close()
+if __name__ == '__main__':
+    main()
