@@ -66,6 +66,8 @@ class Dumbell(object):
         return np.array([np.cos(self.theta),np.sin(self.theta), self.omega])
 
     def step(self, action):
+        if not -5 <= action <= 5:
+            raise ValueError("Action must be between -5 and 5")
 
 	    # calculate reward of previous action (target energy being at 45deg oscillations)
         reward = self.calc_reward(self.target)
@@ -174,27 +176,25 @@ def main():
     # create dumbell enviroment
     env = Dumbell()
     # spit out initial (randomish) state
-    theta, omega = env.reset()
+    x, y, omega = env.reset()
+    theta = np.arctan(x/y)
 
     # step a bunch o times
     for i in range(25000):
         # step takes in an action and spits out percepts ala OpenAi
         # action can be float and continuous
-        # not sure which values work yet, no noticable movement <10, breaks for >1000
-        torque = 0
-
         if theta < 0:
-            torque = -100
+            torque = -5
         else:
-            torque = 100
+            torque = 5
 
 
         # going to change direction of torque depending on position of
         obs, reward, done, info = env.step(torque)
         env.render()
         # states are angle and angular velocity in rads (floats and continuous)
-        theta, omega = obs
-        print(theta, "\t", omega, "\t", reward, "\t", torque)
+        x, y, omega = obs
+        print(np.arctan(x/y), "\t", omega, "\t", reward, "\t", torque)
 
 
 
