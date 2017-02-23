@@ -1,4 +1,7 @@
-import Tkinter as tk
+try:
+    import Tkinter as tk
+except ImportError:
+    import tkinter as tk
 import numpy as np
 
 class Dumbell(object):
@@ -187,6 +190,7 @@ def main():
 
         # going to change direction of torque depending on position of
         obs, reward, done, info = env.step(torque)
+        env.render()
         # states are angle and angular velocity in rads (floats and continuous)
         theta, omega = obs
         print theta, "\t", omega, "\t", reward, "\t", torque
