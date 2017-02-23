@@ -1,3 +1,4 @@
+import Tkinter as tk
 import numpy as np
 
 class Dumbell(object):
@@ -9,11 +10,14 @@ class Dumbell(object):
         self.m = mass
 		# arbitrary time
         t = 0.0
-		# velocity and position
+		# velocity, position and action
         self.omega = 0
         self.theta = 0
+        self.action = 0
         # currently set up for a target of 45 deg
         self.target = target
+
+        self.display = Display(length)
 
     # differential equations to be solved
     def theta_deriv(self, length, length_deriv, theta, omega):
@@ -24,10 +28,12 @@ class Dumbell(object):
 
     # function to calculate x position of mass
     def x_position(self):
-        return self.length_0 * np.cos(self.theta)
+        return self.length_0 * np.sin(self.theta)
 
     # function to calculate y position of mass
-    def y_position(self, theta):
+    def y_position(self, theta=None):
+        if theta is None:
+            theta = self.theta
         return self.length_0 * (1 - np.cos(theta))
 
     def calc_potential_energy(self, theta):
@@ -47,15 +53,17 @@ class Dumbell(object):
         reward = -1 * (targetEnergy - currentEnergy) * (targetEnergy - currentEnergy)
         return reward
 
-    def reset(self):
-		# position at zero, comment out for random under target
-        self.theta = self.target * (2 * np.random.random() - 1)
-		# no initial speed (this could be a problem!)
+    def reset(self, theta=None):
+        if theta is None:
+            self.theta = self.target * (2 * np.random.random() - 1)
+        else:
+            self.theta = theta
         self.omega = 0
         return np.array([self.theta, self.omega])
 
-
     def step(self, action):
+        self.action = action
+
 	    # calculate reward of previous action (target energy being at 45deg oscillations)
         reward = self.calc_reward(self.target)
 
@@ -103,12 +111,52 @@ class Dumbell(object):
         wk4 = self.omega_deriv(length, length_deriv, theta3, omega3, spin_accel, radius, w0)
 
 		# increases theta and omega
-        self.theta = self.theta + (ok1+2.0*ok2+2.0*ok3+ok4)*(h/6.0)
-        self.omega = self.omega + (wk1+2.0*wk2+2.0*wk3+wk4)*(h/6.0)
+        self.theta += (ok1 + 2.0 * ok2 + 2.0 * ok3 + ok4) * (h / 6.0)
+        self.omega += (wk1 + 2.0 * wk2 + 2.0 * wk3 + wk4) * (h / 6.0)
 
         return np.array([self.theta, self.omega]), reward, False, {}
 
 
+    def render(self):
+        """
+        Displays the current state of the pendulum
+        """
+        self.display.update(self.x_position(), self.y_position(), self.action)
+
+
+
+class Display:
+
+    def __init__(self, length):
+        #Create a window and hide it
+        self.root = tk.Tk()
+        self.root.withdraw()
+
+        self.length = length
+        self.width = 400
+        self.height = 400
+
+        #Create the canvas on which the pendulum will be drawn
+        self.canvas = tk.Canvas(self.root, width=self.width, height=self.height)
+        self.canvas.pack()
+
+    def update(self, x_position, y_position, action):
+        """
+        Updates the display of the pendulum
+        """
+        self.root.deiconify() #Display the window
+        self.canvas.delete("all") #Clear the current pendulum drawing
+
+        #Draw pendulum
+        x = x_position*self.width / (self.length*2) + self.width/2
+        y = self.height - y_position*self.height / (self.length*2)
+        self.canvas.create_line(self.width/2, self.height/2, x, y)
+
+        #Draw action
+        action_text = "Action: %g" % action
+        self.canvas.create_text(0, 0, anchor="nw", text=action_text)
+
+        self.root.update()
 
 
 def main():
