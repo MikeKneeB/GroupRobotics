@@ -11,7 +11,7 @@ class ReplayMemory(object):
         self.buffer_size = buffer_size
         self.count = 0
         self.buffer=deque()
-        random.seed(random_seed)
+        #random.seed(random_seed)
 
     # add an experience to memory
     def add(self, init_state, action, reward, final_state):
@@ -45,10 +45,6 @@ class ReplayMemory(object):
         action_batch = [_[1] for _ in batch]
         reward_batch = [_[2] for _ in batch]
         final_state_batch = [_[3] for _ in batch]
-
-        # state batches are re-shaped to function with keras methods
-        start_state_batch = np.array([start_state_batch]).reshape((-1,1,3))
-        final_state_batch = np.array([final_state_batch]).reshape(-1,1,3)
 
         return start_state_batch, action_batch, reward_batch, final_state_batch
 

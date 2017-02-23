@@ -5,9 +5,10 @@ from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
 from keras.optimizers import Adam
 
-from QNet import DeepQNetwork
-import Policy
-import Memory
+from MachineLearning.Models.DumbellEnvironmentPy3 import Dumbell
+from MachineLearning.QNetwork.QNet import DeepQNetwork
+import MachineLearning.QNetwork.Policy as Policy
+import MachineLearning.QNetwork.Memory as Memory
 
 
 ENV_NAME = 'Pendulum-v0'   # only one that works, need different policies for others
@@ -16,14 +17,15 @@ ENV_NAME = 'Pendulum-v0'   # only one that works, need different policies for ot
 
 
 # Start a gym environment and initialise random properties.
-env = gym.make(ENV_NAME)
+#env = gym.make(ENV_NAME)
+env = Dumbell(2.5, 1, 0.9)
 seed=111
-np.random.seed(seed)
-env.seed(seed)
+#np.random.seed(seed)
+#env.seed(seed)
 
 # Define parameters for network and actions
 # number of discrete output actions
-number_actions = 5
+number_actions = 3
 gamma = 0.99                    # discount factor
 batch_size = 64                 # size of replay memory batches
 train_episodes = 100            # number of training episodes
