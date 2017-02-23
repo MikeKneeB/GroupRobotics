@@ -27,7 +27,7 @@ class Dumbell(object):
         return -1 * omega
 
     def omega_deriv(self, length, length_deriv, theta, omega, spin_accel, radius, w0):
-        return spin_accel*radius*radius/(length*length + radius*radius) + w0*w0*np.sin(theta)
+        return spin_accel*radius*radius/(length*length*2) + w0*np.sin(theta)
 
     # function to calculate x position of mass
     def x_position(self):
@@ -40,15 +40,15 @@ class Dumbell(object):
         return self.length_0 * (1 - np.cos(theta))
 
     def calc_potential_energy(self, theta):
-        return self.m * 9.81 * self.y_position(theta)
+        return 9.81 * self.y_position(theta)
 
     def calc_kinetic_energy(self, omega):
-	    return (self.m * self.length_0*self.length_0 * omega*omega)/2.0
+	    return (self.length_0*self.length_0 * omega*omega)/2.0
         #return (self.m * self.length_0 *self.length_0 *omega*omega)/2.0
 
     def calc_reward(self, targetTheta):
         targetEnergy = self.calc_potential_energy(targetTheta)
-        currentKineticEnergy = self.calc_kinetic_energy(self.omega) * 0.259965599
+        currentKineticEnergy = self.calc_kinetic_energy(self.omega)
         currentPotentialEnergy = self.calc_potential_energy(self.theta)
         currentEnergy = currentKineticEnergy + currentPotentialEnergy
 
@@ -62,10 +62,10 @@ class Dumbell(object):
         else:
             self.theta = theta
         self.omega = 0
-        return np.array([self.theta, self.omega])
+        self.action = 0
+        return np.array([np.cos(self.theta),np.sin(self.theta), self.omega])
 
     def step(self, action):
-        self.action = action
 
 	    # calculate reward of previous action (target energy being at 45deg oscillations)
         reward = self.calc_reward(self.target)
@@ -73,8 +73,9 @@ class Dumbell(object):
         if type(action) is list or type(action) is tuple:
             action = action[0]
 
+        self.action = action
 		# Runge Kutta parameters
-        h = 0.01 # step size for Runge Kutta
+        h = 0.05 # step size for Runge Kutta
         N = 2500.0 # number of intervals for Runge Kutta
         omega1 = 0.0; omega2 = 0.0; omega3 = 0.0 # omega at half interval in Runge Kutta calculation
         wk1 = 0.0; wk2 = 0.0; wk3 = 0.0; wk4 = 0.0 # for omega
@@ -86,10 +87,10 @@ class Dumbell(object):
         length_deriv = 0.0
         radius = 0.1*length
 
-        w0 = (9.81*length)/(length*length + radius*radius)
+        w0 = (9.81*length)/(length*length)
 
 		# note force is thought of as the angular force (torque), constant throughout whole step
-        spin_accel = action/self.m
+        spin_accel = 2 * action / (self.m * radius * radius)
 
 		# step part 1
         ok1 = self.theta_deriv(length, length_deriv, self.theta, self.omega)
@@ -117,7 +118,7 @@ class Dumbell(object):
         self.theta += (ok1 + 2.0 * ok2 + 2.0 * ok3 + ok4) * (h / 6.0)
         self.omega += (wk1 + 2.0 * wk2 + 2.0 * wk3 + wk4) * (h / 6.0)
 
-        return np.array([self.theta, self.omega]), reward, False, {}
+        return np.array([np.cos(self.theta), np.sin(self.theta), self.omega]), reward, False, {}
 
 
     def render(self):
