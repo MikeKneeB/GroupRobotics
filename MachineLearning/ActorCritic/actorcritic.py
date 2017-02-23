@@ -129,6 +129,3 @@ def getNextAction(state, policy):
     actions = policy[state]
     nextAction = np.argmax(actions)
     return nextAction
-
-def wrapAroundAverage(numpyIn, wrap):
-    pass
