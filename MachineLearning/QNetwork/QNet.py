@@ -21,9 +21,8 @@ class DeepQNetwork(object):
     # environments step method
     # could do with being slightly more generic
     def process_action(self, action):
-
-        correction = action/((self.number_actions-1)/4)
-        action = -2 + correction # -2 is the min action and +2 is the max
+        correction = action*20#action/((self.number_actions-1)/4)
+        action = -20 + correction # -2 is the min action and +2 is the max
         return [action]
 
     # convenience method to prepare for keras methods
@@ -156,6 +155,7 @@ class DeepQNetwork(object):
             for step in range(steps):
                 # select and perform an action
                 action = self.select_action(current_state)
+                print(action)
                 new_state, reward, done, info = self.environment.step(self.process_action(action))
                 episode_reward+=reward
                 if visualize:
