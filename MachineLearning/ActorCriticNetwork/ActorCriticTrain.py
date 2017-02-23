@@ -35,8 +35,11 @@ render: show environment state during training. Must be False if env has no
 obsComp: optional observation comprehension function.
 rewComp: optional reward comprehension function.
 """
-def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action, epochs = 1000, run_length = 300, batch_size = 40, gamma = 0.95, epsilon = 1, min_epsilon = 0.01, buffer = 1000, envname=None, render=False, obsComp=None, rewComp=None):
-
+def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action,
+          epochs = 1000, run_length = 300,
+          gamma = 0.95, epsilon = 1, min_epsilon = 0.01,
+          batch_size = 40, buffer = 1000,
+          envname=None, render=False, obsComp=None, rewComp=None):
     # For file naming purposes.
     now = datetime.datetime.now()
 
@@ -48,7 +51,8 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
 
     with open(filepath, 'w') as f:
 
-        f.write('# Epochs: {} | Run Length: {} | Memory Size: {} | Batch Size: {} | Initial Epsilon: {}\n'.format(epochs, run_length, buffer, batch_size, epsilon))
+        f.write('# Epochs: {} | Run Length: {} | Memory Size: {} | Batch Size: {} | Initial Epsilon: {}\n'.format(
+        epochs, run_length, buffer, batch_size, epsilon))
 
         f.write('{:10s}{:15s}{:10s}\n'.format('ep','re','rol_re'))
 
@@ -187,7 +191,9 @@ run_length: number of actions available to the agent in one run.
 obsComp: optional observation comprehension function.
 rewComp: optional reward comprehension function.
 """
-def test(sess, actor_model, critic_model, env, state_dim, action_dim, epochs = 1000, run_length = 300, obsComp=None, rewComp=None):
+def test(sess, actor_model, critic_model, env, state_dim, action_dim,
+        epochs = 1000, run_length = 300,
+        obsComp=None, rewComp=None):
     for epo in range(epochs+1):
         print('Game: %s' % epo)
 
@@ -257,7 +263,8 @@ if __name__ == '__main__':
         critic_model = critic.CriticNetwork(sess, state_dim, action_dim, max_action, 0.001, 0.001, actor_model.get_num_trainable_vars())
 
         # Train.
-        train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action, epochs=200, run_length=200, render=False, envname='pendulum')
+        train(sess, actor_model, critic_model, env, state_dim, action_dim,
+        max_action, epochs=200, run_length=200, render=True, envname='pendulum')
 
         raw_input('Training complete, press enter to continue to test.')
 
