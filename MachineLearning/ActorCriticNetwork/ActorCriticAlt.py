@@ -27,7 +27,7 @@ if __name__ == '__main__':
         # Get environment params, for building networks etc.
         state_dim = 3
         action_dim = 1
-        max_action = 100
+        max_action = 5
 
         print('{} {} {}'.format(state_dim, action_dim, max_action))
 
@@ -36,5 +36,5 @@ if __name__ == '__main__':
         critic_model = critic.CriticNetwork(sess, state_dim, action_dim, max_action, 0.001, 0.001, actor_model.get_num_trainable_vars())
 
         # Train.
-        ACT.train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action, epochs=1000, run_length=500, epsilon=50,
-        render=False, envname='dumbell', obsComp=dumbellObsComp, rewComp=dumbellRewComp)
+        ACT.train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action, epochs=1000, run_length=500, epsilon=2,
+        render=True, envname='dumbell', obsComp=dumbellObsComp, rewComp=dumbellRewComp)

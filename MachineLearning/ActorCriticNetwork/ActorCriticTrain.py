@@ -47,7 +47,7 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
     if envname is None:
         envname = 'NOENV'
 
-    filepath = '{}:{}_{}-{}-{}_{}'.format(now.hour, now.minute, now.day, now.month, now.year, envname)
+    filepath = '{}:{}_{}-{}-{}_{}.dat'.format(now.hour, now.minute, now.day, now.month, now.year, envname)
 
     with open(filepath, 'w') as f:
 
@@ -89,6 +89,10 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
                 noise_r = epsilon/2.
                 # Calculate noisy action.
                 action = actor_model.predict(obs_1.reshape(1, state_dim)) + random.uniform(-noise_r, noise_r)
+                if action < -max_action:
+                    action = -max_action
+                elif action > max_action:
+                    action = max_action
 
                 print('Act val: {} [{}, {}]'.format(action, epo, j))
 
