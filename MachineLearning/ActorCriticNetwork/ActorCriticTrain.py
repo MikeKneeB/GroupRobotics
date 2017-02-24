@@ -6,6 +6,7 @@ import numpy as np
 import gym
 import random
 import datetime
+import time
 
 import actor
 import critic
@@ -37,7 +38,7 @@ rewComp: optional reward comprehension function.
 """
 def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action,
           epochs = 1000, run_length = 300,
-          gamma = 0.95, epsilon = 1, min_epsilon = 0.01,
+          gamma = 0.95, epsilon = None, min_epsilon = 0.01, decay = 0.95,
           batch_size = 40, buffer = 1000,
           envname=None, render=False, obsComp=None, rewComp=None):
     # For file naming purposes.
@@ -49,12 +50,15 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
 
     filepath = '{}:{}_{}-{}-{}_{}.dat'.format(now.hour, now.minute, now.day, now.month, now.year, envname)
 
+    if epsilon is None:
+        epsilon = 2*max_action[0]
+
     with open(filepath, 'w') as f:
 
-        f.write('# Epochs: {} | Run Length: {} | Memory Size: {} | Batch Size: {} | Initial Epsilon: {}\n'.format(
-        epochs, run_length, buffer, batch_size, epsilon))
+        f.write('# Epochs: {} | Run Length: {} | Memory Size: {} | Batch Size: {} | Initial Epsilon: {} | Decay: {}\n'.format(
+        epochs, run_length, buffer, batch_size, epsilon, decay))
 
-        f.write('{:10s}{:15s}{:10s}\n'.format('ep','re','rol_re'))
+        f.write('{:10s}{:15s}{:15s}{:s}\n'.format('ep','re','rol_re','epsilon'))
 
         # Initialise global variables for tensorflow session.
         sess.run(tf.global_variables_initializer())
@@ -88,13 +92,19 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
                 # Calculate noise amount, set to half epsilon.
                 noise_r = epsilon/2.
                 # Calculate noisy action.
-                action = actor_model.predict(obs_1.reshape(1, state_dim)) + random.uniform(-noise_r, noise_r)
-                if action < -max_action:
-                    action = -max_action
-                elif action > max_action:
-                    action = max_action
+                action = actor_model.predict(obs_1.reshape(1, state_dim))# + random.uniform(-noise_r, noise_r)
+                if action + noise_r > max_action:
+                    diff = max_action - action
+                    #assert diff >= 0
+                    action = action + random.uniform(diff - epsilon, diff)
+                elif action - noise_r < -max_action:
+                    diff = -max_action - action
+                    #assert diff <= 0
+                    action = action + random.uniform(diff, epsilon + diff)
+                else:
+                    action = action + random.uniform(-noise_r, noise_r)
 
-                print('Act val: {} [{}, {}]'.format(action, epo, j))
+                print('Act val: {} [{}, {}, {}]'.format(action, epo, j, epsilon))
 
                 # Perform action.
                 obs_2, reward, d, i = env.step(action)
@@ -154,12 +164,7 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
                 # Move to the next state!
                 obs_1 = obs_2[:]
 
-                # Update epsilon, noise factor decreases each time.
-                if epsilon > min_epsilon:
-                    epsilon -= (1.0/(epochs*run_length))
-                    # Ensure epsilon does not go below minimum.
-                    if epsilon < min_epsilon:
-                        epsilon = min_epsilon
+
 
                 # For output info.
                 reward_total += reward
@@ -175,7 +180,16 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
                 del running_reward[0]
                 print(len(running_reward))
             running_reward.append(reward_total[0])
-            f.write('{:<10d}{:<15f}{:<15f}\n'.format(epo, reward_total[0], sum(running_reward)/len(running_reward)))
+            f.write('{:<10d}{:<15f}{:<15f}{:<15f}\n'.format(epo, reward_total[0], sum(running_reward)/len(running_reward), epsilon))
+
+            # Update epsilon, noise factor decreases each time.
+            if epsilon > min_epsilon:
+                #epsilon -= (1.0/epochs) # OLD LINEAR VERSION
+                epsilon = decay * epsilon # SHINY NEW EXPONENTIAL VERSION
+                # Ensure epsilon does not go below minimum.
+                if epsilon < min_epsilon:
+                    epsilon = min_epsilon
+
 
         f.close()
 
@@ -254,6 +268,7 @@ if __name__ == '__main__':
     with tf.Session() as sess:
         # Make our environment.
         env = gym.make('Pendulum-v0')
+        env.seed(int(time.time()))
 
         # Get environment params, for building networks etc.
         state_dim = env.observation_space.shape[0]

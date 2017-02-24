@@ -1,12 +1,15 @@
 #!/bin/bash
 
 COMM="plot"
-echo $COMM
+COMM_EPS="plot"
+#echo $COMM
 for item in $@
 do
-  COMM="$COMM '$item' using 'ep':'re' with lines title '$item', '$item' using 'ep':'rol_re' with lines title '$item rolling', "
+  COMM="$COMM '$item' using 'ep':'re' with lines title '$item' noenhanced, '$item' using 'ep':'rol_re' with lines title '$item rolling' noenhanced, "
+  COMM_EPS="$COMM_EPS '$item' using 'ep':'epsilon' with lines title '$item' noenhanced, "
 done
 
-echo $COMM
+#echo $COMM
 
-gnuplot -p -e "set grid; $COMM"
+gnuplot -p -e "set grid; set key bmargin; $COMM"
+gnuplot -p -e "set grid; set key bmargin; $COMM_EPS"
