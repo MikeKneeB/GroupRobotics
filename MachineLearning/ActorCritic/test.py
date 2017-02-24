@@ -1,4 +1,4 @@
-import actorcritic as shawac
+import ActorCritic as shawac
 import numpy as np
 import unittest
 

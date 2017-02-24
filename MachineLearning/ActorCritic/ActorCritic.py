@@ -25,7 +25,7 @@ class ActorCritic:
         :param previousState: tuple of integers, from 0 to the state dimension size
         :param previousAction: an integer from 0 to numberOfActions
         :param state: tuple of integers, from 0 to the state dimension size
-        :param reward: arbitrary double
+        :param reward: arbitrary double, reward of this state
         """
         #print "state: ", state
         self.critic.updateActionKnowledge(previousState, previousAction, state)
@@ -44,9 +44,7 @@ class _Actor:
         self.policy = np.zeros(policyDimensions)
 
     def updatePolicy(self, state, action, tDError):
-        #print "Policy: ", self.policy[state],
         self.policy[state + (action,)] += tDError
-        #print " to ", self.policy[state]
 
 
 class _Critic:
@@ -68,9 +66,6 @@ class _Critic:
         newKnowledge = np.asarray(state).T
         numberInBuffer = self.bufferIndex[stateAction]
 
-        print "\n"
-        print self.actionKnowledgeBuffer[stateAction]
-        print "New knowledge: ", newKnowledge
         observationLocation = -1
         # check for next state in buffer
         for i in range(0, numberInBuffer):
@@ -89,12 +84,7 @@ class _Critic:
         modeIndex = np.argmax(self.actionKnowledgeBuffer[stateAction + (0, Ellipsis)])
         modeAction = self.actionKnowledgeBuffer[stateAction + (slice(1,3), modeIndex)]
 
-        print self.actionKnowledgeBuffer[stateAction]
-        print "Mode state after action: ", modeAction
-        print "\n"
-
         self.actionKnowledge[stateAction] = modeAction
-        #print "Next state: ", self.actionKnowledge[stateAction]
 
 
     def getTDError(self, previousState, newState, policy, actionKnowledge):
@@ -120,8 +110,6 @@ class _Critic:
         return value
 
     def updateReward(self, state, reward):
-        #print "Updated state ", state, " reward from ", self.rewards[state], " to ", reward
-        #print "Current reward space: ", self.rewards
         self.rewards[state] = reward
 
 
