@@ -50,8 +50,10 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
 
     filepath = '{}:{}_{}-{}-{}_{}.dat'.format(now.hour, now.minute, now.day, now.month, now.year, envname)
 
-    if epsilon is None:
+    if epsilon is None and type(max_action) is list:
         epsilon = 2*max_action[0]
+    elif epsilon is None:
+        epsilon = 2*max_action
 
     with open(filepath, 'w') as f:
 
