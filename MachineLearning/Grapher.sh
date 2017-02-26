@@ -14,6 +14,7 @@
 # edit this script without asking me.
 
 PLOTS=()
+LABELS=()
 COMM_LIST=()
 
 function help() {
@@ -23,7 +24,7 @@ function help() {
 while [ $# -gt 0 ]
 do
   case "$1" in
-    -p) PLOTS+=($2); shift;;
+    -p) PLOTS+=($2); LABELS+=($3); shift; shift;;
     -h) help; break;;
     *) break;;
   esac
@@ -31,14 +32,18 @@ do
 done
 
 #echo "${PLOTS[@]}"
+#echo "${LABELS[@]}"
 
 IFS=";"
 
-for plt in "${PLOTS[@]}"
+i=0
+#for plt in "${PLOTS[@]}"
+while [ $i -lt ${#PLOTS[*]} ]
 do
-  read -r -a AX_LIST <<< "$plt"
+  read -r -a AX_LIST <<< "${PLOTS[$i]}"
+  read -r -a LA_LIST <<< "${LABELS[$i]}"
   #echo "${AX_LIST[@]}"
-  COMM="plot"
+  COMM="set xlabel ${LA_LIST[0]}; set ylabel ${LA_LIST[1]}; plot"
   #echo $COMM
   for fname in $@
   do
@@ -54,6 +59,7 @@ do
     done
   done
   COMM_LIST+=("$COMM")
+  i=$(( $i + 1));
 done
 
 #echo $COMM
@@ -61,5 +67,5 @@ done
 for __COMM in "${COMM_LIST[@]}"
 do
   #echo $__COMM; echo
-  gnuplot -p -e "set grid; set xlabel 'Epoch'; set ylabel 'Reward'; set key bmargin; $__COMM"
+  gnuplot -p -e "set grid; set key bmargin; $__COMM"
 done

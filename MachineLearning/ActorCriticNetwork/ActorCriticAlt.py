@@ -36,5 +36,5 @@ if __name__ == '__main__':
         critic_model = critic.CriticNetwork(sess, state_dim, action_dim, max_action, 0.001, 0.001, actor_model.get_num_trainable_vars())
 
         # Train.
-        ACT.train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action, epochs=500, run_length=500,
+        ACT.train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action, epochs=300, run_length=200, decay=0.98,
         render=True, envname='dumbell', obsComp=dumbellObsComp, rewComp=dumbellRewComp)
