@@ -159,7 +159,7 @@ class Display:
         #Draw pendulum
         x_p = x_position*self.width / (self.length*2) + self.width/2
         y_p = self.height - y_position*self.height / (self.length*2)
-        self.canvas.create_line(self.width/2, self.height/2, x_p, y_p)
+        self.canvas.create_line(int(self.width/2), int(self.height/2), int(x_p), int(y_p))
 
         #Draw target position
         x_t = target_x*self.width / (self.length*2) + self.width/2
