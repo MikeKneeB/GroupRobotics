@@ -1,6 +1,6 @@
 import numpy as np
 
-DISCOUNT_THRESHOLD = 0.01
+DISCOUNT_THRESHOLD = 0.001
 
 
 class Critic:
@@ -53,29 +53,30 @@ class Critic:
         return r1 + self.discount * v1 - v0
 
     def value(self, state, policy):
-        return value_recursion(state, 0, policy, self.number_of_Actions, self.actionKnowledge, self.discount,
-                               self.rewards) \
+        return _value_recursion(state, 0, policy, self.number_of_Actions, self.actionKnowledge, self.discount,
+                                self.rewards, 1) \
                / self.discount
 
     def update_reward(self, state, reward):
         self.rewards[state] = reward
 
 
-def value_recursion(state, t, policy, number_of_actions, action_knowledge, discount, rewards):
+def _value_recursion(state, t, policy, number_of_actions, action_knowledge, discount, rewards, discount_p):
     """
-    :return: discount factor times the value of the state i.e E[ sum_{t=0}^\inf( gamma^t * R_{t+1} ) ]
+    :return: the value of the state i.e E[ sum_{t=0}^\inf( gamma^t * R_{t+1} ) ]
     """
     probabilities = policy[state]
     total_value = 0
-    print t
+    #print t
     for action in range(number_of_actions):
         probability = probabilities[action]
-        if probabilities[action] > 0.01 and discount ** t > DISCOUNT_THRESHOLD:
+        if discount_p > DISCOUNT_THRESHOLD:
             next_state = tuple(action_knowledge[state + (action,)].tolist())
             next_reward = rewards[next_state]
             total_value += probability * (
                 next_reward
                 + discount
-                * value_recursion(next_state, t + 1, policy, number_of_actions, action_knowledge, discount, rewards)
+                * _value_recursion(next_state, t + 1, policy, number_of_actions, action_knowledge, discount, rewards,
+                                   probability * discount * discount_p)
             )
     return total_value

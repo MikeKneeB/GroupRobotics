@@ -23,8 +23,9 @@ class Actor:
 
 
 def softmax(state_td_errors):
-    mean = np.average(state_td_errors)
-    normalized = state_td_errors / mean
+    # scale TD errors so the mean is 0 with an absolute maximum of 2
+    normalized = 2 * (state_td_errors - np.mean(state_td_errors))/np.max(np.abs(state_td_errors))
+
     exponentiated = np.exp(normalized)
     sum_of_exponentiated = np.sum(exponentiated)
     return exponentiated / sum_of_exponentiated
