@@ -1,6 +1,5 @@
 import gym
 import numpy as np
-import random
 
 import time
 
@@ -55,19 +54,16 @@ def main():
     actor = ac.ActorCritic(ACTIONS, time_horizon, state_dimensions, discount, 10)
 
     f.write('epoch\treward\n')
-    epochs = 3000
+    epochs = 100
     exploration = epochs / 2
-    display = 19 * epochs / 20
+    display = 9 * epochs / 10
     for epoch in range(epochs):
         # reset environment and extract initial state
         state = reset_enviroment(env)
         cumulativeReward = 0
         print epoch
         for step in range(300):
-            if epoch < exploration:
-                action = random.randint(0, 8)
-            else:
-                action = actor.get_next_action(state)
+            action = actor.get_next_action(state)
             torque = torque_from(action)
 
             # perform action on environment

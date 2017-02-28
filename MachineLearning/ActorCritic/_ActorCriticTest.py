@@ -1,6 +1,6 @@
 import unittest as test
 from ActorCritic import ActorCritic
-import Actor
+import _Actor
 import numpy as np
 
 state1 = (2, 3)
@@ -12,11 +12,8 @@ stateAction = state1 + (action,)
 
 class TestStringMethods(test.TestCase):
     def test_softmax(self):
-        tderrors = np.asarray([1, 2, 3])
-        out = Actor.softmax(tderrors)
-        target = np.asarray([np.exp(0.5), np.exp(1), np.exp(1.5)])
-        target /= np.sum(target)
-        self.assertTrue(np.array_equal(out, target))
+        tderrors = np.asarray([1, 3, 5])
+        out = _Actor.softmax(tderrors)
         self.assertEqual(1, np.sum(out))
 
 

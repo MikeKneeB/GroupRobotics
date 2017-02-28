@@ -1,5 +1,5 @@
-from Actor import Actor
-from Critic import Critic
+from _Actor import Actor
+from _Critic import Critic
 
 
 class ActorCritic:
