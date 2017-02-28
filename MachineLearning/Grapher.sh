@@ -7,6 +7,8 @@
 #   form: "'x1':'y1';'x2':'y2';...;'xn':'yn'". All of these columns will be
 #   plotted on one graph. Multiple -p switches (followed by column lists) can
 #   be passed to the script.
+# - Following each column list should be axis labels in the form:
+#   "'xlabel';'ylabel'".
 # - After one or more -p column lists have been input one or more filenames
 #   should be passed to the script.
 #
