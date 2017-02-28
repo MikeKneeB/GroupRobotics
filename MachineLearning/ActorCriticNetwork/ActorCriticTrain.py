@@ -50,10 +50,10 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
 
     filepath = '{}:{}_{}-{}-{}_{}.dat'.format(now.hour, now.minute, now.day, now.month, now.year, envname)
 
-    if epsilon is None and type(max_action) is list:
-        epsilon = 2*max_action[0]
-    elif epsilon is None:
-        epsilon = 2*max_action
+    #if epsilon is None and type(max_action) is list:
+    epsilon = 2*max_action[0]
+    #elif epsilon is None:
+    #    epsilon = 2*max_action
 
     with open(filepath, 'w') as f:
 
@@ -285,7 +285,7 @@ if __name__ == '__main__':
 
         # Train.
         train(sess, actor_model, critic_model, env, state_dim, action_dim,
-        max_action, epochs=200, run_length=200, render=True, envname='pendulum')
+        max_action, epochs=300, run_length=200, render=False, envname='pendulum', decay=0.98)
 
         raw_input('Training complete, press enter to continue to test.')
 
