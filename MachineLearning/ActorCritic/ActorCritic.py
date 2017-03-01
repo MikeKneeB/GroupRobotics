@@ -29,10 +29,10 @@ class ActorCritic:
 
         self.critic.update_reward(state, reward)
 
-        td_error = self.critic.get_td_error(previous_state, state, self.actor.policy, self.critic.actionKnowledge)
+        td_error = self.critic.get_td_error(previous_state, state, self.actor.policy, self.critic.state_action_observations)
         self.actor.update_policy(previous_state, previous_action, td_error)
 
     def avg_buffer_size(self):
-        return self.critic.bufferIndex.mean()
+        return self.critic.buffer_index.mean()
 
 
