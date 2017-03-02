@@ -19,3 +19,7 @@ class BoltzmannQPolicy(object):
         probs = exp_values / np.sum(exp_values)
         action = np.random.choice(range(nb_actions), p=probs)
         return action
+
+    def set_tau(self, newTau):
+        self.tau = newTau
+

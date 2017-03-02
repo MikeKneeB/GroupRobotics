@@ -8,7 +8,8 @@ import statistics
 class DeepQNetwork(object):
 
     # constructor initialises the network with the given parameters
-    def __init__(self, model, policy, number_actions, memory, gamma, batch_size, environment):
+    def __init__(self, model, policy, number_actions, memory, gamma,
+                 batch_size, environment, min_action, initial_tau, tau_decay_rate):
         self.model = model
         self.policy = policy
         self.number_actions = number_actions
@@ -16,13 +17,16 @@ class DeepQNetwork(object):
         self.gamma = gamma
         self.batch_size = batch_size
         self.environment = environment
+        self.min_action = min_action
+        self.tau = initial_tau
+        self.tau_decay_rate = tau_decay_rate
 
     # convenience method to convert to the correct input for the
     # environments step method
     # could do with being slightly more generic
     def process_action(self, action):
-        correction = action*20#action/((self.number_actions-1)/4)
-        action = -20 + correction # -2 is the min action and +2 is the max
+        correction = action*(2*abs(self.min_action))/(self.number_actions-1)
+        action = self.min_action + correction
         return [action]
 
     # convenience method to prepare for keras methods
@@ -133,6 +137,13 @@ class DeepQNetwork(object):
             file.write('%s\t%s\n' % (episode, episode_reward))
             if episode%1==0:
                 self.target_model.set_weights(self.model.get_weights())
+
+            if self.tau>1.:
+                self.tau = self.tau/self.tau_decay_rate
+            if self.tau<1.:
+                self.tau = 1.
+            self.policy.set_tau(self.tau)
+
         end = time.time()
         file.close()
         print('Time to complete training of %s episodes: %r seconds' % (episodes,(end-start)))
@@ -140,6 +151,8 @@ class DeepQNetwork(object):
     # test the trained network on the environment
     def test(self, episodes, steps, visualize=True):
         # for each episode
+        self.tau = 0.1
+        self.policy.set_tau(self.tau)
         print('Testing for %s episodes' % episodes)
         rewards = []
         for episode in range(episodes):
@@ -155,7 +168,6 @@ class DeepQNetwork(object):
             for step in range(steps):
                 # select and perform an action
                 action = self.select_action(current_state)
-                print(action)
                 new_state, reward, done, info = self.environment.step(self.process_action(action))
                 episode_reward+=reward
                 if visualize:

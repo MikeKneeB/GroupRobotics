@@ -11,7 +11,8 @@ class ReplayMemory(object):
         self.buffer_size = buffer_size
         self.count = 0
         self.buffer=deque()
-        #random.seed(random_seed)
+        if random_seed != 0:
+            random.seed(random_seed)
 
     # add an experience to memory
     def add(self, init_state, action, reward, final_state):
