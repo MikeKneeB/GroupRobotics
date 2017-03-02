@@ -3,13 +3,13 @@ from _Critic import Critic
 
 
 class ActorCritic:
-    def __init__(self, numberOfActions, timeHorizon, stateDimensions, discount, bufferSize):
+    def __init__(self, number_of_actions, state_dimensions, discount, value_learning_rate, policy_update_rate):
         """
         Call getNextAction -> perform that action -> call critique
         """
-        self.numberOfActions = numberOfActions
-        self.actor = Actor(stateDimensions, numberOfActions, )
-        self.critic = Critic(stateDimensions, numberOfActions, timeHorizon, discount, bufferSize)
+        self.numberOfActions = number_of_actions
+        self.actor = Actor(state_dimensions, number_of_actions, policy_update_rate)
+        self.critic = Critic(state_dimensions, discount=discount, value_learning_rate=value_learning_rate)
 
     def get_next_action(self, state):
         """
@@ -24,15 +24,8 @@ class ActorCritic:
         :param state: tuple of integers, from 0 to the state dimension size
         :param reward: arbitrary double, reward of this state
         """
-        # print "state: ", state
-        self.critic.update_action_knowledge(previous_state, previous_action, state)
 
-        self.critic.update_reward(state, reward)
-
-        td_error = self.critic.get_td_error(previous_state, state, self.actor.policy, self.critic.state_action_observations)
+        td_error = self.critic.get_td_error(previous_state, state, reward)
         self.actor.update_policy(previous_state, previous_action, td_error)
-
-    def avg_buffer_size(self):
-        return self.critic.buffer_index.mean()
-
+        self.critic.update_value(previous_state, td_error)
 

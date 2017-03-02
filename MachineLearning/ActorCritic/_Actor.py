@@ -2,16 +2,16 @@ import numpy as np
 
 
 class Actor:
-    def __init__(self, state_dimensions, number_of_actions):
+    def __init__(self, state_dimensions, number_of_actions, policy_update_rate):
         self.number_of_actions = number_of_actions
         policy_dimensions = state_dimensions + (number_of_actions,)
         self.td_errors = np.zeros(policy_dimensions)
         self.policy = np.ones(policy_dimensions)/number_of_actions
+        self.policy_update_rate = policy_update_rate
 
     def update_policy(self, state, action, td_error):
         # update TD error of action in state
-        self.td_errors[state + (action,)] += td_error
-
+        self.td_errors[state + (action,)] += self.policy_update_rate*td_error
         # recalculate policy probabilities
         state_td_errors = self.td_errors[state]
         probabilities = softmax(state_td_errors)

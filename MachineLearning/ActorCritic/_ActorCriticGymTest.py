@@ -1,3 +1,5 @@
+import random
+
 import gym
 import numpy as np
 
@@ -43,18 +45,17 @@ def reset_enviroment(env):
 def main():
     env = gym.make('Pendulum-v0')
     env.reset()
-    f = open('shawac.txt', 'w')
+    f = open('gym.txt', 'w')
 
     # (positions, velocities)
     state_dimensions = (THETAS, OMEGAS)
 
     discount = 0.8
-    time_horizon = 30
 
-    actor = ac.ActorCritic(ACTIONS, time_horizon, state_dimensions, discount, 10)
+    actor = ac.ActorCritic(ACTIONS, state_dimensions, discount, value_learning_rate=0.5, policy_update_rate=0.1)
 
     f.write('epoch\treward\n')
-    epochs = 100
+    epochs = 10000
     exploration = epochs / 2
     display = 9 * epochs / 10
     for epoch in range(epochs):
@@ -63,7 +64,10 @@ def main():
         cumulativeReward = 0
         print epoch
         for step in range(300):
-            action = actor.get_next_action(state)
+            if epoch > exploration:
+                action = actor.get_next_action(state)
+            else:
+                action = random.randint(0, ACTIONS-1)
             torque = torque_from(action)
 
             # perform action on environment
@@ -75,9 +79,8 @@ def main():
             state = new_state
 
             # print display, ",", epochs
-            if epoch > display:
-                time.sleep(0.1)
-                env.render()
+            # if epoch > display:
+            #     env.render()
 
         f.write('{}\t{}\n'.format(epoch, cumulativeReward))
     f.close()
