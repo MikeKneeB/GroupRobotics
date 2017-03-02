@@ -30,8 +30,10 @@ class Dumbell(object):
         return spin_accel*radius*radius/(length*length*2) + w0*np.sin(theta)
 
     # function to calculate x position of mass
-    def x_position(self):
-        return self.length_0 * np.sin(self.theta)
+    def x_position(self, theta=None):
+        if theta is None:
+            theta = self.theta
+        return self.length_0 * np.sin(theta)
 
     # function to calculate y position of mass
     def y_position(self, theta=None):
@@ -66,6 +68,8 @@ class Dumbell(object):
         return np.array([np.cos(self.theta),np.sin(self.theta), self.omega])
 
     def step(self, action):
+        if not -5 <= action <= 5:
+            raise ValueError("Action must be between -5 and 5")
 
 	    # calculate reward of previous action (target energy being at 45deg oscillations)
         reward = self.calc_reward(self.target)
@@ -125,8 +129,9 @@ class Dumbell(object):
         """
         Displays the current state of the pendulum
         """
-        self.display.update(self.x_position(), self.y_position(), self.action)
-
+        self.display.update(self.x_position(), self.y_position(),
+                            self.x_position(self.target), self.y_position(self.target),
+                            self.action)
 
 
 class Display:
@@ -144,7 +149,7 @@ class Display:
         self.canvas = tk.Canvas(self.root, width=self.width, height=self.height)
         self.canvas.pack()
 
-    def update(self, x_position, y_position, action):
+    def update(self, x_position, y_position, target_x, target_y, action):
         """
         Updates the display of the pendulum
         """
@@ -152,9 +157,16 @@ class Display:
         self.canvas.delete("all") #Clear the current pendulum drawing
 
         #Draw pendulum
-        x = x_position*self.width / (self.length*2) + self.width/2
-        y = self.height - y_position*self.height / (self.length*2)
-        self.canvas.create_line(self.width/2, self.height/2, x, y)
+        x_p = x_position*self.width / (self.length*2) + self.width/2
+        y_p = self.height - y_position*self.height / (self.length*2)
+        self.canvas.create_line(int(self.width/2), int(self.height/2), int(x_p), int(y_p))
+
+        #Draw target position
+        x_t = target_x*self.width / (self.length*2) + self.width/2
+        x_t_negative = -target_x*self.width / (self.length*2) + self.width/2
+        y_t = self.height - target_y * self.height / (self.length * 2)
+        self.canvas.create_line(self.width/2, self.height/2, x_t, y_t, fill="red")
+        self.canvas.create_line(self.width/2, self.height/2, x_t_negative, y_t, fill="red")
 
         #Draw action
         action_text = "Action: %g" % action
@@ -174,27 +186,25 @@ def main():
     # create dumbell enviroment
     env = Dumbell()
     # spit out initial (randomish) state
-    theta, omega = env.reset()
+    x, y, omega = env.reset()
+    theta = np.arctan(x/y)
 
     # step a bunch o times
     for i in range(25000):
         # step takes in an action and spits out percepts ala OpenAi
         # action can be float and continuous
-        # not sure which values work yet, no noticable movement <10, breaks for >1000
-        torque = 0
-
         if theta < 0:
-            torque = -100
+            torque = -5
         else:
-            torque = 100
+            torque = 5
 
 
         # going to change direction of torque depending on position of
         obs, reward, done, info = env.step(torque)
         env.render()
         # states are angle and angular velocity in rads (floats and continuous)
-        theta, omega = obs
-        print(theta, "\t", omega, "\t", reward, "\t", torque)
+        x, y, omega = obs
+        print(np.arctan(x/y), "\t", omega, "\t", reward, "\t", torque)
 
 
 
