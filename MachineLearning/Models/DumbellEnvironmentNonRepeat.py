@@ -107,6 +107,9 @@ class Dumbell(object):
             action = action[0]
         self.action = action
 
+        if not -5 <= action <= 5:
+            raise ValueError("Action must be between -5 and 5")
+
         #override repeat forcefull actions
         if action != 0:
             hold = action
