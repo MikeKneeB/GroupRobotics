@@ -4,11 +4,17 @@ except ImportError:
     import tkinter as tk
 import numpy as np
 
+class Dummy(object):
+
+    def __init__(self, observation_space=3):
+        self.shape=(observation_space,)
+
 class Dumbell(object):
 
     def __init__(self, length=2.5, mass=1.0, target=0.785398):
         self.length_0 = length # initial length (equilibrium)
 		# defining system parameters
+        self.observation_space = Dummy()
 		# combined mass of the two dumbbell masses
         self.m = mass
 		# arbitrary time
@@ -68,14 +74,16 @@ class Dumbell(object):
         return np.array([np.cos(self.theta),np.sin(self.theta), self.omega])
 
     def step(self, action):
-        if not -5 <= action <= 5:
-            raise ValueError("Action must be between -5 and 5")
+
 
 	    # calculate reward of previous action (target energy being at 45deg oscillations)
         reward = self.calc_reward(self.target)
 
         if type(action) is list or type(action) is tuple:
             action = action[0]
+
+        if not -5 <= action <= 5:
+            raise ValueError("Action must be between -5 and 5")
 
         self.action = action
 		# Runge Kutta parameters
