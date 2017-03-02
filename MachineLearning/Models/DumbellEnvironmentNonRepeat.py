@@ -38,8 +38,10 @@ class Dumbell(object):
         return spin_accel*radius*radius/(length*length*2) + w0*np.sin(theta) #was w0*w0
 
     # function to calculate x position of mass
-    def x_position(self):
-        return self.length_0 * np.sin(self.theta)
+    def x_position(self, theta=None):
+        if theta is None:
+            theta = self.theta
+        return self.length_0 * np.sin(theta)
 
     # function to calculate y position of mass
     def y_position(self, theta=None):
@@ -64,7 +66,7 @@ class Dumbell(object):
         currentKineticEnergy = self.calc_kinetic_energy(self.omega)
         currentPotentialEnergy = self.calc_potential_energy(self.theta)
         currentEnergy = currentKineticEnergy + currentPotentialEnergy
-        print (self.y_position(self.theta), "\t", self.omega, "\t", currentKineticEnergy, "\t", currentPotentialEnergy, "\t", currentEnergy)
+        #print (self.y_position(self.theta), "\t", self.omega, "\t", currentKineticEnergy, "\t", currentPotentialEnergy, "\t", currentEnergy)
         reward = -1000 * (targetEnergy - currentEnergy) * (targetEnergy - currentEnergy)
 
         #SOME OTHER RANDOM REWARD
@@ -183,30 +185,30 @@ class Display:
         self.canvas = tk.Canvas(self.root, width=self.width, height=self.height)
         self.canvas.pack()
 
-        def update(self, x_position, y_position, target_x, target_y, action):
-            """
-            Updates the display of the pendulum
-            """
-            self.root.deiconify()  # Display the window
-            self.canvas.delete("all")  # Clear the current pendulum drawing
+    def update(self, x_position, y_position, target_x, target_y, action):
+        """
+        Updates the display of the pendulum
+        """
+        self.root.deiconify()  # Display the window
+        self.canvas.delete("all")  # Clear the current pendulum drawing
 
-            # Draw pendulum
-            x_p = x_position * self.width / (self.length * 2) + self.width / 2
-            y_p = self.height - y_position * self.height / (self.length * 2)
-            self.canvas.create_line(int(self.width / 2), int(self.height / 2), int(x_p), int(y_p))
+        # Draw pendulum
+        x_p = x_position * self.width / (self.length * 2) + self.width / 2
+        y_p = self.height - y_position * self.height / (self.length * 2)
+        self.canvas.create_line(int(self.width / 2), int(self.height / 2), int(x_p), int(y_p))
 
-            # Draw target position
-            x_t = target_x * self.width / (self.length * 2) + self.width / 2
-            x_t_negative = -target_x * self.width / (self.length * 2) + self.width / 2
-            y_t = self.height - target_y * self.height / (self.length * 2)
-            self.canvas.create_line(self.width / 2, self.height / 2, x_t, y_t, fill="red")
-            self.canvas.create_line(self.width / 2, self.height / 2, x_t_negative, y_t, fill="red")
+        # Draw target position
+        x_t = target_x * self.width / (self.length * 2) + self.width / 2
+        x_t_negative = -target_x * self.width / (self.length * 2) + self.width / 2
+        y_t = self.height - target_y * self.height / (self.length * 2)
+        self.canvas.create_line(self.width / 2, self.height / 2, x_t, y_t, fill="red")
+        self.canvas.create_line(self.width / 2, self.height / 2, x_t_negative, y_t, fill="red")
 
-            # Draw action
-            action_text = "Action: %g" % action
-            self.canvas.create_text(0, 0, anchor="nw", text=action_text)
+        # Draw action
+        action_text = "Action: %g" % action
+        self.canvas.create_text(0, 0, anchor="nw", text=action_text)
 
-            self.root.update()
+        self.root.update()
 
 def main():
 
