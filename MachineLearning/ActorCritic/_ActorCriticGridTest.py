@@ -1,8 +1,7 @@
 import random
 
-import time
-import numpy as np
 import gym
+import numpy as np
 
 import ActorCritic as ac
 
@@ -40,19 +39,19 @@ def show_policy(policy):
 
 def main():
     env = gym.make('FrozenLake-v0')
-    gym.spec
-    f = open('shawac.txt', 'w')
+    f = open('grid_test.txt', 'w')
 
     # (positions, velocities)
     state_dimensions = (16,)
 
     discount = 0.7
-    time_horizon = 10
+    learning_rate = 0.4
+    policy_update_rate = 0.5
 
-    actor = ac.ActorCritic(ACTIONS, time_horizon, state_dimensions, discount, 10)
+    actor_critic = ac.ActorCritic(ACTIONS, state_dimensions, discount, learning_rate, policy_update_rate)
 
     f.write('epoch\treward\n')
-    epochs = 20000
+    epochs = 100000
     explore = epochs / 2
     for epoch in range(epochs):
         # reset environment and extract initial state
@@ -61,7 +60,7 @@ def main():
         reward = 0
         while not done:
             if epoch > explore:
-                action = actor.get_next_action(state)
+                action = actor_critic.get_next_action(state)
             else:
                 action = random.randint(0, 3)
 
@@ -69,19 +68,19 @@ def main():
             new_state, reward, done = get_observations(action, env)
 
             # critique the quality of the action
-            actor.critique(state, action, new_state, reward)
+            actor_critic.critique(state, action, new_state, reward)
             state = new_state
 
             # print display, ",", epochs
-            env.render()
-            print "\n"
+            #env.render()
+            #print "\n"
 
         f.write('{}\t{}\n'.format(epoch, reward))
         print"Epoch: ", epoch, "\t Reward: ", reward, "\t Exploring: ", epoch < explore
-        if epoch > 1000:
-            time.sleep(1)
-            print "########"
-            #show_policy(actor.actor.policy)
+        # if epoch > 39000:
+        #     time.sleep(1)
+        #     print "########"
+        #     show_policy(actor.actor.policy)
     f.close()
 
 
