@@ -1,3 +1,8 @@
+"""
+Author: Chris Patmore
+Date: 02/03/2017
+Description: Replay Memory implementation
+"""
 from collections import deque
 import random
 

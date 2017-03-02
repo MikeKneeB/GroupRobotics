@@ -1,3 +1,8 @@
+"""
+Author: Chris Patmore
+Date: 02/03/2017
+Description: Policy for action selection code
+"""
 import numpy as np
 
 # action selection policy

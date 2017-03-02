@@ -1,4 +1,9 @@
-
+"""
+Author: Harry Shaw, Harry Gaskin, Chris Patmore
+Date: 02/03/2017
+Description: Dumbell environment adapted from numerical modelling this iteration allows only
+one action in a direction at a time
+"""
 try:
     import Tkinter as tk
 except ImportError:

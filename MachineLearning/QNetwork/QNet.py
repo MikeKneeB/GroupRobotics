@@ -1,3 +1,8 @@
+"""
+Author: Chris Patmore
+Date: 02/03/2017
+Description: The DQN code in all its glory
+"""
 from copy import deepcopy
 from keras.models import Sequential
 import numpy as np
