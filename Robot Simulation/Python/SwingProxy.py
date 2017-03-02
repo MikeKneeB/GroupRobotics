@@ -8,11 +8,12 @@ class SwingProxy:
         self.s.connect((TCP_IP, TCP_PORT))
 
     def get_angle(self):
-        #Pack instruction
-        values=(1)
+        #Pack request
+        values = (1)
         packer = struct.Struct('I')
         packed = packer.pack(values)
         self.s.send(packed)
+
         #Unpack reply
         rec = self.s.recv(self.BUFFER_SIZE)
         unpacker = struct.Struct('f')

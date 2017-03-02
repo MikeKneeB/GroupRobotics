@@ -1,4 +1,7 @@
 import socket
+import select
+import time
+import threading
 import struct
 from controller import Robot
 from controller import PositionSensor
@@ -20,33 +23,50 @@ class SwingController (Robot):
     #Setup position sensor
     self.posSen=self.getPositionSensor("swingAngle")
     self.posSen.enable(self.timeStep)
+    
+    t = threading.Thread(target=self.stepSim)
+    t.start()
   
   #Function to accept a client
   def accept(self):
     print "Waiting for a connection"
     self.conn, self.addr = self.s.accept()
     print "Connection address:", self.addr
+    #Set the connnection to non blocking
+    self.conn.setblocking(0)
   
+  def stepSim(self):
+    while True:
+      if self.step(self.timeStep) == -1:
+        break
+      time.sleep(0.01)
   
   #Run
   def run(self):
     self.accept()
-    #MAIN LOOP
-    while True:
-      if self.step(self.timeStep) == -1:
-        break
-      #receive from client
-      rec = self.conn.recv(BUFFER_SIZE)
-      if rec:
-        unpacker = struct.Struct('I')
-        data = unpacker.unpack(rec)
-        if data[0] is 1:
+    inputs = [ self.conn ]
+    outputs = [ ]
+    count = 0
+    while inputs:
+      #Check if any information in buffer  
+      time.sleep(0.01)
+      readable, writable, exceptional = select.select(inputs, outputs, inputs)
+      for sock in readable:
+        #Read from connection with data
+        rec = sock.recv(BUFFER_SIZE)
+        if rec:
+          #Unpack instruction
+          unpacker = struct.Struct('I')
+          data = unpacker.unpack(rec)
+          if data[0] is 1:
           #Pack reply
-          values = (self.posSen.getValue())
-          packer = struct.Struct('f')
-          packed = packer.pack(values)
-          #Send data
-          self.conn.send(packed)
+            values = (self.posSen.getValue())
+            packer = struct.Struct('f')
+            packed = packer.pack(values)
+            
+            #Send data
+            sock.send(packed)
+    
     #Close connection when simulation ends      
     print "Close Connection"
     self.conn.close()
