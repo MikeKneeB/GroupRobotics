@@ -1,7 +1,6 @@
 import time
 import SwingAPI
 import SwingProxy
-
 from naoqi import ALProxy
 
 def Main():

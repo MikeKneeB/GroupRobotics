@@ -1,8 +1,4 @@
-import time
-import math
 import SwingAPI
-import SwingProxy
-
 from naoqi import ALProxy
 
 def Main():
@@ -11,4 +7,5 @@ def Main():
     PORT = 9559
     motionProxy = ALProxy("ALMotion",robotIP,PORT)
     SwingAPI.position2(motionProxy)
+
 Main()

@@ -1,5 +1,4 @@
 import time
-from naoqi import ALProxy
 
 def moveLimbs(motionProxy,limbs,angleNames,angles,speed,restInt):
     motionProxy.setStiffnesses(limbs,1.0)

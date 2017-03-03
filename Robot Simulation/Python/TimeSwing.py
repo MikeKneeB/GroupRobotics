@@ -1,9 +1,5 @@
-import time
 import math
-
 import SwingAPI
-import JointRanges
-
 from naoqi import ALProxy
 
 def smoothPeriodic(motionProxy,period,numSwings):
