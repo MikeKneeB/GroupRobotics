@@ -1,10 +1,10 @@
 import time
 
+import threading
+
 import math
 
 from naoqi import ALProxy
-
-
 
 #sets up connection to Nao in Webots, returns proxy for motion
 
@@ -20,190 +20,69 @@ def getNao():
 
     return motionProxy
 
-
-
-#takes in angles and speed{0 to 1.0}, returns when motion has been made
-
-def moveNaoToAngle(motionProxy, head, hip, knee, speed):
-
-
-
-    #used in setStiffness
-
-    limbs=["Head","RLeg","LLeg"]
-
-    #used in setAngle 
-
-    angleNames=["HeadPitch","RHipPitch","LHipPitch","RKneePitch","LKneePitch"]
-
-        
-
-    angles=[head,-hip,-hip,knee,knee]
-
+#for use with motionProxy kill methods
+def performAction(motionProxy, action):
     
-
-    #talk to nao
-
-    motionProxy.setStiffnesses(limbs,1.0)
-
-    motionProxy.setAngles(angleNames,angles,speed)
-
-
-
-#performs a small motion by action{-1.0 to 1.0} takes in current angle, spits out new one
-
-def makeAction(motionProxy, head, hip, knee, action):
-
+    #set direction of motion and make action non-zero
     
+    #else
+    head = -0.6685
+    hip = 0.513
+    knee = -0.09
 
-    #limit action
-
-    if action > 1.0:
-
-        action = 1.0
-
-    elif action < -1.0:
-
-        action = -1.0
-
-    
-
-    #also need a minimum action/speed again this needs tuning
-
-    #if action < minAct...
-
-    
-
-    #number of discrete angles used for calculation, needs tuning/testing 
-
-    increments = 1000        
-
-    
-
-    headAngleRange = 1.18
-
-    hipAngleRange = 0.472
-
-    kneeAngleRange = 1.64
-
-    
-
-    headIncrement = headAngleRange / increments
-
-    hipIncrement = hipAngleRange / increments
-
-    kneeIncrement = kneeAngleRange / increments
-
-    
-
-    if action < 0:
-
-        headIncrement = -headIncrement
-
-        hipIncrement = -hipIncrement
-
-        kneeIncrement = -kneeIncrement
-
+    if action > 0:
+        head = 0.5115
+        hip = 0.985
+        knee = 1.55
     elif action == 0:
+        action = 0.00001
 
-        headIncrement = 0
+    # action speed modifier, to be changed to match real bot limits
+    actionLimit = 1
 
-        hipIncrement = 0
+    speed = abs(action) * actionLimit
 
-        kneeIncrement = 0
+    angles = [head, -hip, -hip, knee, knee]
+    limbs = ["Head", "RLeg", "LLeg"]
+    angleNames = ["HeadPitch", "RHipPitch", "LHipPitch", "RKneePitch", "LKneePitch"]
 
+    motionProxy.setStiffnesses(limbs, 1.0)
+    motionProxy.setAngles(angleNames, angles, speed)
+
+#experiment in threading requries exitFlag and action public vars
+class Controller(threading.Thread):
+    def __init__(self, threadID, name, motionProxy, action):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.motionProxy = motionProxy
+        self.action = action
     
+    def run(self):
+        performAction(self.motionProxy, self.action)
+ 
 
-    head += headIncrement
-
-    hip += headIncrement
-
-    knee += kneeIncrement
-
-    
-
-    speed = abs(action)
-
-    
-
-    #Min Angle values: Nao "Planking" position1
-
-    minHeadAngle=-0.6685
-
-    minHipAngle=0.513
-
-    minKneeAngle=-0.09
-
-    
-
-    #Max angle values: Nao "Balling" position2
-
-    maxHeadAngle=0.5115
-
-    maxHipAngle=0.985
-
-    maxKneeAngle=1.55    
-
-
-
-    #limit angles    
-
-    if head < minHeadAngle:
-
-        head = minHeadAngle
-
-    elif head > maxHeadAngle:
-
-        head = maxHeadAngle
-
-    if hip < minHipAngle:
-
-        hip = minHipAngle
-
-    elif hip > maxHipAngle:
-
-        hip = maxHipAngle
-
-    if knee < minKneeAngle:
-
-        knee = minKneeAngle
-
-    elif knee > maxKneeAngle:
-
-        knee = maxKneeAngle
-
-    
-
-    moveNaoToAngle(motionProxy, head, hip, knee, speed)
-
-    return head, hip, knee
-
-    
-
-if __name__ == '__main__':
-
-    
+def Main():
+    print "Main started"
 
     motionProxy = getNao()
 
+    exitFlag = 0
+    action = 0
     
 
     
 
-    # reset Nao to position2
+    while 1:
+        action = float(raw_input("> "))
+        motionProxy.killAll()
+        if action == 99:
+            return
+        control = Controller(1, "Controller", motionProxy, action)
+        control.start()
 
-    head = 0.5115
-
-    hip = 0.985
-
-    knee = 1.55
-
-    moveNaoToAngle(motionProxy, head, hip, knee, 1.0)
-
-    
-
-    # should swing legs up to position1 (if it works)
-
-    for _ in range(1000):
-
-        head, hip, knee = makeAction(motionProxy, head, hip, knee, -0.5)
+if __name__ == '__main__':
+    Main()
+        
+        
+            
