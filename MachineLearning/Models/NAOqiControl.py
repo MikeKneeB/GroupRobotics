@@ -60,17 +60,21 @@ class Controller(threading.Thread):
     
     def run(self):
         performAction(self.motionProxy, self.action)
- 
+
+#takes in robot angle, spits out state value in range [0.0 to 1.0]
+#uses knee as knee take the longest to finish motion
+def getRobotState(kneeAngle):
+    kneeRange = 1.64
+    robotState = (kneeAngle + 0.09)/ kneeRange
+    return robotState
+
 
 def Main():
     print "Main started"
 
     motionProxy = getNao()
 
-    exitFlag = 0
     action = 0
-    
-
     
 
     while 1:
@@ -78,6 +82,13 @@ def Main():
         motionProxy.killAll()
         if action == 99:
             return
+        if action == 50:
+            angleNames = ["HeadPitch", "RHipPitch", "LHipPitch", "RKneePitch", "LKneePitch"]
+            angleValues = motionProxy.getAngles(angleNames, False)
+            robotState = getRobotState(angleValues[4])
+            print robotState
+            action = 0
+
         control = Controller(1, "Controller", motionProxy, action)
         control.start()
 
