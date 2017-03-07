@@ -10,6 +10,8 @@ from MachineLearning.RobotControl import SwingProxy
 
 from naoqi import ALProxy
 
+import numpy as np
+
 
 #for use with motionProxy kill methods
 def performAction(motionProxy, action):
