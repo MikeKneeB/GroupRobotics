@@ -4,7 +4,7 @@ import math
 from Tkinter import *
 import time
 
-class DumbellPendulum:
+class Robot:
     # initialise
     def __init__(self):
         # constants
@@ -32,51 +32,44 @@ class DumbellPendulum:
         maxv = 10.0 #rad/s
         minv = -1 * maxv #rad/s
 
+        # the values of a single index of position and velocity
         global onestate, onevelocity
         onestate = (maxpos - minpos) / numpositions
         onevelocity = (maxv - minv) / numvelocities
 
         # set all qvalues to be 0
-        qvalues = numpy.zeros(shape=(numpositions, numactions))
-        # set all qvalues to be an estimate of what they should be
-        # direction of force matches direction of velocity
-        for i in range(0, numpositions):
-            if (i > (numpositions-1)/2+1):
-                qvalues[i][0] = -1
-                qvalues[i][1] = 0
-                qvalues[i][2] = 1
-            if (i > (numpositions-1)/2+1):
-                qvalues[i][0] = 1
-                qvalues[i][1] = 0
-                qvalues[i][2] = -1
-            if (i == 0):
-                qvalues[i][1] = 100
+        qvalues = numpy.zeros(shape=(numpositions, numpositions, numactions))
+
+        # UI variables
+        global center, animation, canvas, pendulum, force, label, posmarker, posacmarker
+        center = 200
+        animation = Tk()
+        canvas = Canvas(animation, width=center * 2, height=center * 2)
+        canvas.pack()
+        pendulum = canvas.create_line(center, center, center, center + length * 100)
+        force = canvas.create_line(center, 50, center, 50, arrow=FIRST)
+        label = canvas.create_text(20, 20, text=str(-1))
+        posmarker = canvas.create_line(0,0,0,0)
+        posacmarker = canvas.create_line(0,0,0,0)
 
     # returns the reward of the state
-    def reward(self, position, velocity):
-        if ((position == maxpos or position == minpos) and velocity == 0):
-            return 100
-        if (position > maxpos - math.pi/4 or position < minpos + math.pi/4):
-                return 10
-        if (position > maxpos - math.pi/2 or position < minpos + math.pi/2):
-            return 5
-        return -10
+    def reward(self, initialposition, finalposition):
+        # a higher reward the higher the pendulum got
+        return (abs(finalposition) - abs(initialposition))*10
 
     # get the discrete index of the continuous state
     def stateindex(self, state):
-        while (state > maxpos):
-            state = state - maxpos
-        while (state < minpos):
-            state = state - minpos
+        if (state > maxpos or state < minpos):
+            raise IndexError
 
         state = state + maxpos
 
-        index = state // onestate
+        index = int(math.floor(state/onestate))
 
         if (index == numpositions):
             index = numpositions - 1
 
-        return int(index)
+        return index
 
     # get the discrete index of the continuous velocity
     def velocityindex(self, velocity):
@@ -87,24 +80,30 @@ class DumbellPendulum:
 
         velocity = velocity + maxv
 
-        index = velocity // onevelocity
+        index = int(math.floor(velocity/onevelocity))
 
         if (index == numvelocities):
             index = numvelocities - 1
 
-        return int(index)
+        return index
 
     # return the maximum qvalue of the new state, for each possible action taken in that state
-    def maxqvalue(self, state, velocity):
+    def maxqvalue(self, state):
         sindex = self.stateindex(state)
-        vindex = self.velocityindex(velocity)
         # the first action/velocity is temporarily the highest q-value
-        max = qvalues[sindex][0]
+        max = qvalues[sindex][0][0]
+
+        minposac = sindex
+        maxposac = numpositions - sindex
+        if (minposac > maxposac):
+            minposac = numpositions - sindex
+            maxposac = sindex
         # for each action, get the qvalue and check if it's larger than the current max
-        for aindex in range(1, numactions):
-            q = qvalues[sindex][aindex]
-            if (q > max):
-                max = q
+        for posacindex in range(minposac, maxposac):
+            for aindex in range(1, numactions):
+                q = qvalues[sindex][posacindex][aindex]
+                if (q > max):
+                    max = q
         # return the maximum qvalue
         return max
 
@@ -260,8 +259,73 @@ class DumbellPendulum:
 
     #END OF NUMERICAL MODELLING
 
-    #Q-Learning process
-    def qlearning(self, position, velocity, action):
+    # Q-Learning process with no UI and random action and position action for fast initial learning
+    def qlearning_noui(self, position):
+        # learning rate
+        alpha = 0.5
+        # discount factor
+        gamma = 0.9
+
+        # if the action causes the pendulum to make a ful rotation, the action was not good and the position should be reset
+        if (position < minpos or position > maxpos):
+            return maxpos + 1
+
+        # get the corresponding index of this state
+        sindex = self.stateindex(position)
+
+        # try an action and observe the new state
+        #first, get where the action will be done
+        minposac = sindex
+        maxposac = numpositions - sindex
+        if (minposac > maxposac):
+            minposac = numpositions - sindex
+            maxposac = sindex
+        actionposindex = int(math.floor(int(random.random()*(maxposac-minposac) + minposac)))
+        # if the action is -1, do a random action
+        action = int(math.floor(random.random() * numactions))
+
+        currentposition = position
+        currentvelocity = 0
+
+        firstvelocity = self.NextVelocity(position, 0, 0)
+        # if the initial position is negative, the velocity will be positive for the next half-wave
+        passedmiddle = 0
+        changeddirection = 0
+        i = 0
+        # while the current velocity is in the same direction as the initial velocity
+        while (changeddirection == 0):
+            i = i + 1
+            thisaction = 0
+            if (self.stateindex(currentposition) == actionposindex):
+                thisaction = actions[action]
+            else:
+                thisaction = 0
+            # let the pendulum move with no external forces
+            nextpos = self.NextPosition(currentposition, currentvelocity, thisaction)
+            nextvel = self.NextVelocity(currentposition, currentvelocity, thisaction)
+            if (nextpos*position < 0):
+                passedmiddle = 1
+            if (passedmiddle == 1 and nextvel*firstvelocity < 0):
+                changeddirection = 1
+            # update the new position and velocity
+            currentposition = nextpos
+            currentvelocity = nextvel
+
+            # if the action causes the pendulum to make a ful rotation, the action was not good and the position should be reset
+            if (currentposition < minpos or currentposition > maxpos):
+                qvalues[sindex][actionposindex][action] = -10
+                return maxpos+1
+
+        # find the new q-value
+        current = qvalues[sindex][actionposindex][action]
+        newq = current + alpha * (self.reward(position, currentposition) + gamma * self.maxqvalue(currentposition) - current)
+
+        qvalues[sindex][actionposindex][action] = newq
+
+        return currentposition
+
+    # Q-Learning process
+    def qlearning(self, position, actionposindex, action, i):
         # learning rate
         alpha = 0.5
         # discount factor
@@ -273,156 +337,147 @@ class DumbellPendulum:
         while (position < minpos):
             position = position - minpos
 
+        canvas.itemconfigure(label, text=str(i))
+        canvas.coords(posmarker, center + length * math.sin(position) * 100, center + length * math.cos(position) * 100, center + length * math.sin(position) * 100, center + length * math.cos(position) * 100)
+        if (action == 0):  # negative force
+            canvas.coords(force, center, 50, center - 50, 50)
+        else:
+            if (action == 1):  # no force
+                canvas.coords(force, center, 50, center, 50)
+            else:
+                if (action == 2):  # positive force
+                    canvas.coords(force, center, 50, center + 50, 50)
+        acpos = actionposindex*onestate - maxpos
+        canvas.coords(posacmarker, center + length * math.sin(acpos) * 100, center + length * math.cos(acpos) * 100, center + length * math.sin(acpos) * 100, center + length * math.cos(acpos) * 100)
+        # get the corresponding index of this state
+        sindex = self.stateindex(position)
+
         # try an action and observe the new state
-        # if -1, do a random action
+        #first, get where the action will be done
+        minposac = sindex
+        if (minposac > numpositions - sindex):
+            minposac = numpositions - sindex
+        if (actionposindex == -1):
+            actionposindex = int(math.floor(random.random() * (numpositions - sindex*2) + minposac))
+        # if the action is -1, do a random action
         if (action == -1):
-            action = int(random.random() * numactions)
+            action = int(math.floor(random.random() * numactions))
 
-        # do the action
-        currentposition = self.NextPosition(position, velocity, actions[action])
-        currentvelocity = self.NextVelocity(position, velocity, actions[action])
+        currentposition = position
+        currentvelocity = 0
 
+        firstvelocity = self.NextVelocity(position, 0, 0)
         # if the initial position is negative, the velocity will be positive for the next half-wave
-        sign = 1
-        # if the initial position is positive, the velocity will be negative
-        if (position > 0):
-            sign = -1
-
+        passedmiddle = 0
+        changeddirection = 0
+        i = 0
         # while the current velocity is in the same direction as the initial velocity
-        while (currentvelocity*sign > 0):
+        while (changeddirection == 0):
+            i = i + 1
+            thisaction = 0
+            if (self.stateindex(currentposition) == actionposindex):
+                thisaction = actions[action]
+            else:
+                thisaction = 0
             # let the pendulum move with no external forces
-            nextpos = dp.NextPosition(currentposition, currentvelocity, 0)
-            nextvel = dp.NextVelocity(currentposition, currentvelocity, 0)
+            nextpos = self.NextPosition(currentposition, currentvelocity, thisaction)
+            nextvel = self.NextVelocity(currentposition, currentvelocity, thisaction)
+            if (nextpos * position < 0):
+                passedmiddle = 1
+            if (passedmiddle == 1 and nextvel * firstvelocity < 0):
+                changeddirection = 1
             # update the new position and velocity
             currentposition = nextpos
             currentvelocity = nextvel
+            # update the UI
+            #canvas.coords(force, center, 50, center, 50)
+            x = center + length * math.sin(currentposition) * 100
+            y = center + length * math.cos(currentposition) * 100
+            canvas.coords(pendulum, center, center, int(x), int(y))
 
-        #print ('no infinite loop')
+            animation.update()
+            time.sleep(0.01)
 
-        # get the corresponding indicies of this state
-        sindex = self.stateindex(position)
-        vindex = self.velocityindex(velocity)
+            # if the action causes the pendulum to make a ful rotation, the action was not good and the position should be reset
+            if (currentposition < minpos or currentposition > maxpos):
+                qvalues[sindex][actionposindex][action] = -10
+                return maxpos+1
 
         # find the new q-value
-        current = qvalues[sindex][action]
-        newq = current + alpha * (self.reward(position, velocity) + gamma * self.maxqvalue(currentposition, currentvelocity) - current)
+        current = qvalues[sindex][actionposindex][action]
+        newq = current + alpha * (self.reward(position, currentposition) + gamma * self.maxqvalue(currentposition) - current)
 
-        qvalues[sindex][action] = newq
+        qvalues[sindex][actionposindex][action] = newq
+
+        return currentposition
 
     # Repeat q learning several times
     def dolearning(self):
         print('Starting')
-        #make sure each state has been done once (well, 10 times)
-        for i in range(0, 100):
-            # work "outwards" from rest position
-            for p in range ((numpositions-1)/2 + 1, numpositions):
-                for a in range (0, numactions):
-                    pos = p*onestate - maxpos
-                    self.qlearning(pos, 0, a)
-            for p in range ((numpositions-1)/2 + 1, 0, -1):
-                for a in range (0, numactions):
-                    pos = p*onestate - maxpos
-                    self.qlearning(pos, 0, a)
-        print('done each state')
-        """
         # do some random learning
-        for num in range (0, 1000):
-            position = int(random.random() * numpositions * onestate - maxpos)
-            self.qlearning(position, 0, -1)"""
-
+        for num in range (0, 10000):
+            position = random.random() * numpositions * onestate - maxpos
+            while (position < 0.1):
+                position = random.random() * numpositions * onestate - maxpos
+            #print num, position
+            for num2 in range (0, 10):
+                position = self.qlearning_noui(position)
+                if (position == maxpos+1):
+                    break
+#"""
         print qvalues.astype(int)
 
+        # do some learned learning
+        for num in range (0, 100):
+            position = random.random() * numpositions * onestate - maxpos
+            pos1 = position
+            for num2 in range (0, 10):
+                position = self.qlearning(position, self.nextposaction(self.stateindex(position)), self.nextaction(self.stateindex(position)), num)
+                if (position == maxpos+1):
+                    break
+            print abs(pos1) - abs(position)
+
     # returns the action with the highest q-value
-    def nextaction(self, pindex, vindex):
-        best = qvalues[pindex][0]
+    def nextaction(self, pindex):
+        # the first action/velocity is temporarily the highest q-value
+        max = qvalues[pindex][0][0]
         index = 0
-        for i in range(1, numactions):
-            if (qvalues[pindex][i] > best):
-                best = qvalues[pindex][i]
-                index = i
+        minposac = pindex
+        maxposac = numpositions - pindex
+        if (minposac > maxposac):
+            minposac = numpositions - pindex
+            maxposac = pindex
+        # for each action, get the qvalue and check if it's larger than the current max
+        for posacindex in range(minposac, maxposac):
+            for aindex in range(1, numactions):
+                q = qvalues[pindex][posacindex][aindex]
+                if (q > max):
+                    max = q
+                    index = aindex
+        # return the maximum qvalue
         return index
 
-    # returns the action with the second-highest q-value after "first"
-    def secondnextaction(self, pindex, vindex, first):
-        if (qvalues[pindex][1] > qvalues[pindex][2-first]):
-            return 1
-        else:
-            return 2-first
+    # returns the action with the highest q-value
+    def nextposaction(self, pindex):
+        # the first action/velocity is temporarily the highest q-value
+        max = qvalues[pindex][0][0]
+        pos = 0
+        minposac = pindex
+        maxposac = numpositions - pindex
+        if (minposac > maxposac):
+            minposac = numpositions - pindex
+            maxposac = pindex
+        # for each action, get the qvalue and check if it's larger than the current max
+        for posacindex in range(minposac, maxposac):
+            for aindex in range(1, numactions):
+                q = qvalues[pindex][posacindex][aindex]
+                if (q > max):
+                    max = q
+                    pos = posacindex
+        # return the maximum qvalue
+        return pos
 
 
 
-dp = DumbellPendulum()
-#dp.dolearning()
-
-center = 200
-
-animation = Tk()
-canvas = Canvas(animation, width=center*2, height=center*2)
-canvas.pack()
-pendulum = canvas.create_line(center, center, center, center + length * 100)
-force = canvas.create_line(center, 50, center, 50, arrow=FIRST)
-
-position = int(random.random() * numpositions * onestate - maxpos)
-while (int(position) == 0):
-    position = int(random.random() * numpositions * onestate - maxpos)
-velocity = 0
-
-for num1 in range (0, 5):
-    for num2 in range(0, 1000):
-        # Choose the action with the best qvalue for this state
-        pindex = dp.stateindex(position)
-        while pindex == 0:
-            position = int(random.random() * numpositions * onestate - maxpos)
-            pindex = dp.stateindex(position)
-        vindex = dp.velocityindex(velocity)
-        nextaction = dp.nextaction(int(pindex), int(vindex))
-
-        # Show the direction of the action
-        if (nextaction == 0):  # negative force
-            canvas.coords(force, center, 50, center - 50, 50)
-        else:
-            if (nextaction == 1):  # no force
-                canvas.coords(force, center, 50, center, 50)
-            else:
-                if (nextaction == 2):  # positive force
-                    canvas.coords(force, center, 50, center + 50, 50)
-
-        # Get the new position and velocity after doing the action
-        currentposition = dp.NextPosition(position, velocity, actions[nextaction])
-        currentvelocity = dp.NextVelocity(position, velocity, actions[nextaction])
-
-        x = center + length * math.sin(currentposition) * 100
-        y = center + length * math.cos(currentposition) * 100
-
-        canvas.coords(pendulum, center, center, int(x), int(y))
-
-        animation.update()
-        time.sleep(0.01)
-
-        sign = 1
-        canvas.coords(force, center, 50, center, 50)
-        # now leave the pendulum for half a cycle
-        # while the original velocity and current velocity are in the same direction
-        while (sign == 1):
-            nextpos = dp.NextPosition(currentposition, currentvelocity, 0)
-            nextvel = dp.NextVelocity(currentposition, currentvelocity, 0)
-            if currentvelocity*nextvel < 0:
-                sign = -1
-            currentposition = nextpos
-            currentvelocity = nextvel
-
-            # Update the drawing
-            x = center + length * math.sin(currentposition) * 100
-            y = center + length * math.cos(currentposition) * 100
-
-            canvas.coords(pendulum, center, center, int(x), int(y))
-            animation.update()
-
-            time.sleep(0.01)
-
-        position = currentposition
-        velocity = 0
-
-    time.sleep(0.5)
-    position = int(random.random() * numpositions * onestate - maxpos)
-    velocity = 0
+dp = Robot()
+dp.dolearning()
