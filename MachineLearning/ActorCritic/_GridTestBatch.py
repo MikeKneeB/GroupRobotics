@@ -7,6 +7,7 @@ import ActorCritic as ac
 
 # left, down, right, up
 ACTIONS = 4
+EPOCHS = 20000
 
 
 def get_observations(action, env):
@@ -37,22 +38,20 @@ def show_policy(policy):
     print out
 
 
-def main():
-    env = gym.make('FrozenLake-v0')
-    f = open('grid_test.txt', 'w')
+def run(explore_factor, learning_rate, discount):
+    filename = 'grid_{}_{}_{}_no3.txt'.format(explore_factor, learning_rate, discount)
+    f = open(filename, 'w')
 
+    # initialise the policy by setting the cumulative TD error
     state_dimensions = (16,)
     td_errors = np.zeros(state_dimensions + (ACTIONS,))
     td_errors[:, 1] = 5
-    discount = 0.7
-    learning_rate = 0.4
 
     actor_critic = ac.ActorCritic(ACTIONS, state_dimensions, discount, learning_rate, td_errors)
 
+    explore = EPOCHS * explore_factor
     f.write('epoch\treward\n')
-    epochs = 100000
-    explore = epochs / 2
-    for epoch in range(epochs):
+    for epoch in range(EPOCHS):
         # reset environment and extract initial state
         state = reset_enviroment(env)
         done = False
@@ -71,11 +70,10 @@ def main():
             state = new_state
 
             # print display, ",", epochs
-            #env.render()
-            #print "\n"
+            # env.render()
+            # print "\n"
 
         f.write('{}\t{}\n'.format(epoch, reward))
-        print"Epoch: ", epoch, "\t Reward: ", reward, "\t Exploring: ", epoch < explore
         # if epoch > 39000:
         #     time.sleep(1)
         #     print "########"
@@ -83,5 +81,16 @@ def main():
     f.close()
 
 
+def main():
+    explore_factor = 0.5
+    i = 0
+    for learning_rate in np.arange(0.05, 1, 0.05):
+        for discount in np.arange(0.25, 1, 0.05):
+            i += 1
+            run(explore_factor, learning_rate, discount)
+            print('Number {}'.format(i))
+
+
 if __name__ == '__main__':
+    env = gym.make('FrozenLake-v0')
     main()

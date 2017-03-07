@@ -10,11 +10,8 @@ class Critic:
         self.values = np.zeros(state_dimensions)
 
     def get_td_error(self, previous_state, new_state, reward):
-        # print "Reward of new state: ", r1
         v1 = self.values[new_state]
-        # print "Value of new state: ", v1
         v0 = self.values[previous_state]
-        # print "Value of previous state: ", v0
         return reward + self.discount * v1 - v0
 
     def update_value(self, state, td_error):
