@@ -8,6 +8,8 @@ import random
 import datetime
 import time
 
+import subprocess
+
 import actor
 import critic
 
@@ -83,6 +85,10 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
 
             # reward_total for output.
             reward_total = 0
+
+            # UNCOMMENT FOR GIFS - if you have byzanz installed.
+            # if epo == 10 or epo == 50 or epo == 100 or epo == 150 or epo == 200 or epo == 250 or epo == 300:
+            #     subprocess.Popen(['byzanz-record', '-x', '0', '-y', '50', '-w', '500', '-h', '500', '-d', '10', 'run_{}.gif'.format(epo)])
 
             for j in range(run_length):
                 # Render environment if possible.
@@ -285,7 +291,7 @@ if __name__ == '__main__':
 
         # Train.
         train(sess, actor_model, critic_model, env, state_dim, action_dim,
-        max_action, epochs=300, run_length=200, render=False, envname='pendulum', decay=0.98)
+        max_action, epochs=300, run_length=200, render=True, envname='pendulum', decay=0.98)
 
         raw_input('Training complete, press enter to continue to test.')
 
