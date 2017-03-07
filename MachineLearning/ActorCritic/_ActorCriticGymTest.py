@@ -63,7 +63,7 @@ def main():
     exploration = epochs / 2  # epoch after which agent stops exploring
     display = epochs / 2  # epoch after which environment renders
     for epoch in range(epochs):
-        print epoch
+        print(epoch)
 
         # reset environment and extract initial state
         state = reset_environment(env)
