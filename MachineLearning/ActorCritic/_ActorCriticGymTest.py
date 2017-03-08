@@ -51,12 +51,8 @@ def main():
     # (x position, y position, velocity)
     state_dimensions = (X, Y, OMEGAS)
 
-    # Initialise cumulative td_errors so that the policy starts as doing nothing in all states
-    td_errors = 8 * np.ones(state_dimensions + (ACTIONS,))
-
     # If temperature_parameter is too low, you will get NaN errors
-    actor_critic = ac.ActorCritic(ACTIONS, state_dimensions, discount=0.95, learning_rate=0.5, td_errors=td_errors,
-                                  temperature_parameter=10)
+    actor_critic = ac.ActorCritic(ACTIONS, state_dimensions, discount=0.95, learning_rate=0.5, temperature_parameter=10)
 
     epochs = 100
     display = 0  # epoch after which environment renders

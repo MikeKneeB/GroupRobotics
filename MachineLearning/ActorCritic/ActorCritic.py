@@ -3,12 +3,12 @@ from _Critic import Critic
 
 
 class ActorCritic:
-    def __init__(self, number_of_actions, state_dimensions, discount, learning_rate, td_errors, temperature_parameter):
+    def __init__(self, number_of_actions, state_dimensions, discount, learning_rate, temperature_parameter):
         """
         Call getNextAction -> perform that action -> call critique
         """
         self.numberOfActions = number_of_actions
-        self.actor = Actor(number_of_actions, td_errors, temperature_parameter)
+        self.actor = Actor(number_of_actions, state_dimensions, temperature_parameter)
         self.critic = Critic(state_dimensions, discount=discount, value_learning_rate=learning_rate)
 
     def get_next_action(self, state):

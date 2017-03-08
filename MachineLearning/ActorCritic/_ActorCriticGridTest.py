@@ -1,11 +1,9 @@
-import random
-
 import gym
 import numpy as np
 
 import ActorCritic as ac
 
-# left, down, right, up
+# left, down, right, up Actually no
 ACTIONS = 4
 
 
@@ -25,7 +23,7 @@ def reset_environment(env):
 # Shows the current policy. Not actually sure this works.
 def show_policy(policy):
     current = policy.argmax(1)
-    actions = ["<", "v", ">", "/\\"]
+    actions = ["v", ">", "/\\", "<"]
     out = np.array(np.zeros(16, np.string_))
     for i in range(16):
         out[i] = actions[current[i]]
@@ -46,15 +44,10 @@ def main():
     env = gym.make('FrozenLake-v0')
     state_dimensions = (16,)
 
-    # Initialise TD errors such that initial policy is to always go down
-    td_errors = np.zeros(state_dimensions + (ACTIONS,))
-    td_errors[:, 1] = 5
-
-    actor_critic = ac.ActorCritic(ACTIONS, state_dimensions, discount=0.9, learning_rate=0.5, td_errors=td_errors,
-                                  temperature_parameter=2)
+    # NB: if temperature_parameter is too low, you will get NaN errors
+    actor_critic = ac.ActorCritic(ACTIONS, state_dimensions, discount=0.9, learning_rate=0.5, temperature_parameter=2)
 
     epochs = 10000
-    explore = epochs / 2
     for epoch in range(epochs):
         # reset environment and extract initial state
         state = reset_environment(env)
@@ -62,12 +55,7 @@ def main():
         reward = 0
         done = False
         while not done:
-
-            # Get a random action if it's in the exploration phase, else follow policy.
-            if epoch < explore:
-                action = random.randint(0, 3)
-            else:
-                action = actor_critic.get_next_action(state)
+            action = actor_critic.get_next_action(state)
 
             # perform action on environment
             new_state, reward, done = get_observations(action, env)
@@ -77,8 +65,9 @@ def main():
 
             state = new_state
         f.write('{}\t{}\n'.format(epoch, reward))
-        print ("Epoch: ", epoch, "\t Reward: ", reward)
+        print("Epoch: ", epoch, "  Reward: ", reward)
     f.close()
+    show_policy(actor_critic.actor.policy)
 
 
 if __name__ == '__main__':
