@@ -1,5 +1,3 @@
-import random
-
 import gym
 import numpy as np
 
@@ -56,12 +54,12 @@ def main():
     # Initialise cumulative td_errors so that the policy starts as doing nothing in all states
     td_errors = 8 * np.ones(state_dimensions + (ACTIONS,))
 
+    # If temperature_parameter is too low, you will get NaN errors
     actor_critic = ac.ActorCritic(ACTIONS, state_dimensions, discount=0.95, learning_rate=0.5, td_errors=td_errors,
-                                  temperature_parameter=50)
+                                  temperature_parameter=10)
 
-    epochs = 500
-    exploration = epochs / 2  # epoch after which agent stops exploring
-    display = epochs / 2  # epoch after which environment renders
+    epochs = 100
+    display = 0  # epoch after which environment renders
     for epoch in range(epochs):
         print(epoch)
 
@@ -71,11 +69,7 @@ def main():
         cumulative_reward = 0
         for step in range(300):
 
-            # Get a random action if it's in the exploration phase, else follow policy.
-            if epoch < exploration:
-                action = random.randint(0, ACTIONS - 1)
-            else:
-                action = actor_critic.get_next_action(state)
+            action = actor_critic.get_next_action(state)
 
             # perform action on environment
             torque = torque_from(action)
@@ -91,8 +85,6 @@ def main():
                 env.render()
 
         f.write('{}\t{}\n'.format(epoch, cumulative_reward))
-        if epoch > exploration:
-            print("Following policy...")
     f.close()
 
 
