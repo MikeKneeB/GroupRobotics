@@ -55,13 +55,19 @@ class Controller(threading.Thread):
     def run(self):
         performAction(self.motionProxy, self.action)
 
+class Dummy(object):
+
+    def __init__(self, observation_space=4):
+        self.shape = (observation_space,)
+
 class WebotsEnv:
     
     def __init__(self):
         self.motionProxy = self.getNao()
         self.robotState = -1
         self.swingProxy = SwingProxy.SwingProxy("127.0.0.1",5005)
-        
+        self.observation_space = Dummy()
+
         #sets up connection to Nao in Webots, returns proxy for motion
     def getNao(self):
 
@@ -90,7 +96,7 @@ class WebotsEnv:
         potentialEnergy = (1 - np.cos(theta)) * 9.81
         kineticEnergy = omega*omega*0.5
         currentEnergy = kineticEnergy + potentialEnergy
-        reward = -1 * (targetEnergy - currentEnergy) * (targetEnergy - currentEnergy)
+        reward = -0.1 * (targetEnergy - currentEnergy) * (targetEnergy - currentEnergy)
         return reward
 
         
@@ -110,7 +116,7 @@ class WebotsEnv:
         omegaState = thetaState - currentTheta
         reward = self.calculateReward(thetaState, omegaState)
         states = np.array([thetaState, omegaState, robotState])
-        return np.array([thetaState, omegaState, robotState]), reward, False, {} 
+        return np.array([np.cos(thetaState), np.sin(thetaState), omegaState, robotState]), reward, False, {}
 
     def reset(self):
         
@@ -122,7 +128,7 @@ class WebotsEnv:
         thetaState = self.swingProxy.getUpdate()
         omegaState = thetaState - currentTheta
         
-        return np.array([thetaState, omegaState, robotState])
+        return np.array([np.cos(thetaState), np.sin(thetaState), omegaState, robotState])
 
 
 
