@@ -12,7 +12,7 @@ import numpy as np
 
 
 class BoltzmannQPolicy(object):
-    def __init__(self, tau=1., clip=(-500., 500.)):
+    def __init__(self, tau=1., clip=(-1000., 1000.)):
         super(BoltzmannQPolicy, self).__init__()
         self.tau = tau
         self.clip = clip

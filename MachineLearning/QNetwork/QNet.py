@@ -7,7 +7,6 @@ from copy import deepcopy
 from keras.models import Sequential
 import numpy as np
 import time
-import statistics
 
 # the Q network, important stuff
 
@@ -61,6 +60,7 @@ class DeepQNetwork(object):
     # load network weights from a save file
     def load_weights(self, filepath):
         self.model.load_weights(filepath)
+        self.target_model.set_weights(self.model.get_weights())
 
     # save network weights to a file
     def save_weights(self, filepath, overwrite=False):
@@ -113,10 +113,10 @@ class DeepQNetwork(object):
     def train(self, episodes, steps, visualize=False):
         # for each episode
         print('training for %s episodes' % episodes)
-        file = open('episode_data_target.txt', 'w')
+        file = open('Training_Rewards_NRDumbbell0Start.txt', 'w')
         start = time.time()
+        all_episode_rewards = []
         for episode in range(episodes):
-
             # reset the environment
             current_state = deepcopy(self.environment.reset())
             episode_reward = 0
@@ -145,7 +145,7 @@ class DeepQNetwork(object):
 
             # print to screen
             file.write('%s\t%s\n' % (episode, episode_reward))
-
+            all_episode_rewards.append(episode_reward)
             # update target model
             if episode % 1 == 0:
                 self.target_model.set_weights(self.model.get_weights())
@@ -160,12 +160,21 @@ class DeepQNetwork(object):
         # end of training stats
         end = time.time()
         file.close()
+        # Rolling reward
+        file = open('Training_Rolling_Rewards_NRDumbbell0Start.txt', 'w')
+        summing = 0
+        for i in range (episodes):
+            summing += all_episode_rewards[i]
+            if (i + 1) % 10 == 0:
+                file.write('%s\t%s\n' % (i-5, summing/10))
+                summing = 0
+
         print('Time to complete training of %s episodes: %r seconds' % (episodes, (end-start)))
 
     # test the trained network on the environment
     def test(self, episodes, steps, visualize=True):
         # set tau low for test
-        self.tau = 0.1
+        self.tau = 1
         self.policy.set_tau(self.tau)
         print('Testing for %s episodes' % episodes)
         rewards = []
@@ -195,4 +204,9 @@ class DeepQNetwork(object):
                 current_state = deepcopy(new_state)
             rewards.append(episode_reward)
             print('Episode reward : %r' % episode_reward)
-        print('Average reward : %r +/- %r' % (statistics.mean(rewards), statistics.stdev(rewards)))
+        try:
+            import statistics
+            print('Average reward : %r +/- %r' % (statistics.mean(rewards), statistics.stdev(rewards)))
+        except ImportError:
+            print('No Statistics in python 2')
+
