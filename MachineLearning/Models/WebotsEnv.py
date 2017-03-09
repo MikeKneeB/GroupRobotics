@@ -1,4 +1,4 @@
-import time
+#import time
 
 import threading
 
@@ -16,7 +16,7 @@ def performAction(motionProxy, action):
 
     #turns np.ndarray into float that naoqi needs
     action = action[0]
-    action = action[0]
+    #action = action[0]
     
     #set direction of motion and make action non-zero
     
@@ -53,9 +53,7 @@ class Controller(threading.Thread):
         self.action = action
     
     def run(self):
-        print "Thread running"
         performAction(self.motionProxy, self.action)
-        print "Thread exiting"
 
 class WebotsEnv:
     
@@ -97,7 +95,6 @@ class WebotsEnv:
 
         
     def step(self, action):
-        print "Step Called"
         currentTheta = self.swingProxy.getUpdate()
         self.motionProxy.killAll()
         control = Controller(1, "Controller", self.motionProxy, action)
@@ -113,7 +110,6 @@ class WebotsEnv:
         omegaState = thetaState - currentTheta
         reward = self.calculateReward(thetaState, omegaState)
         states = np.array([thetaState, omegaState, robotState])
-        print "Step Returning"
         return np.array([thetaState, omegaState, robotState]), reward, False, {} 
 
     def reset(self):
