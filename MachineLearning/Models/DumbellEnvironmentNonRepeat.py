@@ -19,7 +19,7 @@ class Dummy(object):
 
 class Dumbell(object):
 
-    def __init__(self, length=2.5, mass=1.0, target=0.785398):
+    def __init__(self, length=2.5, mass=0.25, target=0.785398):
         self.length_0 = length  # initial length (equilibrium)
         # defining system parameters
         # combined mass of the two dumbbell masses
@@ -32,7 +32,7 @@ class Dumbell(object):
         self.target = target
         self.observation_space = Dummy()
         self.display = Display(length)
-        self.last_action = 0
+        self.last_action = -5
 
     # differential equations to be solved
     def theta_deriv(self, omega):
@@ -60,42 +60,20 @@ class Dumbell(object):
         return (self.length_0*self.length_0 * omega*omega)/2.0
 
     def calc_reward(self, targetTheta):
-        # INVERSE PENDULUM REWARD
-        # th = (((self.theta) % (2 * np.pi)) - np.pi)
-        # costs = th ** 2 + .1 * self.omega ** 2 + .0001 * (self.action ** 2)
-        # reward = -1*costs
-
-        # ENERGY BASED REWARD
         targetEnergy = self.calc_potential_energy(targetTheta)
         currentKineticEnergy = self.calc_kinetic_energy(self.omega)
         currentPotentialEnergy = self.calc_potential_energy(self.theta)
         currentEnergy = currentKineticEnergy + currentPotentialEnergy
-        reward = -1 * (targetEnergy - currentEnergy) * (targetEnergy - currentEnergy)
-
-        # SOME OTHER RANDOM REWARD
-        # if self.theta>0:
-        #     if self.theta-targetTheta>0.1:
-        #         reward = -100
-        #     elif self.theta-targetTheta<-0.1:
-        #         reward = -((np.pi-self.theta)**2)
-        #     else:
-        #         reward = 300
-        # else:
-        #     if self.theta<-targetTheta-0.1:
-        #         reward = -100
-        #     elif self.theta>-targetTheta+0.1:
-        #         reward = -((np.pi+self.theta)**2)
-        #     else:
-        #         reward = 300
+        reward = -0.1 * (targetEnergy - currentEnergy) * (targetEnergy - currentEnergy)
 
         return reward
 
     def reset(self):
         # position at zero, comment out for random under target
-        self.theta = self.target * (2 * np.random.random() - 1)
+        self.theta = -4/180*np.pi # self.target * (2 * np.random.random() - 1)
         # no initial speed (this could be a problem!)
         self.omega = 0  # possible random moving start 2*(2*np.random.random()-1)
-        self.last_action = 0
+        self.last_action = -5
         self.action = 0
         return np.array([np.cos(self.theta), np.sin(self.theta), self.omega, self.last_action])
 
