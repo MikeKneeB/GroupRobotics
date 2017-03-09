@@ -4,9 +4,7 @@ import threading
 
 import math
 
-import 
-
-from MachineLearning.RobotControl import SwingProxy
+import SwingProxy
 
 from naoqi import ALProxy
 
@@ -15,6 +13,10 @@ import numpy as np
 
 #for use with motionProxy kill methods
 def performAction(motionProxy, action):
+
+    #turns np.ndarray into float that naoqi needs
+    action = action[0]
+    action = action[0]
     
     #set direction of motion and make action non-zero
     
@@ -51,14 +53,16 @@ class Controller(threading.Thread):
         self.action = action
     
     def run(self):
+        print "Thread running"
         performAction(self.motionProxy, self.action)
+        print "Thread exiting"
 
 class WebotsEnv:
     
     def __init__(self):
         self.motionProxy = self.getNao()
         self.robotState = -1
-		self.swingProxy = SwingProxy.SwingProxy("127.0.0.1",5005)
+        self.swingProxy = SwingProxy.SwingProxy("127.0.0.1",5005)
         
         #sets up connection to Nao in Webots, returns proxy for motion
     def getNao(self):
@@ -93,7 +97,8 @@ class WebotsEnv:
 
         
     def step(self, action):
-        currentTheta = swingProxy.getUpdate()
+        print "Step Called"
+        currentTheta = self.swingProxy.getUpdate()
         self.motionProxy.killAll()
         control = Controller(1, "Controller", self.motionProxy, action)
         control.start()
@@ -103,21 +108,22 @@ class WebotsEnv:
         #to the action inputted. Whether in this method
         #or somewhere else, who knows.
         time.sleep(0.1)
-        robotState = getRobotState()
-        thetaState = swingProxy.getUpdate()
+        robotState = self.getRobotState()
+        thetaState = self.swingProxy.getUpdate()
         omegaState = thetaState - currentTheta
-        reward = calculateReward(thetaState, omegaState)
+        reward = self.calculateReward(thetaState, omegaState)
         states = np.array([thetaState, omegaState, robotState])
+        print "Step Returning"
         return np.array([thetaState, omegaState, robotState]), reward, False, {} 
 
     def reset(self):
         
         #sleep for a few seconds just to get starting positions
         time.sleep(5)
-        currentTheta = swingProxy.getUpdate()
+        currentTheta = self.swingProxy.getUpdate()
         time.sleep(0.1)
-        robotState = getRobotState()
-        thetaState = swingProxy.getUpdate()
+        robotState = self.getRobotState()
+        thetaState = self.swingProxy.getUpdate()
         omegaState = thetaState - currentTheta
         
         return np.array([thetaState, omegaState, robotState])
