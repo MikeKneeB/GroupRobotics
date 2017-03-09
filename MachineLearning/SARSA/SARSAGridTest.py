@@ -1,13 +1,11 @@
 import gym
 import numpy as np
+import SARSA as s
 
-import ActorCritic as ac
-
-# left, down, right, up Actually no
+# left, down, right, up
 ACTIONS = 4
 
 
-# Get observations of environment after performing an action.
 def get_observations(action, env):
     observations = env.step(action)
     position, reward, done, info = observations
@@ -20,10 +18,9 @@ def reset_environment(env):
     return observations,
 
 
-# Shows the current policy. Not actually sure this works.
 def show_policy(policy):
     current = policy.argmax(1)
-    actions = ["v", ">", "/\\", "<"]
+    actions = ["<", "v", ">", "/\\"]
     out = np.array(np.zeros(16, np.string_))
     for i in range(16):
         out[i] = actions[current[i]]
@@ -34,7 +31,7 @@ def show_policy(policy):
     out[1][3] = "H"
     out[2][3] = "H"
     out[3][0] = "H"
-    print out
+    print (out)
 
 
 def main():
@@ -45,29 +42,34 @@ def main():
     state_dimensions = (16,)
 
     # NB: if temperature_parameter is too low, you will get NaN errors
-    actor_critic = ac.ActorCritic(ACTIONS, state_dimensions, discount=0.9, learning_rate=0.5, temperature_parameter=2)
+    sarsa = s.SARSA(ACTIONS, state_dimensions, discount=0.7, learning_rate=0.9, temperature_parameter=2)
 
     epochs = 10000
     for epoch in range(epochs):
         # reset environment and extract initial state
         state = reset_environment(env)
+        action = 0
 
         reward = 0
         done = False
         while not done:
-            action = actor_critic.get_next_action(state)
+            new_action = sarsa.get_next_action(state)
 
             # perform action on environment
-            new_state, reward, done = get_observations(action, env)
+            new_state, reward, done = get_observations(new_action, env)
 
-            # critique the quality of the action
-            actor_critic.critique(state, action, new_state, reward)
+            if reward == 0:
+                sarsa.update_Policy(state, action, new_state, new_action, reward)
+
+            if reward==1 :
+                sarsa.update_Policy(state, action, new_state, new_action, reward)
 
             state = new_state
+            action = new_action
         f.write('{}\t{}\n'.format(epoch, reward))
         print("Epoch: ", epoch, "  Reward: ", reward)
     f.close()
-    show_policy(actor_critic.actor.policy)
+    #show_policy(sarsa.policy)
 
 
 if __name__ == '__main__':

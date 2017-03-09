@@ -1,88 +1,86 @@
-import random
-
 import gym
 import numpy as np
 
-import time
-
 import ActorCritic as ac
 
+np.seterr(all='raise')  # If numpy encounters a NaN or something, want it to raise exceptions
+
 # global variables
-THETAS = 20
+X = 9
+Y = 9
 OMEGAS = 17
 ACTIONS = 9
 
 
+# Rescale observations so they are integers from 0
 def rescale(observations):
-    x, y, omega_raw = observations
-    theta_raw = np.arctan(x / y)
-    theta = int(round((theta_raw + np.pi) * THETAS / (2 * np.pi)))
-    if theta == THETAS:
-        theta = 0
+    x_raw, y_raw, omega_raw = observations
+    x = int(round((x_raw + 1) * (X - 1) / 2))
+    y = int(round((y_raw + 1) * (Y - 1) / 2))
     omega = int(round(omega_raw + 8) * (OMEGAS - 1) / 16)
-    return theta, omega
+    return x, y, omega
 
 
+# From an integer action, get the corresponding pendulum torque
 def torque_from(action):
-    return np.array((action * 4.0 / ACTIONS - 2,))
+    return np.array((action * 4.0 / (ACTIONS - 1) - 2,))
 
 
+# From an integer action, get the corresponding pendulum torque
 def get_observations(torque, env):
     observations = env.step(torque)
     positions, reward, failed, info = observations
-    theta, omega = rescale(positions)
+    x, y, omega = rescale(positions)
+    return (x, y, omega), reward
 
-    return (theta, omega), reward
 
-
-# resets enviroment to random position and returns the initial position and velocity
-def reset_enviroment(env):
+# resets environment to random position and returns the initial position and velocity
+def reset_environment(env):
     observations = env.reset()
-    theta, omega = rescale(observations)
-    return theta, omega
+    x, y, omega = rescale(observations)
+    return x, y, omega
 
 
 def main():
     env = gym.make('Pendulum-v0')
     env.reset()
+
     f = open('gym.txt', 'w')
-
-    # (positions, velocities)
-    state_dimensions = (THETAS, OMEGAS)
-
-    discount = 0.8
-
-    actor = ac.ActorCritic(ACTIONS, state_dimensions, discount, value_learning_rate=0.5, policy_update_rate=0.1)
-
     f.write('epoch\treward\n')
-    epochs = 10000
-    exploration = epochs / 2
-    display = 9 * epochs / 10
+
+    # (x position, y position, velocity)
+    state_dimensions = (X, Y, OMEGAS)
+
+    # If temperature_parameter is too low, you will get NaN errors
+    actor_critic = ac.ActorCritic(ACTIONS, state_dimensions, discount=0.95, learning_rate=0.5, temperature_parameter=10)
+
+    epochs = 100
+    display = 0  # epoch after which environment renders
     for epoch in range(epochs):
+        print(epoch)
+
         # reset environment and extract initial state
-        state = reset_enviroment(env)
-        cumulativeReward = 0
-        print epoch
+        state = reset_environment(env)
+
+        cumulative_reward = 0
         for step in range(300):
-            if epoch > exploration:
-                action = actor.get_next_action(state)
-            else:
-                action = random.randint(0, ACTIONS-1)
-            torque = torque_from(action)
+
+            action = actor_critic.get_next_action(state)
 
             # perform action on environment
+            torque = torque_from(action)
             new_state, reward = get_observations(torque, env)
-            cumulativeReward += reward
 
             # critique the quality of the action
-            actor.critique(state, action, new_state, reward)
+            actor_critic.critique(state, action, new_state, reward)
+
+            cumulative_reward += reward
             state = new_state
 
-            # print display, ",", epochs
-            # if epoch > display:
-            #     env.render()
+            if epoch > display:
+                env.render()
 
-        f.write('{}\t{}\n'.format(epoch, cumulativeReward))
+        f.write('{}\t{}\n'.format(epoch, cumulative_reward))
     f.close()
 
 
