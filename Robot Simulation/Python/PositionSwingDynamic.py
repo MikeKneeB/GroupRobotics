@@ -18,7 +18,9 @@ def Main():
 
     #Natural period of the virtual swing
     period = 3.27
-
+    #Delay after period/4 to swing
+    #Negative if before period/4
+    delay = -0.1
     #Natural period of the real swing
     #period = 2.561
 
@@ -30,6 +32,9 @@ def Main():
     toMove = False
     #Start time of simulation
     startSim = time.time()
+    #Variables to calculate period
+    skip = True
+    periodStart = startSim
 
     #Loop
     while True:
@@ -42,8 +47,15 @@ def Main():
             #Set time passed bottom of swing
             start = time.time()
             toMove = True
+            #Calculate period
+            if skip:
+                skip = False
+            elif not skip:
+                period = time.time()-periodStart
+                periodStart = start
+                skip = True
         #Change position at estimated top of swing and if not in correct pos
-        if (time.time()-start) > (period/4) and toMove:
+        if (time.time()-start) > (period/4)+delay and toMove:
             #Decide which position to switch to
             if angle > 0:
                 SwingAPI.position1Dynamic(motionProxy,0.75)
