@@ -2,12 +2,12 @@ import numpy as np
 
 class SARSA:
     def __init__(self, number_of_actions, state_dimensions, discount, learning_rate, policy_update_rate):
-        self.numberOfActions = number_of_actions
-        self.stateDimensions = state_dimensions
-        self.QDimensions = state_dimensions + number_of_actions
+        self.numberOfActions = number_of_actions                    #takes tuple as argument
+        self.stateDimensions = state_dimensions                     #takes tuple as argument
+        self.QDimensions = state_dimensions + number_of_actions     #added tuples create an array
         self.discount = discount
         self.learningRate = learning_rate
-        self.policy = np.ones(self.QDimensions)/number_of_actions
+        #self.policy = np.ones(self.QDimensions)/number_of_actions
         self.QValues = np.zeros(self.QDimensions)
 
 
@@ -20,12 +20,18 @@ class SARSA:
         probabilities = softmax(state_td_errors)
         self.policy[state] = probabilities"""
 
-    def update_policy(self, state, action):
-        self.QValues[state, action] = self.QValues[state, action] + self.learningRate * ()
+    def update_Q(self, state, action, new_state, new_action, reward):
+        #updates Q value for a given state-action transition
+        self.QValues[state, action] = self.QValues[state, action] + self.learningRate * (reward + self.discount * self.QValues[new_state, new_action] - self.QValues[state, action])
+
+
 
     def get_next_action(self, state):
-        probabilities = self.policy[state]
-        return np.random.choice(self.number_of_actions, p=probabilities)
+        """probabilities = self.policy[state]
+        return np.random.choice(self.number_of_actions, p=probabilities)"""
+
+
+
 
 
 def softmax(state_q_values):
