@@ -1,8 +1,5 @@
-import random
-
 import gym
 import numpy as np
-
 import SARSA as s
 
 # left, down, right, up
@@ -15,8 +12,8 @@ def get_observations(action, env):
     return (position,), reward, done
 
 
-# resets enviroment to random position and returns the initial position and velocity
-def reset_enviroment(env):
+# resets environment to random position and returns the initial position and velocity
+def reset_environment(env):
     observations = env.reset()
     return observations,
 
@@ -38,53 +35,41 @@ def show_policy(policy):
 
 
 def main():
-    env = gym.make('FrozenLake-v0')
     f = open('grid_test.txt', 'w')
+    f.write('epoch\treward\n')
 
-    # (positions, velocities)
+    env = gym.make('FrozenLake-v0')
     state_dimensions = (16,)
 
-    discount = 0.7
-    learning_rate = 0.4
-    policy_update_rate = 0.5
+    # NB: if temperature_parameter is too low, you will get NaN errors
+    sarsa = s.SARSA(ACTIONS, state_dimensions, discount=0.7, learning_rate=0.9, temperature_parameter=2)
 
-    #replace with SARSA equiv
-    #actor_critic = ac.ActorCritic(ACTIONS, state_dimensions, discount, learning_rate, policy_update_rate)
-
-    f.write('epoch\treward\n')
-    epochs = 100000
-    explore = epochs / 2
+    epochs = 10000
     for epoch in range(epochs):
         # reset environment and extract initial state
-        state = reset_enviroment(env)
-        done = False
+        state = reset_environment(env)
+        action = 0
+
         reward = 0
+        done = False
         while not done:
-            if epoch > explore:
-                #replace with SARSA equiv
-                #action = actor_critic.get_next_action(state)
-            else:
-                action = random.randint(0, 3)
+            new_action = sarsa.get_next_action(state)
 
             # perform action on environment
-            new_state, reward, done = get_observations(action, env)
+            new_state, reward, done = get_observations(new_action, env)
 
-            # critique the quality of the action
-            #replace with SARSA equiv
-            #actor_critic.critique(state, action, new_state, reward)
+            if reward == 0:
+                sarsa.update_Policy(state, action, new_state, new_action, reward)
+
+            if reward==1 :
+                sarsa.update_Policy(state, action, new_state, new_action, reward)
+
             state = new_state
-
-            # print display, ",", epochs
-            #env.render()
-            #print "\n"
-
+            action = new_action
         f.write('{}\t{}\n'.format(epoch, reward))
-        print("Epoch: ", epoch, "\t Reward: ", reward, "\t Exploring: ", epoch < explore)
-        # if epoch > 39000:
-        #     time.sleep(1)
-        #     print "########"
-        #     show_policy(actor.actor.policy)
+        print("Epoch: ", epoch, "  Reward: ", reward)
     f.close()
+    #show_policy(sarsa.policy)
 
 
 if __name__ == '__main__':
