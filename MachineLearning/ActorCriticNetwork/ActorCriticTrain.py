@@ -53,7 +53,10 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
     filepath = '{}:{}_{}-{}-{}_{}.dat'.format(now.hour, now.minute, now.day, now.month, now.year, envname)
 
     #if epsilon is None and type(max_action) is list:
-    epsilon = 2*max_action[0]
+    try:
+        epsilon = 2*max_action[0]
+    except TypeError:
+        epsilon = 2*max_action
     #elif epsilon is None:
     #    epsilon = 2*max_action
 
@@ -66,6 +69,10 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
 
         # Initialise global variables for tensorflow session.
         sess.run(tf.global_variables_initializer())
+
+        est_time_1 = 0
+        est_time_2 = 0
+        est_time = 0
 
         # Initialise target networks.
         actor_model.update_target_network()
@@ -85,6 +92,8 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
 
             # reward_total for output.
             reward_total = 0
+
+            est_time_1 = time.time()
 
             # UNCOMMENT FOR GIFS - if you have byzanz installed.
             # if epo == 10 or epo == 50 or epo == 100 or epo == 150 or epo == 200 or epo == 250 or epo == 300:
@@ -112,7 +121,7 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
                 else:
                     action = action + random.uniform(-noise_r, noise_r)
 
-                print('Act val: {} [{}, {}, {}]'.format(action, epo, j, epsilon))
+                print('Act val: {} [{}, {}, {}] EST TIME: {}:{}:{}'.format(action, epo, j, epsilon, est_time.tm_hour, est_time.tm_min, est_time.tm_sec))
 
                 # Perform action.
                 obs_2, reward, d, i = env.step(action)
@@ -183,6 +192,10 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
                     continue
 
             print('Reward earned: {}'.format(reward_total))
+
+            est_time_2 = time.time()
+
+            est_time = time.localtime(est_time_2 - est_time_1)
 
             if len(running_reward) > 20:
                 del running_reward[0]
