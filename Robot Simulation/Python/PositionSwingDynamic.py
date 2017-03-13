@@ -5,7 +5,7 @@ from naoqi import ALProxy
 
 def Main():
     #Open file for data
-    f = open("PositionSwing.txt","w")
+    f = open("PositionSwingDynamic.txt","w")
 
     #Address of Robot and Swing
     IP = "127.0.0.1"
@@ -35,6 +35,7 @@ def Main():
     #Variables to calculate period
     skip = True
     periodStart = startSim
+    count = 1
 
     #Loop
     while True:
@@ -51,7 +52,8 @@ def Main():
             if skip:
                 skip = False
             elif not skip:
-                period = time.time()-periodStart
+                count+=1
+                period = ((time.time()-periodStart)+(period*(count-1)))/count
                 periodStart = start
                 skip = True
         #Change position at estimated top of swing and if not in correct pos

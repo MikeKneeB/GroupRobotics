@@ -58,6 +58,7 @@ DEF Swing Robot {
             axis 0 0 1
             minStop -3
             maxStop 3
+            dampingConstant 0.002215
           }
           device [
             PositionSensor {
@@ -151,6 +152,7 @@ DEF Swing Robot {
             anchor 0 0 1
             minStop -3
             maxStop 3
+            dampingConstant 0.002215
           }
           endPoint Solid {
             translation 2.86235e-09 -0.9075 0
