@@ -49,9 +49,9 @@ def main():
         # reset environment and extract initial state
         state = reset_environment(env)
         action = 0
-
         reward = 0
         done = False
+
         while not done:
             new_action = sarsa.get_next_action(state)
 
