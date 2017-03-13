@@ -54,8 +54,8 @@ def main():
     # If temperature_parameter is too low, you will get NaN errors
     actor_critic = ac.ActorCritic(ACTIONS, state_dimensions, discount=0.95, learning_rate=0.5, temperature_parameter=10)
 
-    epochs = 100
-    display = 0  # epoch after which environment renders
+    epochs = 300
+    display = 250  # epoch after which environment renders
     for epoch in range(epochs):
         print(epoch)
 

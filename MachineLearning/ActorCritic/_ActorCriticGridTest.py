@@ -1,9 +1,7 @@
 import gym
-import numpy as np
 
 import ActorCritic as ac
 
-# left, down, right, up Actually no
 ACTIONS = 4
 
 
@@ -18,23 +16,6 @@ def get_observations(action, env):
 def reset_environment(env):
     observations = env.reset()
     return observations,
-
-
-# Shows the current policy. Not actually sure this works.
-def show_policy(policy):
-    current = policy.argmax(1)
-    actions = ["v", ">", "/\\", "<"]
-    out = np.array(np.zeros(16, np.string_))
-    for i in range(16):
-        out[i] = actions[current[i]]
-    out = out.reshape((4, 4))
-    out[0][0] = "S"
-    out[3][3] = "G"
-    out[1][1] = "H"
-    out[1][3] = "H"
-    out[2][3] = "H"
-    out[3][0] = "H"
-    print out
 
 
 def main():
@@ -67,7 +48,6 @@ def main():
         f.write('{}\t{}\n'.format(epoch, reward))
         print("Epoch: ", epoch, "  Reward: ", reward)
     f.close()
-    show_policy(actor_critic.actor.policy)
 
 
 if __name__ == '__main__':
