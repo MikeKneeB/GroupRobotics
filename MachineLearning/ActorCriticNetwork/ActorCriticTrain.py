@@ -72,7 +72,7 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
 
         est_time_1 = 0
         est_time_2 = 0
-        est_time = 0
+        est_time = time.localtime(0)
 
         # Initialise target networks.
         actor_model.update_target_network()
@@ -93,8 +93,6 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
             # reward_total for output.
             reward_total = 0
 
-            est_time_1 = time.time()
-
             # UNCOMMENT FOR GIFS - if you have byzanz installed.
             # if epo == 10 or epo == 50 or epo == 100 or epo == 150 or epo == 200 or epo == 250 or epo == 300:
             #     subprocess.Popen(['byzanz-record', '-x', '0', '-y', '50', '-w', '500', '-h', '500', '-d', '10', 'run_{}.gif'.format(epo)])
@@ -105,6 +103,8 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
                     env.render()
 
                 print('Obs: {}'.format(obs_1.reshape(1, state_dim)))
+
+                est_time_1 = time.time()
 
                 # Calculate noise amount, set to half epsilon.
                 noise_r = epsilon/2.
@@ -195,7 +195,7 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
 
             est_time_2 = time.time()
 
-            est_time = time.localtime(est_time_2 - est_time_1)
+            est_time = (est_time_2 - est_time_1)*(run_length - j)
 
             if len(running_reward) > 20:
                 del running_reward[0]
