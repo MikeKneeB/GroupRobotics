@@ -3,7 +3,7 @@ import numpy as np
 class SARSA:
     def __init__(self, number_of_actions, state_dimensions, discount, learning_rate, temperature_parameter):
         self.numberOfActions = number_of_actions                    #takes tuple as argument
-        self.stateDimensions = state_dimensions                     #takes tuple as argument
+        self.stateDimensions = state_dimensions                     #integer to be cast as tuple
         self.QDimensions = state_dimensions + (number_of_actions,)     #added tuples create an array
         self.discount = discount
         self.learningRate = learning_rate
@@ -12,19 +12,11 @@ class SARSA:
         self.temperatureParameter = temperature_parameter
 
 
-    """def update_policy(self, state, action, td_error):
-        # update TD error of action in state
-        self.td_errors[state + (action,)] += self.policy_update_rate * td_error
-
-        # recalculate policy probabilities
-        state_td_errors = self.td_errors[state]
-        probabilities = softmax(state_td_errors)
-        self.policy[state] = probabilities"""
-
     def update_Policy(self, state, action, new_state, new_action, reward):
         #updates Q value for a given state-action transition
         #make this easier to read
-        self.QValues[state, action] = self.QValues[state, action] + self.learningRate * (reward + self.discount * self.QValues[new_state, new_action] - self.QValues[state, action])
+        difference = reward + self.discount * self.QValues[new_state, new_action] - self.QValues[state, action]
+        self.QValues[state, action] += self.learningRate * difference
 
         self.policy[state]= softmax(self.QValues[state], self.temperatureParameter)
 
