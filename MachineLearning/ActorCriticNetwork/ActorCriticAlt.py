@@ -38,3 +38,5 @@ if __name__ == '__main__':
         # Train.
         ACT.train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action, epochs=300, run_length=200, decay=0.98,
         render=True, envname='dumbell', obsComp=dumbellObsComp, rewComp=dumbellRewComp)
+
+        ACT.test(sess, actor_model, critic_model, env, state_dim, action_dim, epochs=1, run_length=200, obsComp=dumbellObsComp, rewComp=dumbellRewComp, filename='dumbell_out.dat')
