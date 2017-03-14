@@ -15,8 +15,10 @@ class SARSA:
     def update_Policy(self, state, action, new_state, new_action, reward):
         #updates Q value for a given state-action transition
         #make this easier to read
-        difference = reward + self.discount * self.QValues[new_state, new_action] - self.QValues[state, action]
-        self.QValues[state, action] += self.learningRate * difference
+        state_action = state + (action,)
+        new_state_action = new_state + (new_action,)
+        difference = reward + self.discount * self.QValues[new_state_action] - self.QValues[state_action]
+        self.QValues[state_action] += self.learningRate * difference
 
         self.policy[state]= softmax(self.QValues[state], self.temperatureParameter)
 
