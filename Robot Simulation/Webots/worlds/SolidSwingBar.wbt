@@ -1,4 +1,4 @@
-#VRML_SIM V8.2.1 utf8
+#VRML_SIM V8.5 utf8
 WorldInfo {
   info [
     "Aldebaran's Nao H25 V5.0"
@@ -20,8 +20,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.0223466 0.993147 0.114718 3.52379
-  position -0.960496 0.861015 -2.25864
+  orientation 0.022346594 0.99314672 0.11471797 3.52379
+  position -1.325958 1.0889925 -3.1611165
 }
 TexturedBackground {
 }
@@ -36,18 +36,17 @@ Floor {
   size 25 25
   tileSize 0.8 0.8
   texture [
-    "textures/checkered_marble.png"
     "textures/checkered_marble.jpg"
   ]
 }
 Nao {
   translation 0.0935363 0.48511 0.00318779
-  rotation -0.377964 -0.654655 -0.654653 3.86433
+  rotation -0.3779639 -0.65465484 -0.65465284 3.86433
   controller "naoqisim"
   controllerArgs "9559"
   synchronization FALSE
 }
-DEF Swing Robot {
+DEF Swing Supervisor {
   translation 0 2.2 0
   children [
     DEF RArm Transform {
@@ -194,5 +193,5 @@ DEF Swing Robot {
   ]
   name "Swing"
   boundingObject USE Top_Bar_Geometry
-  controller "SwingController"
+  controller "SwingSupervisorController"
 }

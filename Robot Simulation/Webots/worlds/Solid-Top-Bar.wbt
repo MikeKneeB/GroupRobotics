@@ -1,4 +1,4 @@
-#VRML_SIM V8.2.1 utf8
+#VRML_SIM V8.5 utf8
 WorldInfo {
   info [
     "Aldebaran's Nao H25 V5.0"
@@ -36,13 +36,12 @@ Floor {
   size 25 25
   tileSize 0.8 0.8
   texture [
-    "textures/checkered_marble.png"
     "textures/checkered_marble.jpg"
   ]
 }
 Nao {
   translation 0.911883 0.762526 0.00318784
-  rotation 0.186156 0.694748 0.694745 2.77349
+  rotation 0.18615605 0.69474819 0.69474519 2.77349
   controller "naoqisim"
   controllerArgs "9559"
   synchronization FALSE
@@ -59,6 +58,7 @@ DEF Swing Robot {
             axis 0 0 1
             minStop -3
             maxStop 3
+            dampingConstant 0.002215
           }
           device [
             PositionSensor {
@@ -153,6 +153,7 @@ DEF Swing Robot {
             anchor 0 0 1
             minStop -3
             maxStop 3
+            dampingConstant 0.002215
           }
           endPoint Solid {
             translation 0.435079 -0.796406 1.89085e-16

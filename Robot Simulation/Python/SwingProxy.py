@@ -8,16 +8,27 @@ class SwingProxy:
         self.s.connect((TCP_IP, TCP_PORT))
 
     def get_angle(self):
-        #Pack request
-        values = (1)
-        packer = struct.Struct('I')
-        packed = packer.pack(values)
-        self.s.send(packed)
-
+        #Send request
+        try:
+            self.s.send("update")
+        except socket.error, e:
+            print "Disconnected from swing"
+            return 999
         #Unpack reply
-        rec = self.s.recv(self.BUFFER_SIZE)
-        unpacker = struct.Struct('f')
-        return unpacker.unpack(rec)[0]
+        try:
+            rec = self.s.recv(self.BUFFER_SIZE)
+            unpacker = struct.Struct('f')
+            return unpacker.unpack(rec)[0]
+        except socket.error, e:
+            print "Disconnected from swing"
+            return 999
+
+    def revert_world(self):
+        # Send request
+        try:
+            self.s.send("revert")
+        except socket.error, e:
+            print "Could not revert world"
 
     def closeConnection(self):
         self.s.close()
