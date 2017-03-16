@@ -1,4 +1,13 @@
-# https://gym.openai.com/evaluations/eval_n7JgacQRiK3MMrWFnaz6g
+"""
+ Author: Mike Knee
+
+This is the main DDPG training loop, using the network data structures in
+actor.py and critic.py. It is based heavily on code written by Patrick Emami
+and Bart Keulen, which can be found at:
+http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html
+https://gym.openai.com/evaluations/eval_n7JgacQRiK3MMrWFnaz6g
+respectively.
+"""
 
 import tensorflow as tf
 import tflearn
@@ -281,6 +290,10 @@ i: column index.
 def column(matrix, i):
     return [row[i] for row in matrix]
 
+"""
+Main procedure, for when this file is run as the main module. Applies the train
+method to the openai pendulum environment.
+"""
 if __name__ == '__main__':
     with tf.Session() as sess:
         # Make our environment.
@@ -300,7 +313,7 @@ if __name__ == '__main__':
 
         # Train.
         train(sess, actor_model, critic_model, env, state_dim, action_dim,
-        max_action, epochs=1, run_length=200, render=True, envname='pendulum', decay=0.98)
+        max_action, epochs=300, run_length=200, render=True, envname='pendulum', decay=0.98)
 
         raw_input('Training complete, press enter to continue to test.')
 
