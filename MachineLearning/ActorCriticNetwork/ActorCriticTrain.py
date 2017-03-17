@@ -318,4 +318,4 @@ if __name__ == '__main__':
         raw_input('Training complete, press enter to continue to test.')
 
         # Test.
-        test(sess, actor_model, critic_model, env, state_dim, action_dim, epochs=10, run_length=300)
+        test(sess, actor_model, critic_model, env, state_dim, action_dim, epochs=10, run_length=300, filename='out.dat')
