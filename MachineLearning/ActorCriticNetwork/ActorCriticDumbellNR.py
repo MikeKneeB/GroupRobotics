@@ -58,4 +58,4 @@ if __name__ == '__main__':
         ACT.train(sess, actor_model, critic_model, env, state_dim, action_dim, max_action, epochs=200, run_length=500, decay=0.98,
         render=False, buffer=10000, envname='dumbell_nr', obsComp=dumbellObsComp, rewComp=dumbellRewComp)
 
-        ACT.test(sess, actor_model, critic_model, env, state_dim, action_dim, epochs=1, run_length = 500, obsComp=dumbellObsComp, rewComp=dumbellRewComp, filename='out.dat')
+        ACT.test(sess, actor_model, critic_model, env, state_dim, action_dim, epochs=1, run_length = 500, obsComp=dumbellObsComp, rewComp=dumbellRewComp, filename='out_1.dat')
