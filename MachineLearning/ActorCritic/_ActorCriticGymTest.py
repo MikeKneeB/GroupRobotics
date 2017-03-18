@@ -1,3 +1,10 @@
+"""
+Author: Harry Shaw
+Date: 18/03/17
+
+Test of actor-critic on inverted pendulum model
+"""
+
 import gym
 import numpy as np
 

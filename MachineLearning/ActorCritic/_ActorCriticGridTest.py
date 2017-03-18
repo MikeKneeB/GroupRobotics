@@ -1,3 +1,10 @@
+"""
+Author: Harry Shaw
+Date: 18/03/17
+
+Test of actor-critic on frozen lake environment
+"""
+
 import gym
 
 import ActorCritic as ac

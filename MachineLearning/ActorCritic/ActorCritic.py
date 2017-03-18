@@ -1,12 +1,17 @@
+"""
+Author: Harry Shaw
+Date: 18/03/17
+
+Complete actor-critic learning system. To use, simply call getNextAction, perform the action and move into the next
+state, then use "critique"
+"""
+
 from _Actor import Actor
 from _Critic import Critic
 
 
 class ActorCritic:
     def __init__(self, number_of_actions, state_dimensions, discount, learning_rate, temperature_parameter):
-        """
-        Call getNextAction -> perform that action -> call critique
-        """
         self.numberOfActions = number_of_actions
         self.actor = Actor(number_of_actions, state_dimensions, temperature_parameter)
         self.critic = Critic(state_dimensions, discount=discount, value_learning_rate=learning_rate)
