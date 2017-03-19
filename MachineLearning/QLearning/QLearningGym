@@ -1,0 +1,54 @@
+import gym
+import random
+import QLearning as QL
+import math
+
+def main():
+    env = gym.make('Pendulum-v0')
+    env.reset()
+
+    f = open('gym.txt', 'w')
+    f.write('epoch\treward\n')
+
+    q_learning = QL.QLearning(5.18, 1.82, 501, 0.5, 0.9)
+
+    epochs = 300
+    display = 250  # epoch after which environment renders
+
+    for epoch in range(epochs):
+        print(epoch)
+
+        # create a random initial state
+        state = random.random() * q_learning.numpositions * q_learning.onepos - q_learning.maxpos
+        while (state < 0.1 or state >= q_learning.maxpos or state <= q_learning.minpos):
+            state = random.random() * q_learning.numpositions * q_learning.onepos - q_learning.maxpos
+
+        cumulative_reward = 0
+
+        for step in range(300):
+
+            posindex = q_learning.index_of_state(state)
+            action = q_learning.best_action(posindex)
+            actionpos = q_learning.best_action_position(posindex)
+
+            # perform action on environment
+            newposition = q_learning.perform_action(state, actionpos, action)
+
+            # position is circular and so the pendulum may have gone past the min/max
+            while (newposition > q_learning.maxpos):
+                newposition -= math.pi*2
+            while (newposition < q_learning.minpos):
+                newposition += math.pi*2
+
+            reward = q_learning.reward(state, newposition)
+
+            cumulative_reward += reward
+            state = newposition
+
+            if epoch > display:
+                env.render()
+
+        f.write('{}\t{}\n'.format(epoch, cumulative_reward))
+    f.close()
+
+main()

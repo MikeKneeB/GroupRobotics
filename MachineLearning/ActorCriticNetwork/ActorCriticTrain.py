@@ -1,4 +1,13 @@
-# https://gym.openai.com/evaluations/eval_n7JgacQRiK3MMrWFnaz6g
+"""
+ Author: Mike Knee
+
+This is the main DDPG training loop, using the network data structures in
+actor.py and critic.py. It is based heavily on code written by Patrick Emami
+and Bart Keulen, which can be found at:
+http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html
+https://gym.openai.com/evaluations/eval_n7JgacQRiK3MMrWFnaz6g
+respectively.
+"""
 
 import tensorflow as tf
 import tflearn
@@ -70,10 +79,6 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
         # Initialise global variables for tensorflow session.
         sess.run(tf.global_variables_initializer())
 
-        est_time_1 = 0
-        est_time_2 = 0
-        est_time = time.localtime(0)
-
         # Initialise target networks.
         actor_model.update_target_network()
         critic_model.update_target_network()
@@ -121,7 +126,7 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
                 else:
                     action = action + random.uniform(-noise_r, noise_r)
 
-                print('Act val: {} [{}, {}, {}] EST TIME: {}:{}:{}'.format(action, epo, j, epsilon, est_time.tm_hour, est_time.tm_min, est_time.tm_sec))
+                print('Act val: {} [{}, {}, {}]'.format(action, epo, j, epsilon))
 
                 # Perform action.
                 obs_2, reward, d, i = env.step(action)
@@ -181,8 +186,6 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
                 # Move to the next state!
                 obs_1 = obs_2[:]
 
-
-
                 # For output info.
                 reward_total += reward
 
@@ -192,10 +195,6 @@ def train(sess, actor_model, critic_model, env, state_dim, action_dim, max_actio
                     continue
 
             print('Reward earned: {}'.format(reward_total))
-
-            est_time_2 = time.time()
-
-            est_time = (est_time_2 - est_time_1)*(run_length - j)
 
             if len(running_reward) > 20:
                 del running_reward[0]
@@ -232,7 +231,11 @@ rewComp: optional reward comprehension function.
 """
 def test(sess, actor_model, critic_model, env, state_dim, action_dim,
         epochs = 1000, run_length = 300,
-        obsComp=None, rewComp=None):
+        obsComp=None, rewComp=None, filename='output'):
+
+    obs_store = []
+    action_store = []
+
     for epo in range(epochs+1):
         print('Game: %s' % epo)
 
@@ -240,9 +243,6 @@ def test(sess, actor_model, critic_model, env, state_dim, action_dim,
         obs_1 = env.reset()
         if obsComp is not None:
             obs_1 = obsComp(obs_1)
-
-        # Not strictly necessary...
-        reward_total = 0
 
         for j in range(run_length):
             # Always draw in test mode.
@@ -252,6 +252,13 @@ def test(sess, actor_model, critic_model, env, state_dim, action_dim,
 
             # Get action, do not add noise.
             action = actor_model.predict(obs_1.reshape(1, state_dim))
+
+            if epo == 0:
+                obs_store.append([obs_1[0].item(), obs_1[1].item(), obs_1[2].item()])
+                action_store.append(action[0][0])
+            # else:
+            #     obs_store[j] = [(x + y) for x, y in zip(obs_store[j], [obs_1[0].item(), obs_1[1].item(), obs_1[2].item()])]
+            #     action_store[j] += action[0][0]
 
             print('Act val: {} [{}, {}]'.format(action, epo, j))
 
@@ -265,15 +272,13 @@ def test(sess, actor_model, critic_model, env, state_dim, action_dim,
             # Move to our new state.
             obs_1 = obs_2[:]
 
-            # Why is this even here?
-            reward_total += reward
-
             if d:
                 continue
 
-        print('Reward earned: {}'.format(reward_total))
+    with open(filename, 'w') as f:
+        for i, item in enumerate(obs_store):
+            f.write('{:<10d}{:<15f}{:<15f}{:<15f}{:<15f}\n'.format(i, item[0], item[1], item[2], action_store[i]))
 
-    # HEHEHHEHEHE
     return 0
 
 """
@@ -285,6 +290,10 @@ i: column index.
 def column(matrix, i):
     return [row[i] for row in matrix]
 
+"""
+Main procedure, for when this file is run as the main module. Applies the train
+method to the openai pendulum environment.
+"""
 if __name__ == '__main__':
     with tf.Session() as sess:
         # Make our environment.
@@ -309,4 +318,4 @@ if __name__ == '__main__':
         raw_input('Training complete, press enter to continue to test.')
 
         # Test.
-        test(sess, actor_model, critic_model, env, state_dim, action_dim, epochs=10, run_length=300)
+        test(sess, actor_model, critic_model, env, state_dim, action_dim, epochs=10, run_length=300, filename='out.dat')
