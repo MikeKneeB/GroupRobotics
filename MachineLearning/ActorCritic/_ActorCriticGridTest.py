@@ -29,6 +29,7 @@ def main():
     f = open('grid_test.txt', 'w')
     f.write('epoch\treward\n')
 
+    # outputs epoch and cumulative reward gained during an epoch
     env = gym.make('FrozenLake-v0')
     state_dimensions = (16,)
 

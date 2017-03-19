@@ -10,9 +10,11 @@ class Actor:
     def __init__(self, number_of_actions, state_dimensions, temperature_parameter):
         self.number_of_actions = number_of_actions
         policy_dimensions = state_dimensions + (number_of_actions,)
-        self.td_errors = np.zeros(policy_dimensions)
+
+        self.td_errors = np.zeros(policy_dimensions)  # stores the cumulative TD errors for each state-action
+
         self.temperature_parameter = temperature_parameter
-        self.policy = np.ones(policy_dimensions)/number_of_actions
+        self.policy = np.ones(policy_dimensions)/number_of_actions  # stores the policy for each state
 
     def update_policy(self, state, action, td_error):
         # update cumulative TD error of action in state

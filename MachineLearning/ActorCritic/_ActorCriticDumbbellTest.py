@@ -65,6 +65,7 @@ def main():
         env.reset()
         filename = 'dblol{}.txt'.format(discount)
 
+        # outputs epoch and cumulative reward gained during an epoch
         f = open(filename, 'w')
         env.reset()
 

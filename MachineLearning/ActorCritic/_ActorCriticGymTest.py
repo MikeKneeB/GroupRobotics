@@ -52,6 +52,7 @@ def main():
     env = gym.make('Pendulum-v0')
     env.reset()
 
+    # outputs epoch and cumulative reward gained during an epoch
     f = open('gym.txt', 'w')
     f.write('epoch\treward\n')
 
