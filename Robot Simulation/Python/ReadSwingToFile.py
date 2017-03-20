@@ -7,11 +7,11 @@ def Main():
     SWING_PORT = 5005
     swingProxy = SwingProxy.SwingProxy(IP,SWING_PORT)
     #Open file
-    f = open("Swing.txt","w")
+    f = open("TimeSwing.txt","w")
     #Count for loop and start time for time elapsed
     count = 0
     start = time.time()
-    while count < 1000:
+    while count < 10000:
         timeElaps = time.time()-start
         angle = swingProxy.get_angle()
 

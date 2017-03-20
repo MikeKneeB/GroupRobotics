@@ -52,8 +52,10 @@ def Main():
             if skip:
                 skip = False
             elif not skip:
-                count+=1
-                period = ((time.time()-periodStart)+(period*(count-1)))/count
+                count += 1
+                temp = time.time()-periodStart
+                print temp
+                period = ((temp)+(period*(count-1)))/count
                 periodStart = start
                 skip = True
         #Change position at estimated top of swing and if not in correct pos
