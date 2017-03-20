@@ -4,15 +4,15 @@ import SwingAPI
 from naoqi import ALProxy
 
 def smoothPeriodic(motionProxy,period,numSwings):
-    print numSwings
     i = 0
     #Setup timing
-    numSteps=1000
+    numSteps=100
     restInt=float(period)/float(numSteps)
     #Limb and angle setup
     limbs=["Head","RLeg","LLeg"]
     angleNames=["HeadPitch","RHipPitch","LHipPitch","RKneePitch","LKneePitch"]
     while i < numSwings:
+        print i
         t = 0
         while t < period:
             x = 2*math.pi*t/period
@@ -36,6 +36,6 @@ def Main():
     robotIP="127.0.0.1"
     PORT=9559
     motionProxy=ALProxy("ALMotion",robotIP,PORT)
-    smoothPeriodic(motionProxy,2.57,12)
+    smoothPeriodic(motionProxy,2.57,60)
 
 Main()
