@@ -13,7 +13,6 @@ def smoothPeriodic(motionProxy,period,numSwings):
     limbs=["Head","RLeg","LLeg"]
     angleNames=["HeadPitch","RHipPitch","LHipPitch","RKneePitch","LKneePitch"]
     while i < numSwings:
-        print i
         t = 0
         while t < period:
             x = 2*math.pi*t/period
@@ -24,7 +23,6 @@ def smoothPeriodic(motionProxy,period,numSwings):
             SwingAPI.moveLimbs(motionProxy, limbs, angleNames, angles, 0.75, restInt)
             t += restInt
         i += 1
-    print "here"
 def stepPeriodic(motionProxy,period,numSwings):
     restInt=float(period)/2.0
     for x in range(0,numSwings):
@@ -38,6 +36,6 @@ def Main():
     robotIP="127.0.0.1"
     PORT=9559
     motionProxy=ALProxy("ALMotion",robotIP,PORT)
-    smoothPeriodic(motionProxy,2.57,25)
+    smoothPeriodic(motionProxy,2.57,12)
 
 Main()
