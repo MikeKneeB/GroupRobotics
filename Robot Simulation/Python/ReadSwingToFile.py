@@ -11,7 +11,7 @@ def Main():
     #Count for loop and start time for time elapsed
     count = 0
     start = time.time()
-    while count < 10000:
+    while count < 10000000:
         timeElaps = time.time()-start
         angle = swingProxy.get_angle()
 
