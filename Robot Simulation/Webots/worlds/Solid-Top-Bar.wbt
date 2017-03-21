@@ -46,7 +46,7 @@ Nao {
   controllerArgs "9559"
   synchronization FALSE
 }
-DEF Swing Robot {
+Supervisor {
   translation 0 2.2 0
   children [
     DEF RArm Transform {
@@ -58,7 +58,7 @@ DEF Swing Robot {
             axis 0 0 1
             minStop -3
             maxStop 3
-            dampingConstant 0.002215
+            dampingConstant 1
           }
           device [
             PositionSensor {
@@ -193,7 +193,7 @@ DEF Swing Robot {
       }
     }
   ]
-  name "Swing"
+  name "Swing Supervisor"
   boundingObject USE Top_Bar_Geometry
-  controller "SwingController"
+  controller "SwingSupervisorController"
 }
