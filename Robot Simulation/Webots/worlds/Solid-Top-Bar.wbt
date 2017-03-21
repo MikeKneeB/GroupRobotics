@@ -58,7 +58,7 @@ Supervisor {
             axis 0 0 1
             minStop -3
             maxStop 3
-            dampingConstant 0.07166
+            dampingConstant 0.1
           }
           device [
             PositionSensor {
@@ -153,7 +153,7 @@ Supervisor {
             anchor 0 0 1
             minStop -3
             maxStop 3
-            dampingConstant 0.07166
+            dampingConstant 0.1
           }
           endPoint Solid {
             translation 0.435079 -0.796406 1.89085e-16
