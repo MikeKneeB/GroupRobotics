@@ -36,6 +36,6 @@ def Main():
     robotIP="127.0.0.1"
     PORT=9559
     motionProxy=ALProxy("ALMotion",robotIP,PORT)
-    smoothPeriodic(motionProxy,2.57,120)
+    smoothPeriodic(motionProxy,2.5,120)
 
 Main()
