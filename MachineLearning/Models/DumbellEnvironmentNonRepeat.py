@@ -1,8 +1,8 @@
 """
 Author: Harry Shaw, Harry Gaskin, Chris Patmore
 Date: 02/03/2017
-Description: Dumbell environment adapted from numerical modelling this iteration allows only
-one action in a direction at a time
+Description: Dumbell environment adapted from numerical modelling, this iteration allows only
+one action in a direction at a time for discrete action agent.
 """
 try:
     import Tkinter as tk
@@ -10,13 +10,13 @@ except ImportError:
     import tkinter as tk
 import numpy as np
 
-
+# simply adds a shape for ease of use in agents
 class Dummy(object):
 
     def __init__(self, observation_space=4):
         self.shape = (observation_space,)
 
-
+# main dumbbell environment
 class Dumbell(object):
 
     def __init__(self, length=2.5, mass=0.25, target=0.785398):
@@ -59,34 +59,39 @@ class Dumbell(object):
     def calc_kinetic_energy(self, omega):
         return (self.length_0*self.length_0 * omega*omega)/2.0
 
-    def calc_reward(self, targetTheta):
+    # reward function based on the energy of the pendulum, to emphasise swinging at a particular angle
+    def calc_reward(self, targetTheta, a):
         targetEnergy = self.calc_potential_energy(targetTheta)
         currentKineticEnergy = self.calc_kinetic_energy(self.omega)
         currentPotentialEnergy = self.calc_potential_energy(self.theta)
         currentEnergy = currentKineticEnergy + currentPotentialEnergy
-        reward = -0.1 * (targetEnergy - currentEnergy) * (targetEnergy - currentEnergy)
+        reward = (-0.1 * (targetEnergy - currentEnergy) * (targetEnergy - currentEnergy))-0.005*(a**2)
 
         return reward
 
+    # reset the world to run another episode
     def reset(self):
         # position at zero, comment out for random under target
-        self.theta = -4/180*np.pi # self.target * (2 * np.random.random() - 1)
+        self.theta = 0#self.target * (2 * np.random.random() - 1)
         # no initial speed (this could be a problem!)
         self.omega = 0  # possible random moving start 2*(2*np.random.random()-1)
         self.last_action = -5
         self.action = 0
         return np.array([np.cos(self.theta), np.sin(self.theta), self.omega, self.last_action])
 
+    # step in the environment, a Runge-kutta step
     def step(self, action):
-        # calculate reward of previous action (target energy being at 45deg oscillations)
-        reward = self.calc_reward(self.target)
-
+        # change action format
         if type(action) is list or type(action) is tuple:
             action = action[0]
         self.action = action
 
+        # disallow too large actions
         if not -5 <= action <= 5:
             raise ValueError("Action must be between -5 and 5")
+
+        # calculate reward for current state
+        reward = self.calc_reward(self.target, action)
 
         # override repeat forcefull actions
         if action != 0:
@@ -96,6 +101,7 @@ class Dumbell(object):
             self.last_action = hold
         self.action = action
 
+        # perform the runge kutta step
         # Runge Kutta parameters
         h = 0.05  # step size for Runge Kutta
 
@@ -134,6 +140,7 @@ class Dumbell(object):
         self.theta += (ok1+2.0*ok2+2.0*ok3+ok4)*(h/6.0)
         self.omega += (wk1+2.0*wk2+2.0*wk3+wk4)*(h/6.0)
 
+        # return new state information and reward
         return np.array([np.cos(self.theta), np.sin(self.theta), self.omega, self.last_action]), reward, False, {}
 
     def render(self):
