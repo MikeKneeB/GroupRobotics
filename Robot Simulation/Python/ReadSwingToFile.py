@@ -7,7 +7,7 @@ def Main():
     SWING_PORT = 5005
     swingProxy = SwingProxy.SwingProxy(IP,SWING_PORT)
     #Open file
-    f = open("DampingFixed.txt","w")
+    f = open("TimeFixed.txt","w")
     #Count for loop and start time for time elapsed
     count = 0
     start = time.time()
