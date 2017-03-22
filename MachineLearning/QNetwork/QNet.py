@@ -1,7 +1,7 @@
 """
 Author: Chris Patmore
-Date: 02/03/2017
-Description: The DQN code in all its glory
+Date: 22/03/2017
+Description: The implementation of a DQN agent
 """
 from copy import deepcopy
 from keras.models import Sequential
@@ -49,7 +49,7 @@ class DeepQNetwork(object):
 
         return q_values
 
-    # compile the model so it can be used
+    # compile the model so it can be used, copy weights onto target network
     def compile(self, optimizer):
         config = self.model.get_config()
         self.target_model = Sequential.from_config(config)
@@ -57,7 +57,7 @@ class DeepQNetwork(object):
         self.model.compile(optimizer, loss='mse')
         self.target_model.set_weights(self.model.get_weights())
 
-    # load network weights from a save file
+    # load network weights from a save file, onto both networks
     def load_weights(self, filepath):
         self.model.load_weights(filepath)
         self.target_model.set_weights(self.model.get_weights())
@@ -93,8 +93,9 @@ class DeepQNetwork(object):
         start_state_batch = np.array([start_state_batch]).reshape((-1, 1, self.environment.observation_space.shape[0]))
         final_state_batch = np.array([final_state_batch]).reshape((-1, 1, self.environment.observation_space.shape[0]))
 
-        # compute the q-values for the next and current state
+        # compute the q-values for the next state using target Network
         next_state_q_values = self.target_model.predict_on_batch(final_state_batch)
+        # compute the q-values for the current state using Q-Network
         current_state_q_values = self.model.predict_on_batch(start_state_batch)
 
         # using Q-value algorithm compute new q value for state action pair
@@ -111,11 +112,13 @@ class DeepQNetwork(object):
 
     # train the network with the environment
     def train(self, episodes, steps, visualize=False):
-        # for each episode
+        # intialisations for training
         print('training for %s episodes' % episodes)
         file = open('Training_Rewards_NRDumbbell0Start.txt', 'w')
         start = time.time()
         all_episode_rewards = []
+
+        # for each episode
         for episode in range(episodes):
             # reset the environment
             current_state = deepcopy(self.environment.reset())
@@ -133,6 +136,7 @@ class DeepQNetwork(object):
                 action = self.select_action(current_state)
                 new_state, reward, done, info = self.environment.step(self.process_action(action))
                 episode_reward += reward
+                # for GUI
                 if visualize:
                     self.environment.render()
 
@@ -157,18 +161,19 @@ class DeepQNetwork(object):
                 self.tau = 1.
             self.policy.set_tau(self.tau)
 
+
         # end of training stats
         end = time.time()
         file.close()
         # Rolling reward
         file = open('Training_Rolling_Rewards_NRDumbbell0Start.txt', 'w')
         summing = 0
-        for i in range (episodes):
+        for i in range(episodes):
             summing += all_episode_rewards[i]
             if (i + 1) % 10 == 0:
                 file.write('%s\t%s\n' % (i-5, summing/10))
                 summing = 0
-
+        file.close()
         print('Time to complete training of %s episodes: %r seconds' % (episodes, (end-start)))
 
     # test the trained network on the environment
@@ -193,6 +198,7 @@ class DeepQNetwork(object):
             for step in range(steps):
                 # select and perform an action
                 action = self.select_action(current_state)
+
                 new_state, reward, done, info = self.environment.step(self.process_action(action))
                 episode_reward += reward
                 if visualize:
@@ -204,6 +210,8 @@ class DeepQNetwork(object):
                 current_state = deepcopy(new_state)
             rewards.append(episode_reward)
             print('Episode reward : %r' % episode_reward)
+
+        # test statistics, these fo not work for python 2
         try:
             import statistics
             print('Average reward : %r +/- %r' % (statistics.mean(rewards), statistics.stdev(rewards)))

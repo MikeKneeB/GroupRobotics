@@ -1,14 +1,17 @@
 """
 Author: Chris Patmore
-Date: 02/03/2017
-Description: Policy for action selection code
+Date: 22/03/2017
+Description: Policy for action selection code,
+credit to Matthias plappert, for inspiration
+https://github.com/matthiasplappert/keras-rl/blob/master/rl/policy.py
 """
 import numpy as np
 
 # action selection policy
 # action is selected based using a boltzmann distribution based on the
 # Q-value of the state action pair.
-# if tau -> 0 the best action will always be selected
+# i.e. if tau -> 0 the best action will always be selected, however this will
+# start clipping and break selection, suggested min tau is 1
 
 
 class BoltzmannQPolicy(object):

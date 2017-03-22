@@ -1,6 +1,6 @@
 """
 Author: Chris Patmore
-Date: 02/03/2017
+Date: 22/03/2017
 Description: Replay Memory implementation
 """
 from collections import deque
@@ -47,6 +47,7 @@ class ReplayMemory(object):
         else:
             batch = random.sample(self.buffer, batch_size)
 
+        #shape correctly for use with Keras
         start_state_batch = [_[0] for _ in batch]
         action_batch = [_[1] for _ in batch]
         reward_batch = [_[2] for _ in batch]
