@@ -42,21 +42,21 @@ def main():
     state_dimensions = (16,)
 
     # NB: if temperature_parameter is too low, you will get NaN errors
-    sarsa = s.SARSA(ACTIONS, state_dimensions, discount=0.7, learning_rate=0.9, temperature_parameter=2)
+    sarsa = s.SARSA(ACTIONS, state_dimensions, discount=0.9, learning_rate=0.5, temperature_parameter=2)
 
     epochs = 10000
     for epoch in range(epochs):
         # reset environment and extract initial state
         state = reset_environment(env)
-        action = 0
-
+        action = sarsa.get_next_action(state)
         reward = 0
         done = False
-        while not done:
-            new_action = sarsa.get_next_action(state)
 
+        while not done:
             # perform action on environment
-            new_state, reward, done = get_observations(new_action, env)
+            new_state, reward, done = get_observations(action, env)
+
+            new_action = sarsa.get_next_action(new_state)
 
             if reward == 0:
                 sarsa.update_Policy(state, action, new_state, new_action, reward)

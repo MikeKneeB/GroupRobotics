@@ -1,0 +1,173 @@
+import math
+import numpy
+import NumMod as model
+import random
+
+class QLearning:
+    # initialise
+    def __init__(self, mass, length, numpos, alpha, gamma):
+        # constants
+        # mass and length of pendulum
+        self.mass = mass
+        self.plength = length
+
+        self.numpositions = numpos
+        self.a = alpha
+        self.g = gamma
+
+        # arrays
+        # all the possible actions that could be taken and the qvalue of every state-action
+        torque = 8.66 #Nm
+        leglength = 0.1 #m
+        self.actions = [-1*torque/leglength, 0, torque/leglength] #N
+
+        self.numactions = 3
+        self.maxpos = math.pi
+        self.minpos = -1 * self.maxpos
+        self.onepos = (self.maxpos - self.minpos) / self.numpositions
+
+        # set all qvalues to be 0
+        self.qvalues = numpy.zeros(shape=(self.numpositions, self.numpositions, self.numactions))
+
+    # returns the reward of the state
+    def reward(self, initialposition, finalposition):
+        # a higher reward the higher the pendulum got
+        return (abs(finalposition) - abs(initialposition))*10
+
+    # get the discrete index of the continuous state
+    def index_of_state(self, state):
+        if (state > self.maxpos or state < self.minpos):
+            raise IndexError
+
+        state = state + self.maxpos
+
+        index = int(math.floor(state/self.onepos))
+
+        if (index == self.numpositions):
+            index = self.numpositions - 1
+
+        return index
+
+    # return the maximum qvalue of the new state, for each possible action taken in that state
+    def max_q_value(self, state):
+        sindex = self.index_of_state(state)
+        # the first action/velocity is temporarily the highest q-value
+        maxval = self.qvalues[sindex][0][0]
+
+        # get the minimum and maximum positions where an action could be performed
+        minposac = self.index_of_state(-1*abs(state))
+        maxposac = self.index_of_state(abs(state))
+
+        # for each action, get the qvalue and check if it's larger than the current max
+        for posacindex in range(minposac, maxposac):
+            for aindex in range(1, self.numactions):
+                q = self.qvalues[sindex][posacindex][aindex]
+                if (q > maxval):
+                    maxval = q
+        # return the maximum qvalue
+        return maxval
+
+    # Q-Learning process
+    def perform_action(self, position, actionposindex, action):
+        # learning rate
+        alpha = self.a
+        # discount factor
+        gamma = self.g
+
+        # position is circular; if it goes "out of bounds", adjust it
+        while (position > self.maxpos):
+            position = position - self.maxpos
+        while (position < self.minpos):
+            position = position - self.minpos
+
+        # get the corresponding index of this state
+        sindex = self.index_of_state(position)
+
+        # random action position
+        if (actionposindex == -1):
+            minposac = self.index_of_state(-1*abs(position))
+            actionposindex = int(math.floor(random.random() * (self.numpositions - sindex*2) + minposac))
+
+        # random action
+        if action == -1:
+            action = int(math.floor(random.random() * self.numactions))
+
+        currentposition = position
+        currentvelocity = 0
+
+        firstvelocity = model.NextVelocity(position, 0, 0, self.mass, self.plength)
+        # if the initial position is negative, the velocity will be positive for the next half-wave
+        passedmiddle = 0
+        changeddirection = 0
+        iteration = 0
+        # while the current velocity is in the same direction as the initial velocity
+        while (changeddirection == 0):
+            iteration = iteration + 1
+            thisaction = 0
+            if (self.index_of_state(currentposition) == actionposindex):
+                thisaction = self.actions[action]
+            else:
+                thisaction = 0
+            # let the pendulum move with no external forces
+            nextpos = model.NextPosition(currentposition, currentvelocity, thisaction, self.mass, self.plength)
+            nextvel = model.NextVelocity(currentposition, currentvelocity, thisaction, self.mass, self.plength)
+            if (nextpos * position < 0):
+                passedmiddle = 1
+            if (passedmiddle == 1 and nextvel * firstvelocity < 0):
+                changeddirection = 1
+            # update the new position and velocity
+            currentposition = nextpos
+            currentvelocity = nextvel
+
+            # if the action causes the pendulum to make a ful rotation, the action was not good and the position should be reset
+            if (currentposition < self.minpos or currentposition > self.maxpos):
+                self.qvalues[sindex][actionposindex][action] = -10
+                return self.maxpos+1
+
+        # find the new q-value
+        current = self.qvalues[sindex][actionposindex][action]
+        newq = current + alpha * (self.reward(position, currentposition) + gamma * self.max_q_value(currentposition) - current)
+
+        self.qvalues[sindex][actionposindex][action] = newq
+
+        return currentposition
+
+    # returns the action with the highest q-value
+    def best_action(self, pindex):
+        # the first action/velocity is temporarily the highest q-value
+        max = self.qvalues[pindex][0][0]
+        index = 0
+        minposac = pindex
+        maxposac = self.numpositions - pindex
+        if (minposac > maxposac):
+            minposac = self.numpositions - pindex
+            maxposac = pindex
+        # for each action, get the qvalue and check if it's larger than the current max
+        for posacindex in range(minposac, maxposac):
+            for aindex in range(1, self.numactions):
+                q = self.qvalues[pindex][posacindex][aindex]
+                if (q > max):
+                    max = q
+                    index = aindex
+        # return the maximum qvalue
+        return index
+
+    # returns the action with the highest q-value
+    def best_action_position(self, pindex):
+        # the first action/velocity is temporarily the highest q-value
+        max = self.qvalues[pindex][0][0]
+        pos = 0
+        minposac = pindex
+        maxposac = self.numpositions - pindex
+        if (minposac > maxposac):
+            minposac = self.numpositions - pindex
+            maxposac = pindex
+        # for each action, get the qvalue and check if it's larger than the current max
+        for posacindex in range(minposac, maxposac):
+            for aindex in range(1, self.numactions):
+                q = self.qvalues[pindex][posacindex][aindex]
+                if (q > max):
+                    max = q
+                    pos = posacindex
+        # return the maximum qvalue
+        return pos
