@@ -3,6 +3,13 @@ import time
 import SwingAPI
 from naoqi import ALProxy
 
+#   Author: Harry Withers
+#   Date:   21/02/2017
+#
+#   Originally named NumModModel.py.
+#   This file provides two functions for periodic motion, one that moves constantly
+#   and another that switched between 2 positions.
+
 def smoothPeriodic(motionProxy,period,numSwings):
     i = 0
     #Setup timing

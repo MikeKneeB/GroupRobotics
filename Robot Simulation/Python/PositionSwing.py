@@ -3,6 +3,14 @@ import SwingAPI
 import SwingProxy
 from naoqi import ALProxy
 
+#   Author: Harry Withers
+#   Date:   02/03/2017
+#
+#   This file uses the position of the swing to calculate when
+#   to change position next. It does this by finding when the
+#   robot is at the bottom of its swing (theta=0) and counts out
+#   a quarter of a period from that point.
+
 def Main():
     #Open file for data
     f = open("PositionSwing.txt","w")

@@ -3,6 +3,13 @@ import SwingAPI
 import SwingProxy
 from naoqi import ALProxy
 
+#   Author: Harry Withers
+#   Date:   09/03/2017
+#
+#   This file does the same as PositionSwing.py but now the robot
+#   dynamically calculates the period of the swing to improve its
+#   drive.
+
 def Main():
     #Open file for data
     f = open("PositionSwingDynamic.txt","w")

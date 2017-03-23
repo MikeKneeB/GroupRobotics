@@ -1,6 +1,13 @@
 import socket
 import struct
 
+#   Author: Harry Withers
+#   Date:   23/02/2017
+#
+#   This class acts as a proxy when connecting to the virtual swing.
+#   It has 2 functions, one to get the position of the swing and one
+#   to revert the Webots world to its initial conditions.
+
 class SwingProxy:
     def __init__(self, TCP_IP, TCP_PORT):
         self.BUFFER_SIZE = 20

@@ -1,5 +1,14 @@
 import time
 
+#   Author: Harry Withers
+#   Date:   21/02/2017
+#
+#   This file contains the a simplified API for controlling the robot.
+#   It includes a function to move specified limbs, 2 functions to move
+#   to either position 1 or 2 (shown in the report) with all joints moving
+#   at the same speed and 2 functions to move between these positions with
+#   all joints taking the same amount of time (dynamic).
+
 hipRange = 0.472
 kneeRange = 1.64
 headRange = 1.18
