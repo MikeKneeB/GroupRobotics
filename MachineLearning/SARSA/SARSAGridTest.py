@@ -54,7 +54,8 @@ def main():
 
     # NB: if temperature_parameter is too low, you will get NaN errors
     #initialises a sarsa object
-    sarsa = s.SARSA(ACTIONS, state_dimensions, discount=0.9, learning_rate = 0.5, temperature_parameter=2)
+    learning_rate = 0.5
+    sarsa = s.SARSA(ACTIONS, state_dimensions, discount=0.9, learning_rate = learning_rate, temperature_parameter=2)
 
     epochs = 10000
     for epoch in range(epochs):
@@ -84,7 +85,7 @@ def main():
             action = new_action
 
         #potential fix by slowly adjusting learning rate, can be left commented out
-        #sarsa.learningRate = learning_rate - (0.5/10000)
+        sarsa.learningRate = learning_rate - (0.5/10000)
         f.write('{}\t{}\n'.format(epoch, reward))
         print("Epoch: ", epoch, "  Reward: ", reward)
     f.close()
