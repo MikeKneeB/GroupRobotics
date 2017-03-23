@@ -6,6 +6,12 @@ import struct
 from controller import Robot
 from controller import PositionSensor
 
+# Author: Harry Withers
+# Date:   22/02/2017
+#
+# Class to act as Swing robot in Webots. This class also acts as a TCP server
+# so that a client can query the position of the swing.
+
 BUFFER_SIZE = 20
 
 class SwingController (Robot):

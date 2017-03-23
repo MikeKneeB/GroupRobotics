@@ -6,6 +6,12 @@ import struct
 from controller import Supervisor
 from controller import PositionSensor
 
+# Author: Harry Withers
+# Date:   22/02/2017
+#
+# Class to act as Swing supervisor in Webots. This is so that a client can both
+# query the position of the swing and revert the world.
+
 BUFFER_SIZE = 20
 
 class SwingController (Supervisor):
